@@ -20,12 +20,12 @@ export default function Header({ season, solarTerm }) {
             <motion.div 
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
-              className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
+              className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
             >
               <img 
                 src="./logo/logo_main_transparent.png" 
                 alt="中藥正念日曆" 
-                className="w-9 h-9 object-contain"
+                className="w-12 h-12 object-contain"
               />
             </motion.div>
             <div>

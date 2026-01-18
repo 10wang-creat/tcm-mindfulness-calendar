@@ -28,7 +28,7 @@ export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
                   <img 
                     src={tab.icon} 
                     alt={tab.label}
-                    className={`w-6 h-6 object-contain transition-all ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}
+                    className={`w-8 h-8 object-contain transition-all ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}
                   />
                   {isActive && (
                     <motion.div
