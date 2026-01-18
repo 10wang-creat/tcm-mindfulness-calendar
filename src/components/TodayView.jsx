@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Volume2, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { getSolarTermImage } from '../data/calendarData';
 
 export default function TodayView({ todayInfo, onOpenCalendar }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -60,9 +61,30 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
         >
           第 {dayOfYear} 天
         </motion.p>
-        <h2 className="text-xl font-serif text-gray-800 mb-2">
+        <h2 className="text-xl font-serif text-gray-800 mb-3">
           {formatDate(date)}
         </h2>
+        
+        {/* 節氣圖騰 */}
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="flex justify-center mb-3"
+        >
+          <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white">
+            <img 
+              src={getSolarTermImage(solarTerm.name)}
+              alt={solarTerm.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br ${seasonColor.bg} text-3xl">🌱</div>`;
+              }}
+            />
+          </div>
+        </motion.div>
+        
         <div className="flex items-center justify-center gap-3">
           <span 
             className="px-3 py-1 rounded-full text-sm font-medium text-white"

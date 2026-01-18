@@ -95,6 +95,39 @@ export const solarTerms = [
   { name: "冬至", date: "2026-12-21", season: "冬" }
 ];
 
+// 節氣圖片映射
+export const solarTermImages = {
+  "小寒": "/solar-terms/23_xiaohan_小寒.png",
+  "大寒": "/solar-terms/24_dahan_大寒.png",
+  "立春": "/solar-terms/01_lichun_立春.png",
+  "雨水": "/solar-terms/02_yushui_雨水.png",
+  "驚蟄": "/solar-terms/03_jingzhe_驚蟄.png",
+  "春分": "/solar-terms/04_chunfen_春分.png",
+  "清明": "/solar-terms/05_qingming_清明.png",
+  "穀雨": "/solar-terms/06_guyu_穀雨.png",
+  "立夏": "/solar-terms/07_lixia_立夏.png",
+  "小滿": "/solar-terms/08_xiaoman_小滿.png",
+  "芒種": "/solar-terms/09_mangzhong_芒種.png",
+  "夏至": "/solar-terms/10_xiazhi_夏至.png",
+  "小暑": "/solar-terms/11_xiaoshu_小暑.png",
+  "大暑": "/solar-terms/12_dashu_大暑.png",
+  "立秋": "/solar-terms/13_liqiu_立秋.png",
+  "處暑": "/solar-terms/14_chushu_處暑.png",
+  "白露": "/solar-terms/15_bailu_白露.png",
+  "秋分": "/solar-terms/16_qiufen_秋分.png",
+  "寒露": "/solar-terms/17_hanlu_寒露.png",
+  "霜降": "/solar-terms/18_shuangjiang_霜降.png",
+  "立冬": "/solar-terms/19_lidong_立冬.png",
+  "小雪": "/solar-terms/20_xiaoxue_小雪.png",
+  "大雪": "/solar-terms/21_daxue_大雪.png",
+  "冬至": "/solar-terms/22_dongzhi_冬至.png"
+};
+
+// 取得節氣圖片路徑
+export function getSolarTermImage(termName) {
+  return solarTermImages[termName] || null;
+}
+
 // 節氣對應的養生主題
 export const solarTermThemes = {
   "小寒": { theme: "藏精養腎", color: "#4A5568" },
@@ -192,11 +225,13 @@ export default {
   metadata,
   herbsDatabase,
   solarTerms,
+  solarTermImages,
   solarTermThemes,
   seasonColors,
   getHerbForDate,
   getSolarTermForDate,
   getSolarTermTheme,
+  getSolarTermImage,
   getSeasonColor,
   generateMeditationText
 };
