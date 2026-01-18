@@ -1,13 +1,21 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Volume2, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { solarTermImages } from '../data/calendarData';
+import { solarTermImages, herbImages } from '../data/calendarData';
 
 // 使用 Vite 的 BASE_URL 構建正確路徑
 const getImagePath = (termName) => {
   const imagePath = solarTermImages[termName];
   if (!imagePath) return null;
   // 移除開頭的 ./ 並加上 BASE_URL
+  const cleanPath = imagePath.replace(/^\.\//, '');
+  return `${import.meta.env.BASE_URL}${cleanPath}`;
+};
+
+// 取得藥材圖片路徑
+const getHerbImagePath = (herbName) => {
+  const imagePath = herbImages[herbName];
+  if (!imagePath) return null;
   const cleanPath = imagePath.replace(/^\.\//, '');
   return `${import.meta.env.BASE_URL}${cleanPath}`;
 };
@@ -122,19 +130,16 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
             transition={{ duration: breathPhase === 'exhale' ? 6 : 4, ease: "easeInOut" }}
             className="relative z-10"
           >
-            <div className="w-32 h-32 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-32 h-32 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center overflow-hidden">
               <img 
-                src={`/herbs/${herb.id}.png`}
+                src={getHerbImagePath(herb.name)}
                 alt={herb.name}
-                className="w-24 h-24 object-contain"
+                className="w-28 h-28 object-contain"
                 onError={(e) => {
                   e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'flex';
+                  e.target.parentElement.innerHTML = '<div class="w-24 h-24 flex items-center justify-center text-4xl">🌿</div>';
                 }}
               />
-              <div className="hidden w-24 h-24 items-center justify-center text-4xl">
-                🌿
-              </div>
             </div>
           </motion.div>
 

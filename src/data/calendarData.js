@@ -68,6 +68,69 @@ export const herbsDatabase = [
   { id: 54, name: "滑石", effect: "清熱利濕" }
 ];
 
+// 藥材圖片對照表
+export const herbImages = {
+  "人參": "./herbs/04_ginseng.png",
+  "黃耆": "./herbs/02_astragalus.png",
+  "當歸": "./herbs/07_angelica.png",
+  "枸杞": "./herbs/01_goji.png",
+  "紅棗": "./herbs/14_red-date.png",
+  "茯苓": "./herbs/53_poria.png",
+  "白朮": "./herbs/10_atractylodes.png",
+  "甘草": "./herbs/06_licorice.png",
+  "生薑": "./herbs/08_mint.png",
+  "肉桂": "./herbs/37._agarwood.png",
+  "附子": "./herbs/09_codonopsis.png",
+  "乾薑": "./herbs/08_mint.png",
+  "陳皮": "./herbs/31_tangerine-peel.png",
+  "半夏": "./herbs/33_immature-bitter-orange.png",
+  "麥門冬": "./herbs/15_rehmannia.png",
+  "五味子": "./herbs/20_mulberry.png",
+  "山藥": "./herbs/11_chinese-yam.png",
+  "蓮子": "./herbs/12_jujube.png",
+  "芡實": "./herbs/54_coix-seed.png",
+  "龍眼肉": "./herbs/18_longan.png",
+  "酸棗仁": "./herbs/21_sour-jujube-seed.png",
+  "遠志": "./herbs/23_polygala.png",
+  "柏子仁": "./herbs/22_biota-seed.png",
+  "合歡皮": "./herbs/24_silk-tree-bark.png",
+  "夜交藤": "./herbs/25_polygonum-vine.png",
+  "天麻": "./herbs/19_fo-ti.png",
+  "鉤藤": "./herbs/03_mugwort.png",
+  "石決明": "./herbs/27_oyster-shell.png",
+  "珍珠母": "./herbs/28_mother-of-pearl.png",
+  "龍骨": "./herbs/26_dragon-bone.png",
+  "牡蠣": "./herbs/27_oyster-shell.png",
+  "代赭石": "./herbs/29_magnetite.png",
+  "磁石": "./herbs/29_magnetite.png",
+  "琥珀": "./herbs/30_amber.png",
+  "柴胡": "./herbs/35_cyperus.png",
+  "香附": "./herbs/35_cyperus.png",
+  "川芎": "./herbs/39_sichuan-lovage.png",
+  "丹參": "./herbs/40_red-sage.png",
+  "紅花": "./herbs/41_safflower.png",
+  "桃仁": "./herbs/42_peach-kernel.png",
+  "益母草": "./herbs/44_motherwort.png",
+  "雞血藤": "./herbs/45_spatholobus.png",
+  "延胡索": "./herbs/46_corydalis.png",
+  "鬱金": "./herbs/47_curcuma.png",
+  "薑黃": "./herbs/48_turmeric.png",
+  "三七": "./herbs/43_notoginseng.png",
+  "蒲黃": "./herbs/41_safflower.png",
+  "五靈脂": "./herbs/30_amber.png",
+  "茵陳": "./herbs/49_artemisia.png",
+  "金錢草": "./herbs/50_lysimachia.png",
+  "車前草": "./herbs/51_plantain.png",
+  "澤瀉": "./herbs/52_alisma.png",
+  "薏苡仁": "./herbs/54_coix-seed.png",
+  "滑石": "./herbs/55_talc.png"
+};
+
+// 取得藥材圖片路徑
+export function getHerbImage(herbName) {
+  return herbImages[herbName] || null;
+}
+
 export const solarTerms = [
   { name: "小寒", date: "2026-01-05", season: "冬" },
   { name: "大寒", date: "2026-01-20", season: "冬" },
