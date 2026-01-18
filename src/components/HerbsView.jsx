@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { Search, Filter } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState, useMemo } from 'react';
+import { herbImages } from '../data/calendarData';
 
 export default function HerbsView({ herbsDatabase, onSelectHerb }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,6 +49,11 @@ export default function HerbsView({ herbsDatabase, onSelectHerb }) {
     return 'from-gray-50 to-slate-100';
   };
 
+  // 取得藥材圖片路徑
+  const getHerbImagePath = (herbName) => {
+    return herbImages[herbName] || null;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -57,7 +63,7 @@ export default function HerbsView({ herbsDatabase, onSelectHerb }) {
       {/* 標題 */}
       <div className="text-center mb-6">
         <h2 className="text-2xl font-serif font-bold text-gray-800 mb-1">藥材圖鑑</h2>
-        <p className="text-sm text-gray-500">54種傳統中藥材</p>
+        <p className="text-sm text-gray-500">56種傳統中藥材</p>
       </div>
 
       {/* 搜尋欄 */}
@@ -98,44 +104,49 @@ export default function HerbsView({ herbsDatabase, onSelectHerb }) {
 
       {/* 藥材列表 */}
       <div className="grid grid-cols-2 gap-3">
-        {filteredHerbs.map((herb, index) => (
-          <motion.button
-            key={herb.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.02 }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => onSelectHerb && onSelectHerb(herb)}
-            className={`
-              p-4 rounded-xl bg-gradient-to-br ${getHerbColor(herb)}
-              text-left shadow-sm hover:shadow-md transition-shadow
-            `}
-          >
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 bg-white/50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <img 
-                  src={`/herbs/${herb.id}.png`}
-                  alt={herb.name}
-                  className="w-10 h-10 object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <span className="hidden text-2xl">🌿</span>
+        {filteredHerbs.map((herb, index) => {
+          const imagePath = getHerbImagePath(herb.name);
+          return (
+            <motion.button
+              key={herb.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.02 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onSelectHerb && onSelectHerb(herb)}
+              className={`
+                p-4 rounded-xl bg-gradient-to-br ${getHerbColor(herb)}
+                text-left shadow-sm hover:shadow-md transition-shadow
+              `}
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 bg-white/50 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {imagePath ? (
+                    <img 
+                      src={imagePath}
+                      alt={herb.name}
+                      className="w-10 h-10 object-contain"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    <span className="text-2xl">🌿</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-serif font-bold text-gray-800 text-lg truncate">
+                    {herb.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 truncate">
+                    {herb.effect}
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <h3 className="font-serif font-bold text-gray-800 text-lg truncate">
-                  {herb.name}
-                </h3>
-                <p className="text-sm text-gray-600 truncate">
-                  {herb.effect}
-                </p>
-              </div>
-            </div>
-          </motion.button>
-        ))}
+            </motion.button>
+          );
+        })}
       </div>
 
       {/* 空狀態 */}
