@@ -1,13 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, RotateCcw, Volume2, ChevronDown } from 'lucide-react';
+import { Play, Pause, RotateCcw, ChevronDown, Headphones } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { solarTermImages, herbImages } from '../data/calendarData';
+import { solarTermImages, herbImages, herbMeditations } from '../data/calendarData';
+import MeditationPlayer from './MeditationPlayer';
 
 // 使用 Vite 的 BASE_URL 構建正確路徑
 const getImagePath = (termName) => {
   const imagePath = solarTermImages[termName];
   if (!imagePath) return null;
-  // 移除開頭的 ./ 並加上 BASE_URL
   const cleanPath = imagePath.replace(/^\.\//, '');
   return `${import.meta.env.BASE_URL}${cleanPath}`;
 };
@@ -20,10 +20,19 @@ const getHerbImagePath = (herbName) => {
   return `${import.meta.env.BASE_URL}${cleanPath}`;
 };
 
+// 取得冥想音檔路徑
+const getMeditationPath = (herbName) => {
+  const audioPath = herbMeditations[herbName];
+  if (!audioPath) return null;
+  const cleanPath = audioPath.replace(/^\.\//, '');
+  return `${import.meta.env.BASE_URL}${cleanPath}`;
+};
+
 export default function TodayView({ todayInfo, onOpenCalendar }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [breathPhase, setBreathPhase] = useState('inhale'); // inhale, hold, exhale
+  const [breathPhase, setBreathPhase] = useState('inhale');
   const [showFullMeditation, setShowFullMeditation] = useState(false);
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   // 呼吸引導計時器
   useEffect(() => {
@@ -51,6 +60,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
   }, [isPlaying]);
 
   const { herb, solarTerm, theme, seasonColor, meditation, dayOfYear, date } = todayInfo;
+  const meditationSrc = getMeditationPath(herb.name);
   
   const formatDate = (d) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -96,7 +106,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
               className="w-full h-full object-contain"
               onError={(e) => {
                 e.target.style.display = 'none';
-                e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br ${seasonColor.bg} text-3xl">🌱</div>`;
+                e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-sage-50 to-sage-100 text-3xl">🌱</div>';
               }}
             />
           </div>
@@ -169,7 +179,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
             <p className="text-lg text-gray-600">{herb.effect}</p>
           </div>
 
-          {/* 播放控制 */}
+          {/* 呼吸引導控制 */}
           <div className="flex items-center justify-center gap-4 mb-4">
             <motion.button
               whileTap={{ scale: 0.95 }}
@@ -177,7 +187,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
               className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-colors ${
                 isPlaying 
                   ? 'bg-gray-800 text-white' 
-                  : `bg-gradient-to-r ${seasonColor.bg.replace('from-', 'from-').replace('-50', '-500').replace('-100', '-400')} text-white`
+                  : 'text-white'
               }`}
               style={!isPlaying ? { background: `linear-gradient(135deg, ${seasonColor.primary}, ${seasonColor.secondary})` } : {}}
             >
@@ -197,6 +207,47 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
             )}
           </div>
 
+          {/* 冥想音頻播放器切換按鈕 */}
+          {meditationSrc && (
+            <div className="mb-4">
+              <button
+                onClick={() => setShowAudioPlayer(!showAudioPlayer)}
+                className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-sage-50 to-terracotta-50 rounded-xl hover:from-sage-100 hover:to-terracotta-100 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <Headphones className="w-5 h-5 text-sage-600" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {herb.name}・觀想冥想音頻
+                  </span>
+                </div>
+                <motion.div animate={{ rotate: showAudioPlayer ? 180 : 0 }}>
+                  <ChevronDown className="w-4 h-4 text-gray-400" />
+                </motion.div>
+              </button>
+
+              {/* 展開的音頻播放器 */}
+              <AnimatePresence>
+                {showAudioPlayer && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-4">
+                      <MeditationPlayer
+                        herbName={herb.name}
+                        audioSrc={meditationSrc}
+                        herbEffect={herb.effect}
+                        seasonColor={seasonColor}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
           {/* 冥想文字 */}
           <motion.div 
             className="bg-gray-50 rounded-xl p-4 cursor-pointer"
@@ -204,9 +255,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-500">今日冥想</span>
-              <motion.div
-                animate={{ rotate: showFullMeditation ? 180 : 0 }}
-              >
+              <motion.div animate={{ rotate: showFullMeditation ? 180 : 0 }}>
                 <ChevronDown className="w-4 h-4 text-gray-400" />
               </motion.div>
             </div>

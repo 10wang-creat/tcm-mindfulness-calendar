@@ -4,3 +4,4 @@ export { default as CalendarView } from './CalendarView';
 export { default as HerbsView } from './HerbsView';
 export { default as StatsView } from './StatsView';
 export { default as BottomNav } from './BottomNav';
+export { default as MeditationPlayer } from './MeditationPlayer';
