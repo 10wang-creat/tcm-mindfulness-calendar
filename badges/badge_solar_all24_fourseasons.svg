@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <!-- 背景漸層 - Legendary 金色 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8E1"/>
+      <stop offset="100%" style="stop-color:#FFE0B2"/>
+    </linearGradient>
+    <!-- 太陽漸層 -->
+    <radialGradient id="sunGradient" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FFEB3B"/>
+      <stop offset="100%" style="stop-color:#FFA000"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- 外框 -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FF9800" stroke-width="4"/>
+  
+  <!-- 背景 -->
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  
+  <!-- 四季分區 -->
+  <!-- 春 - 右上 (粉紅) -->
+  <path d="M60 60 L60 20 A40 40 0 0 1 100 60 Z" fill="#FCE4EC"/>
+  <!-- 夏 - 右下 (綠色) -->
+  <path d="M60 60 L100 60 A40 40 0 0 1 60 100 Z" fill="#E8F5E9"/>
+  <!-- 秋 - 左下 (橙色) -->
+  <path d="M60 60 L60 100 A40 40 0 0 1 20 60 Z" fill="#FFF3E0"/>
+  <!-- 冬 - 左上 (藍色) -->
+  <path d="M60 60 L20 60 A40 40 0 0 1 60 20 Z" fill="#E3F2FD"/>
+  
+  <!-- 季節圖標 -->
+  <!-- 春 - 櫻花 -->
+  <g transform="translate(75, 40)">
+    <circle cx="0" cy="0" r="3" fill="#E91E63"/>
+    <circle cx="5" cy="-2" r="2" fill="#F8BBD9"/>
+    <circle cx="5" cy="3" r="2" fill="#F8BBD9"/>
+    <circle cx="-2" cy="-4" r="2" fill="#F8BBD9"/>
+    <circle cx="-4" cy="2" r="2" fill="#F8BBD9"/>
+  </g>
+  
+  <!-- 夏 - 綠葉 -->
+  <g transform="translate(78, 75)">
+    <path d="M0 0 Q8 -8 5 -15 Q-2 -8 0 0" fill="#4CAF50"/>
+    <path d="M0 0 Q-5 -10 -8 -12 Q-3 -5 0 0" fill="#81C784"/>
+  </g>
+  
+  <!-- 秋 - 楓葉 -->
+  <g transform="translate(42, 80)">
+    <path d="M0 -5 L3 0 L8 -2 L5 3 L8 8 L3 6 L0 10 L-3 6 L-8 8 L-5 3 L-8 -2 L-3 0 Z" fill="#FF5722" transform="scale(0.7)"/>
+  </g>
+  
+  <!-- 冬 - 雪花 -->
+  <g transform="translate(40, 40)" stroke="#64B5F6" stroke-width="1.5" fill="none">
+    <line x1="0" y1="-6" x2="0" y2="6"/>
+    <line x1="-5" y1="-3" x2="5" y2="3"/>
+    <line x1="-5" y1="3" x2="5" y2="-3"/>
+    <circle cx="0" cy="0" r="2" fill="#64B5F6"/>
+  </g>
+  
+  <!-- 中央太陽 -->
+  <circle cx="60" cy="60" r="12" fill="url(#sunGradient)"/>
+  <circle cx="60" cy="60" r="8" fill="#FFD700"/>
+  
+  <!-- 分隔線 -->
+  <line x1="60" y1="20" x2="60" y2="100" stroke="#8D6E63" stroke-width="1" opacity="0.3"/>
+  <line x1="20" y1="60" x2="100" y2="60" stroke="#8D6E63" stroke-width="1" opacity="0.3"/>
+</svg>

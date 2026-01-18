@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#C8E6C9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.3"/>
+  <!-- 地面線 -->
+  <line x1="25" y1="60" x2="95" y2="60" stroke="#8D6E63" stroke-width="2"/>
+  <!-- 樹冠 -->
+  <circle cx="60" cy="40" r="18" fill="#4CAF50"/>
+  <circle cx="50" cy="45" r="10" fill="#66BB6A"/>
+  <circle cx="70" cy="45" r="10" fill="#66BB6A"/>
+  <!-- 樹幹 -->
+  <rect x="56" y="50" width="8" height="10" fill="#5D4037"/>
+  <!-- 根系 - 地下 -->
+  <path d="M60 60 Q50 70 35 80" stroke="#8D6E63" stroke-width="2.5" fill="none"/>
+  <path d="M60 60 Q60 75 60 90" stroke="#8D6E63" stroke-width="3" fill="none"/>
+  <path d="M60 60 Q70 70 85 80" stroke="#8D6E63" stroke-width="2.5" fill="none"/>
+  <path d="M50 70 Q45 78 40 88" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+  <path d="M70 70 Q75 78 80 88" stroke="#A1887F" stroke-width="1.5" fill="none"/>
+  <!-- 地下背景 -->
+  <rect x="20" y="60" width="80" height="35" fill="#D7CCC8" opacity="0.3"/>
+</svg>

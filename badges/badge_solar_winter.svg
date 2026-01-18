@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E3F2FD"/>
+      <stop offset="100%" style="stop-color:#BBDEFB"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#2196F3" stroke-width="0.5" opacity="0.3"/>
+  <!-- 雪花主結構 -->
+  <g stroke="#64B5F6" stroke-width="2.5" fill="none">
+    <!-- 六條主軸 -->
+    <line x1="60" y1="25" x2="60" y2="95"/>
+    <line x1="30" y1="42" x2="90" y2="78"/>
+    <line x1="30" y1="78" x2="90" y2="42"/>
+  </g>
+  <!-- 分支裝飾 -->
+  <g stroke="#90CAF9" stroke-width="1.5" fill="none">
+    <!-- 上分支 -->
+    <line x1="60" y1="35" x2="52" y2="42"/>
+    <line x1="60" y1="35" x2="68" y2="42"/>
+    <!-- 下分支 -->
+    <line x1="60" y1="85" x2="52" y2="78"/>
+    <line x1="60" y1="85" x2="68" y2="78"/>
+    <!-- 左上分支 -->
+    <line x1="38" y1="48" x2="35" y2="40"/>
+    <line x1="38" y1="48" x2="30" y2="50"/>
+    <!-- 右下分支 -->
+    <line x1="82" y1="72" x2="85" y2="80"/>
+    <line x1="82" y1="72" x2="90" y2="70"/>
+    <!-- 左下分支 -->
+    <line x1="38" y1="72" x2="35" y2="80"/>
+    <line x1="38" y1="72" x2="30" y2="70"/>
+    <!-- 右上分支 -->
+    <line x1="82" y1="48" x2="85" y2="40"/>
+    <line x1="82" y1="48" x2="90" y2="50"/>
+  </g>
+  <!-- 中心圓 -->
+  <circle cx="60" cy="60" r="8" fill="#E1F5FE"/>
+  <circle cx="60" cy="60" r="4" fill="#64B5F6"/>
+  <!-- 末端圓點 -->
+  <circle cx="60" cy="25" r="3" fill="#64B5F6"/>
+  <circle cx="60" cy="95" r="3" fill="#64B5F6"/>
+  <circle cx="30" cy="42" r="3" fill="#64B5F6"/>
+  <circle cx="90" cy="78" r="3" fill="#64B5F6"/>
+  <circle cx="30" cy="78" r="3" fill="#64B5F6"/>
+  <circle cx="90" cy="42" r="3" fill="#64B5F6"/>
+</svg>

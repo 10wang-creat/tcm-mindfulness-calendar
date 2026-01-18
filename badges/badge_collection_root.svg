@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#C8E6C9"/>
+    </linearGradient>
+    <linearGradient id="ginsengGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D7CCC8"/>
+      <stop offset="100%" style="stop-color:#A1887F"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.3"/>
+  <!-- 土壤 -->
+  <ellipse cx="60" cy="85" rx="30" ry="8" fill="#5D4037"/>
+  <!-- 人參主體 -->
+  <path d="M60 40 Q55 50 58 60 Q55 70 50 85" stroke="url(#ginsengGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- 人參分支 - 左腿 -->
+  <path d="M55 65 Q48 75 45 90" stroke="url(#ginsengGradient)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- 人參分支 - 右腿 -->
+  <path d="M62 65 Q68 75 75 88" stroke="url(#ginsengGradient)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- 細根 -->
+  <path d="M50 85 Q45 90 42 95" stroke="#BCAAA4" stroke-width="2" fill="none"/>
+  <path d="M75 88 Q78 92 82 95" stroke="#BCAAA4" stroke-width="2" fill="none"/>
+  <!-- 人參頭部 -->
+  <ellipse cx="60" cy="38" rx="8" ry="6" fill="#D7CCC8"/>
+  <!-- 葉子 -->
+  <path d="M60 35 Q55 28 60 22 Q65 28 60 35" fill="#4CAF50"/>
+  <path d="M60 35 Q52 30 50 25" stroke="#4CAF50" stroke-width="2" fill="none"/>
+  <path d="M60 35 Q68 30 70 25" stroke="#4CAF50" stroke-width="2" fill="none"/>
+</svg>

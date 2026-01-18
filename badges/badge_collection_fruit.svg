@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#C8E6C9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.3"/>
+  <!-- 枸杞 -->
+  <ellipse cx="40" cy="42" rx="6" ry="4" fill="#D32F2F"/>
+  <ellipse cx="50" cy="38" rx="5" ry="3.5" fill="#E53935"/>
+  <ellipse cx="45" cy="48" rx="5" ry="3" fill="#C62828"/>
+  <!-- 紅棗 -->
+  <ellipse cx="75" cy="45" rx="8" ry="5" fill="#B71C1C"/>
+  <path d="M75 40 L75 42" stroke="#8D6E63" stroke-width="1"/>
+  <!-- 龍眼 -->
+  <circle cx="55" cy="65" r="8" fill="#8D6E63"/>
+  <circle cx="55" cy="65" r="5" fill="#D7CCC8"/>
+  <circle cx="55" cy="65" r="2" fill="#3E2723"/>
+  <!-- 蓮子 -->
+  <ellipse cx="78" cy="70" rx="6" ry="7" fill="#FFF8E1"/>
+  <line x1="78" y1="64" x2="78" y2="76" stroke="#BDBDBD" stroke-width="0.5"/>
+  <!-- 決明子 -->
+  <ellipse cx="38" cy="75" rx="4" ry="6" fill="#5D4037" transform="rotate(-15 38 75)"/>
+  <ellipse cx="48" cy="80" rx="4" ry="6" fill="#6D4C41" transform="rotate(10 48 80)"/>
+  <!-- 裝飾籃 -->
+  <path d="M25 88 Q60 95 95 88" stroke="#A1887F" stroke-width="2" fill="none"/>
+</svg>
