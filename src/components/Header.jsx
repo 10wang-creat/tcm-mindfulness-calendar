@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Menu } from 'lucide-react';
 
 export default function Header({ season, solarTerm }) {
   const seasonColors = {
@@ -35,21 +34,16 @@ export default function Header({ season, solarTerm }) {
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
-            {solarTerm && (
-              <motion.div 
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                className="hidden sm:flex items-center gap-2 bg-white/20 rounded-full px-3 py-1 backdrop-blur-sm"
-              >
-                <span className="text-sm font-medium">{solarTerm.name}</span>
-                <span className="text-xs text-white/70">{solarTerm.season}季</span>
-              </motion.div>
-            )}
-            <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors">
-              <Menu className="w-5 h-5" />
-            </button>
-          </div>
+          {solarTerm && (
+            <motion.div 
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="flex items-center gap-2 bg-white/20 rounded-full px-3 py-1 backdrop-blur-sm"
+            >
+              <span className="text-sm font-medium">{solarTerm.name}</span>
+              <span className="text-xs text-white/70">{solarTerm.season}季</span>
+            </motion.div>
+          )}
         </div>
       </div>
     </motion.header>

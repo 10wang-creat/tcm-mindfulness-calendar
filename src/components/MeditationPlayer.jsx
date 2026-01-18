@@ -9,7 +9,8 @@ const MeditationPlayer = ({
   herbName, 
   audioSrc, 
   herbEffect,
-  seasonColor = { primary: '#6B8E6B', secondary: '#C4A484' }
+  seasonColor = { primary: '#6B8E6B', secondary: '#C4A484' },
+  onComplete = null  // 冥想完成回調
 }) => {
   const audioRef = useRef(null);
   const progressRef = useRef(null);
@@ -129,6 +130,11 @@ const MeditationPlayer = ({
     const handleEnded = () => {
       setIsPlaying(false);
       setCurrentTime(0);
+      // 冥想完成時觸發回調
+      if (onComplete && duration > 0) {
+        const minutes = Math.ceil(duration / 60);
+        onComplete(herbName, minutes);
+      }
     };
 
     const handleError = (e) => {
@@ -171,7 +177,7 @@ const MeditationPlayer = ({
       audio.removeEventListener('waiting', handleWaiting);
       audio.removeEventListener('playing', handlePlaying);
     };
-  }, [audioSrc, volume]);
+  }, [audioSrc, volume, onComplete, herbName]);
 
   // 當音頻源改變時重置狀態
   useEffect(() => {

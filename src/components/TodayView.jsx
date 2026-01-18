@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Headphones } from 'lucide-react';
+import { ChevronDown, Headphones, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import { solarTermImages, herbImages, herbMeditations } from '../data/calendarData';
 import MeditationPlayer from './MeditationPlayer';
+import { useUserStats } from '../hooks/useUserStats';
 
 // 使用 Vite 的 BASE_URL 構建正確路徑
 const getImagePath = (termName) => {
@@ -31,9 +32,22 @@ const getMeditationPath = (herbName) => {
 export default function TodayView({ todayInfo, onOpenCalendar }) {
   const [showFullMeditation, setShowFullMeditation] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [showCompletionMessage, setShowCompletionMessage] = useState(false);
+  
+  const { stats, recordMeditation } = useUserStats();
 
   const { herb, solarTerm, theme, seasonColor, meditation, dayOfYear, date } = todayInfo;
   const meditationSrc = getMeditationPath(herb.name);
+  
+  // 檢查今日是否已完成冥想
+  const isTodayCompleted = stats.lastMeditationDate === new Date().toDateString();
+  
+  // 冥想完成處理
+  const handleMeditationComplete = (herbName, minutes) => {
+    recordMeditation(herbName, minutes);
+    setShowCompletionMessage(true);
+    setTimeout(() => setShowCompletionMessage(false), 3000);
+  };
   
   const formatDate = (d) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -46,6 +60,32 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
       animate={{ opacity: 1, y: 0 }}
       className="min-h-[calc(100vh-8rem)] flex flex-col"
     >
+      {/* 完成提示訊息 */}
+      <AnimatePresence>
+        {showCompletionMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2"
+          >
+            <CheckCircle className="w-5 h-5" />
+            <span className="font-medium">冥想完成！已記錄到統計</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* 今日已完成標記 */}
+      {isTodayCompleted && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mx-4 mt-2 mb-2 bg-green-50 border border-green-200 rounded-xl px-4 py-2 flex items-center justify-center gap-2"
+        >
+          <CheckCircle className="w-4 h-4 text-green-500" />
+          <span className="text-sm text-green-700">今日冥想已完成</span>
+        </motion.div>
+      )}
       {/* 日期與節氣區 */}
       <div className="text-center py-6 px-4">
         <motion.p 
@@ -157,6 +197,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
                         audioSrc={meditationSrc}
                         herbEffect={herb.effect}
                         seasonColor={seasonColor}
+                        onComplete={handleMeditationComplete}
                       />
                     </div>
                   </motion.div>
