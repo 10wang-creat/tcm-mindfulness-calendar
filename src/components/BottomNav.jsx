@@ -2,15 +2,15 @@ import { motion } from 'framer-motion';
 
 export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
   const tabs = [
-    { id: 'today', label: '今日', icon: './logo/icon_today.png' },
-    { id: 'calendar', label: '日曆', icon: './logo/icon_calendar.png' },
-    { id: 'herbs', label: '藥材', icon: './logo/icon_meet_herbs.png' },
-    { id: 'stats', label: '統計', icon: './logo/icon_my_journey.png' }
+    { id: 'today', icon: './logo/icon_today.png' },
+    { id: 'calendar', icon: './logo/icon_calendar.png' },
+    { id: 'herbs', icon: './logo/icon_meet_herbs.png' },
+    { id: 'stats', icon: './logo/icon_my_journey.png' }
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-area-bottom">
-      <div className="container mx-auto px-4">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 safe-area-bottom shadow-lg">
+      <div className="container mx-auto px-2">
         <div className="flex items-center justify-around py-2">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
@@ -19,28 +19,38 @@ export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
                 key={tab.id}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => onTabChange(tab.id)}
-                className={`
-                  flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-all
-                  ${isActive ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'}
-                `}
+                className="relative p-2 rounded-2xl transition-all"
               >
-                <div className="relative">
+                {/* 選中背景 */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTabBg"
+                    className="absolute inset-0 bg-sage-50 rounded-2xl"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                
+                {/* 圖標 */}
+                <div className="relative z-10">
                   <img 
                     src={tab.icon} 
-                    alt={tab.label}
-                    className={`w-8 h-8 object-contain transition-all ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}
+                    alt={tab.id}
+                    className={`w-12 h-12 object-contain transition-all duration-300 ${
+                      isActive 
+                        ? 'opacity-100 scale-110' 
+                        : 'opacity-40 grayscale hover:opacity-60'
+                    }`}
                   />
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full"
-                      style={{ backgroundColor: seasonColor?.primary || '#4A5568' }}
-                    />
-                  )}
                 </div>
-                <span className={`text-xs font-medium ${isActive ? '' : ''}`}>
-                  {tab.label}
-                </span>
+                
+                {/* 選中指示點 */}
+                {isActive && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-sage-500"
+                  />
+                )}
               </motion.button>
             );
           })}
