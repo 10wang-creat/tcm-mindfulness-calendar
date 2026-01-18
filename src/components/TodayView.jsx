@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Headphones, CheckCircle } from 'lucide-react';
+import { ChevronDown, Headphones, CheckCircle, ZoomIn } from 'lucide-react';
 import { useState } from 'react';
 import { solarTermImages, herbImages, herbMeditations } from '../data/calendarData';
 import MeditationPlayer from './MeditationPlayer';
 import { useUserStats } from '../hooks/useUserStats';
+import ImageLightbox from './ImageLightbox';
 
 // 使用 Vite 的 BASE_URL 構建正確路徑
 const getImagePath = (termName) => {
@@ -33,6 +34,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
   const [showFullMeditation, setShowFullMeditation] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
+  const [lightbox, setLightbox] = useState({ isOpen: false, src: '', alt: '', title: '', subtitle: '' });
   
   const { stats, recordMeditation } = useUserStats();
 
@@ -47,6 +49,16 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
     recordMeditation(herbName, minutes);
     setShowCompletionMessage(true);
     setTimeout(() => setShowCompletionMessage(false), 3000);
+  };
+  
+  // 開啟圖片燈箱
+  const openLightbox = (src, alt, title, subtitle) => {
+    setLightbox({ isOpen: true, src, alt, title, subtitle });
+  };
+  
+  // 關閉圖片燈箱
+  const closeLightbox = () => {
+    setLightbox({ ...lightbox, isOpen: false });
   };
   
   const formatDate = (d) => {
@@ -99,14 +111,22 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
           {formatDate(date)}
         </h2>
         
-        {/* 節氣圖騰 */}
+        {/* 節氣圖騰 - 可點擊放大 */}
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="flex justify-center mb-3"
         >
-          <div className="w-32 h-32 rounded-2xl overflow-hidden shadow-lg border-4 border-white bg-cream-50">
+          <div 
+            className="w-32 h-32 rounded-2xl overflow-hidden shadow-lg border-4 border-white bg-cream-50 cursor-pointer relative group"
+            onClick={() => openLightbox(
+              getImagePath(solarTerm.name),
+              solarTerm.name,
+              solarTerm.name,
+              `${solarTerm.season}季・${theme.theme}`
+            )}
+          >
             <img 
               src={getImagePath(solarTerm.name)}
               alt={solarTerm.name}
@@ -116,6 +136,12 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
                 e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-sage-50 to-sage-100 text-3xl">🌱</div>';
               }}
             />
+            {/* 放大提示 */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+              <div className="absolute bottom-1 right-1 opacity-60 group-hover:opacity-100 transition-opacity bg-white/80 rounded-full p-1">
+                <ZoomIn className="w-3 h-3 text-gray-600" />
+              </div>
+            </div>
           </div>
         </motion.div>
         
@@ -136,12 +162,20 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
         whileHover={{ scale: 1.02 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
-        {/* 藥材圖片區 */}
+        {/* 藥材圖片區 - 可點擊放大 */}
         <div 
           className={`h-56 bg-gradient-to-br ${seasonColor.bg} flex items-center justify-center relative overflow-hidden`}
         >
           <div className="relative z-10">
-            <div className="w-44 h-44 rounded-2xl bg-white/50 backdrop-blur-sm flex items-center justify-center overflow-hidden shadow-lg border-4 border-white">
+            <div 
+              className="w-44 h-44 rounded-2xl bg-white/50 backdrop-blur-sm flex items-center justify-center overflow-hidden shadow-lg border-4 border-white cursor-pointer relative group"
+              onClick={() => openLightbox(
+                getHerbImagePath(herb.name),
+                herb.name,
+                herb.name,
+                herb.effect
+              )}
+            >
               <img 
                 src={getHerbImagePath(herb.name)}
                 alt={herb.name}
@@ -151,6 +185,12 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
                   e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center text-5xl">🌿</div>';
                 }}
               />
+              {/* 放大提示 */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div className="absolute bottom-2 right-2 opacity-60 group-hover:opacity-100 transition-opacity bg-white/80 rounded-full p-1.5">
+                  <ZoomIn className="w-4 h-4 text-gray-600" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -255,6 +295,16 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
           查看完整日曆
         </motion.button>
       </div>
+      
+      {/* 圖片燈箱 */}
+      <ImageLightbox
+        isOpen={lightbox.isOpen}
+        onClose={closeLightbox}
+        imageSrc={lightbox.src}
+        imageAlt={lightbox.alt}
+        title={lightbox.title}
+        subtitle={lightbox.subtitle}
+      />
     </motion.div>
   );
 }
