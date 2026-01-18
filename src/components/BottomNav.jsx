@@ -35,10 +35,10 @@ export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
                   <img 
                     src={tab.icon} 
                     alt={tab.id}
-                    className={`w-12 h-12 object-contain transition-all duration-300 ${
+                    className={`w-10 h-10 object-contain transition-all duration-300 ${
                       isActive 
                         ? 'opacity-100 scale-110' 
-                        : 'opacity-40 grayscale hover:opacity-60'
+                        : 'opacity-70 hover:opacity-90'
                     }`}
                   />
                 </div>
