@@ -48,7 +48,7 @@ TEMP_DIR = Path(__file__).parent / "temp_meditation"
 
 HERBS_DATABASE = [
     # ===== 冬季養生 (1-14) =====
-    {"id": 1, "name": "人參", "pinyin": "renshen", "effect": "大補元氣", "season": "冬",
+    {"id": 1, "name": "人蔘", "pinyin": "renshen", "effect": "大補元氣", "season": "冬",
      "visual": "人形般的根莖，帶著淡淡的金黃光澤",
      "sensation": "溫暖的能量從丹田向全身擴散，如同冬日暖陽",
      "aroma": "淡淡的泥土香與甘甜氣息"},
