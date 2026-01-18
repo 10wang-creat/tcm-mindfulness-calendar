@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <!-- 背景漸層 - Legendary 金色 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8E1"/>
+      <stop offset="100%" style="stop-color:#FFE0B2"/>
+    </linearGradient>
+    <!-- 鼎身漸層 -->
+    <linearGradient id="dingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="50%" style="stop-color:#B8860B"/>
+      <stop offset="100%" style="stop-color:#8B6914"/>
+    </linearGradient>
+    <!-- 蒸汽漸層 -->
+    <linearGradient id="steamGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 外圍光暈 -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3"/>
+  
+  <!-- 外框 -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FF9800" stroke-width="4"/>
+  
+  <!-- 背景 -->
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  
+  <!-- 內圈裝飾 -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#FF9800" stroke-width="0.5" opacity="0.5"/>
+  
+  <!-- 草藥裝飾 - 左 -->
+  <path d="M25 55 Q30 45 35 55 Q30 58 25 55" fill="#2E7D32"/>
+  <path d="M28 60 Q33 52 38 60 Q33 63 28 60" fill="#4CAF50"/>
+  
+  <!-- 草藥裝飾 - 右 -->
+  <path d="M95 55 Q90 45 85 55 Q90 58 95 55" fill="#2E7D32"/>
+  <path d="M92 60 Q87 52 82 60 Q87 63 92 60" fill="#4CAF50"/>
+  
+  <!-- 藥鼎主體 -->
+  <g filter="url(#glow)">
+    <!-- 鼎身 -->
+    <path d="M40 60 L42 85 Q60 92 78 85 L80 60 Q60 55 40 60" fill="url(#dingGradient)"/>
+    
+    <!-- 鼎口 -->
+    <ellipse cx="60" cy="60" rx="20" ry="6" fill="#8B6914"/>
+    <ellipse cx="60" cy="58" rx="18" ry="5" fill="#5D4037"/>
+    
+    <!-- 鼎耳 - 左 -->
+    <path d="M42 62 Q35 60 38 68 Q42 70 42 65" fill="#B8860B"/>
+    
+    <!-- 鼎耳 - 右 -->
+    <path d="M78 62 Q85 60 82 68 Q78 70 78 65" fill="#B8860B"/>
+    
+    <!-- 鼎足 -->
+    <rect x="45" y="85" width="5" height="8" rx="1" fill="#8B6914"/>
+    <rect x="57" y="87" width="5" height="8" rx="1" fill="#8B6914"/>
+    <rect x="70" y="85" width="5" height="8" rx="1" fill="#8B6914"/>
+    
+    <!-- 鼎身紋飾 -->
+    <path d="M50 70 Q55 65 60 70 Q65 65 70 70" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+    <circle cx="60" cy="77" r="3" fill="none" stroke="#FFD700" stroke-width="1"/>
+  </g>
+  
+  <!-- 蒸汽 -->
+  <g fill="url(#steamGradient)" opacity="0.6">
+    <path d="M50 50 Q48 40 52 30 Q54 40 50 50"/>
+    <path d="M60 48 Q58 35 62 25 Q64 35 60 48"/>
+    <path d="M70 50 Q68 40 72 30 Q74 40 70 50"/>
+  </g>
+  
+  <!-- 閃光點 -->
+  <circle cx="48" cy="65" r="1" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="72" cy="68" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+</svg>

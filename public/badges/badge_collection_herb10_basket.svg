@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5F5"/>
+      <stop offset="100%" style="stop-color:#E0E0E0"/>
+    </linearGradient>
+    <linearGradient id="basketGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#A1887F"/>
+      <stop offset="100%" style="stop-color:#6D4C41"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#9E9E9E" stroke-width="2"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#9E9E9E" stroke-width="0.5" opacity="0.3"/>
+  <!-- 竹籃 -->
+  <ellipse cx="60" cy="80" rx="25" ry="10" fill="url(#basketGradient)"/>
+  <path d="M35 80 Q35 55 40 50 L80 50 Q85 55 85 80" fill="url(#basketGradient)"/>
+  <!-- 籃子編織紋 -->
+  <path d="M40 55 L80 55" stroke="#8D6E63" stroke-width="1" opacity="0.5"/>
+  <path d="M38 62 L82 62" stroke="#8D6E63" stroke-width="1" opacity="0.5"/>
+  <path d="M36 70 L84 70" stroke="#8D6E63" stroke-width="1" opacity="0.5"/>
+  <!-- 草藥 -->
+  <path d="M45 50 Q42 40 45 32 Q48 40 45 50" fill="#66BB6A"/>
+  <path d="M55 48 Q52 35 55 28 Q58 35 55 48" fill="#81C784"/>
+  <path d="M65 48 Q62 38 65 30 Q68 38 65 48" fill="#4CAF50"/>
+  <path d="M75 50 Q72 42 75 35 Q78 42 75 50" fill="#66BB6A"/>
+  <!-- 提把 -->
+  <path d="M45 50 Q60 25 75 50" stroke="#6D4C41" stroke-width="3" fill="none"/>
+</svg>

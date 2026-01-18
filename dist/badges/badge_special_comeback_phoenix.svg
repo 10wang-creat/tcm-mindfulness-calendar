@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <!-- 背景漸層 - Uncommon 綠色 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#C8E6C9"/>
+    </linearGradient>
+    <!-- 火焰漸層 -->
+    <linearGradient id="flameGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF5722"/>
+      <stop offset="50%" style="stop-color:#FF9800"/>
+      <stop offset="100%" style="stop-color:#FFEB3B"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 外框 -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  
+  <!-- 背景 -->
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  
+  <!-- 內圈裝飾 -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- 灰燼底部 -->
+  <ellipse cx="60" cy="85" rx="25" ry="6" fill="#9E9E9E" opacity="0.5"/>
+  <ellipse cx="60" cy="83" rx="20" ry="4" fill="#BDBDBD" opacity="0.4"/>
+  
+  <!-- 火焰 -->
+  <g fill="url(#flameGradient)">
+    <!-- 主火焰 -->
+    <path d="M60 30 Q75 45 70 60 Q75 70 60 85 Q45 70 50 60 Q45 45 60 30"/>
+    <!-- 左側小火焰 -->
+    <path d="M45 50 Q52 55 48 65 Q42 60 45 50" opacity="0.8"/>
+    <!-- 右側小火焰 -->
+    <path d="M75 50 Q68 55 72 65 Q78 60 75 50" opacity="0.8"/>
+  </g>
+  
+  <!-- 鳳凰翅膀 - 左 -->
+  <path d="M25 55 Q35 45 45 55 Q40 60 35 58 Q30 62 25 55" fill="#FF5722"/>
+  <path d="M30 60 Q38 52 45 60 Q40 63 35 62 Q32 65 30 60" fill="#FF9800"/>
+  
+  <!-- 鳳凰翅膀 - 右 -->
+  <path d="M95 55 Q85 45 75 55 Q80 60 85 58 Q90 62 95 55" fill="#FF5722"/>
+  <path d="M90 60 Q82 52 75 60 Q80 63 85 62 Q88 65 90 60" fill="#FF9800"/>
+  
+  <!-- 鳳凰頭部 -->
+  <circle cx="60" cy="38" r="8" fill="#FF5722"/>
+  <circle cx="60" cy="36" r="5" fill="#FFEB3B"/>
+  
+  <!-- 鳳凰眼睛 -->
+  <circle cx="58" cy="35" r="1.5" fill="#263238"/>
+  <circle cx="62" cy="35" r="1.5" fill="#263238"/>
+  
+  <!-- 鳳凰頭冠 -->
+  <path d="M55 30 Q58 22 60 28 Q62 22 65 30" stroke="#FF5722" stroke-width="2" fill="none"/>
+  
+  <!-- 火星粒子 -->
+  <circle cx="40" cy="45" r="1" fill="#FFEB3B"/>
+  <circle cx="80" cy="48" r="0.8" fill="#FF9800"/>
+  <circle cx="50" cy="35" r="0.6" fill="#FFEB3B"/>
+  <circle cx="70" cy="38" r="0.7" fill="#FF9800"/>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E3F2FD"/>
+      <stop offset="100%" style="stop-color:#BBDEFB"/>
+    </linearGradient>
+    <linearGradient id="crystalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E1F5FE"/>
+      <stop offset="50%" style="stop-color:#81D4FA"/>
+      <stop offset="100%" style="stop-color:#4FC3F7"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#2196F3" stroke-width="3"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#2196F3" stroke-width="0.5" opacity="0.3"/>
+  <!-- 主水晶 -->
+  <polygon points="60,25 75,55 68,85 52,85 45,55" fill="url(#crystalGradient)" stroke="#1976D2" stroke-width="1"/>
+  <!-- 晶面 -->
+  <line x1="60" y1="25" x2="60" y2="85" stroke="#4FC3F7" stroke-width="0.5" opacity="0.5"/>
+  <line x1="52" y1="55" x2="68" y2="55" stroke="#4FC3F7" stroke-width="0.5" opacity="0.5"/>
+  <!-- 左小水晶 -->
+  <polygon points="35,50 42,65 38,80 30,80 28,65" fill="#B3E5FC" stroke="#1976D2" stroke-width="0.5"/>
+  <!-- 右小水晶 -->
+  <polygon points="85,55 90,70 88,82 80,82 78,70" fill="#B3E5FC" stroke="#1976D2" stroke-width="0.5"/>
+  <!-- 反光點 -->
+  <circle cx="55" cy="40" r="3" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="65" cy="50" r="2" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="33" cy="58" r="1.5" fill="#FFFFFF" opacity="0.7"/>
+  <!-- 基座 -->
+  <ellipse cx="60" cy="88" rx="28" ry="5" fill="#90A4AE"/>
+</svg>

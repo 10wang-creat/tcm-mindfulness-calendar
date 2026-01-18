@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5F5"/>
+      <stop offset="100%" style="stop-color:#E0E0E0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#9E9E9E" stroke-width="2"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#9E9E9E" stroke-width="0.5" opacity="0.3"/>
+  <!-- 土壤 -->
+  <ellipse cx="60" cy="82" rx="28" ry="8" fill="#5D4037"/>
+  <!-- 根系 -->
+  <path d="M60 82 Q55 88 50 92" stroke="#795548" stroke-width="2" fill="none"/>
+  <path d="M60 82 Q65 88 70 92" stroke="#795548" stroke-width="2" fill="none"/>
+  <path d="M60 82 Q60 90 60 95" stroke="#795548" stroke-width="2" fill="none"/>
+  <!-- 主莖 -->
+  <path d="M60 82 L60 45" stroke="#4CAF50" stroke-width="3" fill="none"/>
+  <!-- 葉子 -->
+  <path d="M60 55 Q45 50 40 55 Q50 62 60 55" fill="#66BB6A"/>
+  <path d="M60 55 Q75 50 80 55 Q70 62 60 55" fill="#81C784"/>
+  <path d="M60 65 Q48 60 43 65 Q52 72 60 65" fill="#81C784"/>
+  <path d="M60 65 Q72 60 77 65 Q68 72 60 65" fill="#66BB6A"/>
+  <!-- 頂芽 -->
+  <path d="M60 45 Q55 38 60 32 Q65 38 60 45" fill="#A5D6A7"/>
+</svg>

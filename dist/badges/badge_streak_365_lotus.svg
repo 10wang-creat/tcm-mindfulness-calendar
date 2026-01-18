@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <!-- 背景漸層 - Legendary 金色 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF8E1"/>
+      <stop offset="100%" style="stop-color:#FFE0B2"/>
+    </linearGradient>
+    <!-- 蓮花漸層 -->
+    <linearGradient id="lotusGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#FFA000"/>
+    </linearGradient>
+    <!-- 光暈效果 -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- 外發光 -->
+    <radialGradient id="outerGlow" cx="50%" cy="50%">
+      <stop offset="60%" style="stop-color:#FFD700;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.3"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- 外圍光暈 -->
+  <circle cx="60" cy="60" r="58" fill="url(#outerGlow)"/>
+  
+  <!-- 外框 -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FF9800" stroke-width="4"/>
+  
+  <!-- 背景 -->
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  
+  <!-- 內圈裝飾 -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#FF9800" stroke-width="0.5" opacity="0.5"/>
+  
+  <!-- 光芒射線 -->
+  <g stroke="#FFD700" stroke-width="1" opacity="0.4">
+    <line x1="60" y1="15" x2="60" y2="25"/>
+    <line x1="60" y1="95" x2="60" y2="105"/>
+    <line x1="15" y1="60" x2="25" y2="60"/>
+    <line x1="95" y1="60" x2="105" y2="60"/>
+    <line x1="28" y1="28" x2="35" y2="35"/>
+    <line x1="85" y1="85" x2="92" y2="92"/>
+    <line x1="92" y1="28" x2="85" y2="35"/>
+    <line x1="28" y1="92" x2="35" y2="85"/>
+  </g>
+  
+  <!-- 蓮花花瓣 - 8片 -->
+  <g fill="url(#lotusGradient)" filter="url(#glow)">
+    <!-- 上 -->
+    <path d="M60 30 Q70 45 60 55 Q50 45 60 30"/>
+    <!-- 右上 -->
+    <path d="M81 39 Q78 56 66 58 Q72 46 81 39"/>
+    <!-- 右 -->
+    <path d="M90 60 Q75 70 65 60 Q75 50 90 60"/>
+    <!-- 右下 -->
+    <path d="M81 81 Q72 74 66 62 Q78 64 81 81"/>
+    <!-- 下 -->
+    <path d="M60 90 Q50 75 60 65 Q70 75 60 90"/>
+    <!-- 左下 -->
+    <path d="M39 81 Q42 64 54 62 Q48 74 39 81"/>
+    <!-- 左 -->
+    <path d="M30 60 Q45 50 55 60 Q45 70 30 60"/>
+    <!-- 左上 -->
+    <path d="M39 39 Q48 46 54 58 Q42 56 39 39"/>
+  </g>
+  
+  <!-- 蓮蓬中心 -->
+  <circle cx="60" cy="60" r="10" fill="#FFA000"/>
+  <circle cx="60" cy="60" r="7" fill="#FFD700"/>
+  
+  <!-- 蓮子點 -->
+  <circle cx="57" cy="58" r="1.5" fill="#FFA000"/>
+  <circle cx="63" cy="58" r="1.5" fill="#FFA000"/>
+  <circle cx="60" cy="63" r="1.5" fill="#FFA000"/>
+  
+  <!-- 閃爍粒子（動畫可後加） -->
+  <circle cx="35" cy="35" r="1" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="85" cy="35" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="40" cy="80" r="0.8" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="80" cy="80" r="1" fill="#FFFFFF" opacity="0.8"/>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <!-- 背景漸層 - Rare 藍色 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E3F2FD"/>
+      <stop offset="100%" style="stop-color:#BBDEFB"/>
+    </linearGradient>
+    <!-- 月亮漸層 -->
+    <radialGradient id="moonGradient" cx="40%" cy="40%">
+      <stop offset="0%" style="stop-color:#FFFDE7"/>
+      <stop offset="100%" style="stop-color:#FFF9C4"/>
+    </radialGradient>
+    <!-- 光暈 -->
+    <radialGradient id="glowGradient" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FFF9C4;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#FFF9C4;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- 外框 -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#2196F3" stroke-width="3"/>
+  
+  <!-- 背景 -->
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  
+  <!-- 內圈裝飾 -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#2196F3" stroke-width="0.5" opacity="0.3"/>
+  
+  <!-- 外圍光暈 -->
+  <circle cx="60" cy="60" r="38" fill="url(#glowGradient)"/>
+  
+  <!-- 月亮主體 -->
+  <circle cx="60" cy="60" r="28" fill="url(#moonGradient)"/>
+  
+  <!-- 月球紋理 - 隕石坑 -->
+  <circle cx="50" cy="55" r="5" fill="#FFECB3" opacity="0.5"/>
+  <circle cx="68" cy="52" r="3" fill="#FFECB3" opacity="0.4"/>
+  <circle cx="55" cy="70" r="4" fill="#FFECB3" opacity="0.4"/>
+  <circle cx="72" cy="65" r="2.5" fill="#FFECB3" opacity="0.3"/>
+  
+  <!-- 星星裝飾 -->
+  <circle cx="25" cy="35" r="1.5" fill="#FFD700"/>
+  <circle cx="95" cy="40" r="1" fill="#FFD700"/>
+  <circle cx="30" cy="85" r="1" fill="#FFD700"/>
+  <circle cx="90" cy="80" r="1.5" fill="#FFD700"/>
+</svg>

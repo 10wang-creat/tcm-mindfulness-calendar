@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#C8E6C9"/>
+    </linearGradient>
+    <linearGradient id="wheatGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFEB3B"/>
+      <stop offset="100%" style="stop-color:#FFC107"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.3"/>
+  <!-- 麥穗莖 -->
+  <path d="M60 95 Q55 70 50 40" stroke="#8D6E63" stroke-width="2.5" fill="none"/>
+  <!-- 麥穗粒 - 左側 -->
+  <ellipse cx="46" cy="42" rx="4" ry="7" fill="url(#wheatGradient)" transform="rotate(-20 46 42)"/>
+  <ellipse cx="44" cy="52" rx="4" ry="7" fill="url(#wheatGradient)" transform="rotate(-15 44 52)"/>
+  <ellipse cx="46" cy="62" rx="4" ry="7" fill="url(#wheatGradient)" transform="rotate(-10 46 62)"/>
+  <!-- 麥穗粒 - 右側 -->
+  <ellipse cx="54" cy="38" rx="4" ry="7" fill="url(#wheatGradient)" transform="rotate(15 54 38)"/>
+  <ellipse cx="52" cy="48" rx="4" ry="7" fill="url(#wheatGradient)" transform="rotate(10 52 48)"/>
+  <ellipse cx="52" cy="58" rx="4" ry="7" fill="url(#wheatGradient)" transform="rotate(5 52 58)"/>
+  <!-- 麥芒 -->
+  <path d="M50 35 L45 25" stroke="#FFC107" stroke-width="1" fill="none"/>
+  <path d="M48 32 L40 22" stroke="#FFC107" stroke-width="1" fill="none"/>
+</svg>

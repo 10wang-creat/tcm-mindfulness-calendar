@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5F5"/>
+      <stop offset="100%" style="stop-color:#E0E0E0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#9E9E9E" stroke-width="2"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#9E9E9E" stroke-width="0.5" opacity="0.3"/>
+  <!-- 沙地 -->
+  <ellipse cx="60" cy="78" rx="32" ry="10" fill="#FFF8E1"/>
+  <!-- 腳印 -->
+  <g fill="#8D6E63">
+    <!-- 腳掌 -->
+    <ellipse cx="60" cy="60" rx="12" ry="18"/>
+    <!-- 腳趾 -->
+    <circle cx="52" cy="42" r="4"/>
+    <circle cx="60" cy="40" r="4.5"/>
+    <circle cx="68" cy="42" r="4"/>
+    <circle cx="48" cy="48" r="3"/>
+    <circle cx="72" cy="48" r="3"/>
+  </g>
+  <!-- 腳印陰影 -->
+  <ellipse cx="60" cy="62" rx="10" ry="15" fill="#6D4C41" opacity="0.3"/>
+  <!-- 沙粒效果 -->
+  <circle cx="35" cy="75" r="1" fill="#D7CCC8"/>
+  <circle cx="85" cy="72" r="1.2" fill="#D7CCC8"/>
+  <circle cx="45" cy="82" r="0.8" fill="#D7CCC8"/>
+  <circle cx="78" cy="80" r="1" fill="#D7CCC8"/>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFDE7"/>
+      <stop offset="100%" style="stop-color:#FFF9C4"/>
+    </linearGradient>
+    <radialGradient id="sunGradient" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FFEB3B"/>
+      <stop offset="100%" style="stop-color:#FFC107"/>
+    </radialGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#FF9800" stroke-width="3"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#FF9800" stroke-width="0.5" opacity="0.3"/>
+  <!-- 向日葵花瓣 -->
+  <g fill="#FFC107">
+    <ellipse cx="60" cy="32" rx="6" ry="15" />
+    <ellipse cx="60" cy="88" rx="6" ry="15" />
+    <ellipse cx="32" cy="60" rx="15" ry="6" />
+    <ellipse cx="88" cy="60" rx="15" ry="6" />
+    <ellipse cx="40" cy="40" rx="6" ry="12" transform="rotate(-45 40 40)"/>
+    <ellipse cx="80" cy="40" rx="6" ry="12" transform="rotate(45 80 40)"/>
+    <ellipse cx="40" cy="80" rx="6" ry="12" transform="rotate(45 40 80)"/>
+    <ellipse cx="80" cy="80" rx="6" ry="12" transform="rotate(-45 80 80)"/>
+  </g>
+  <!-- 內層花瓣 -->
+  <g fill="#FFD54F">
+    <ellipse cx="60" cy="40" rx="4" ry="10" />
+    <ellipse cx="60" cy="80" rx="4" ry="10" />
+    <ellipse cx="40" cy="60" rx="10" ry="4" />
+    <ellipse cx="80" cy="60" rx="10" ry="4" />
+  </g>
+  <!-- 花心 -->
+  <circle cx="60" cy="60" r="16" fill="#5D4037"/>
+  <!-- 花心紋理 -->
+  <circle cx="55" cy="56" r="2" fill="#4E342E"/>
+  <circle cx="65" cy="56" r="2" fill="#4E342E"/>
+  <circle cx="60" cy="64" r="2" fill="#4E342E"/>
+  <circle cx="52" cy="62" r="1.5" fill="#4E342E"/>
+  <circle cx="68" cy="62" r="1.5" fill="#4E342E"/>
+</svg>

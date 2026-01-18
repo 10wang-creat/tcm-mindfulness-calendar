@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F5E9"/>
+      <stop offset="100%" style="stop-color:#C8E6C9"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#4CAF50" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="52" fill="url(#bgGradient)"/>
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.3"/>
+  <!-- 沙漏框架 -->
+  <path d="M40 25 L80 25 L80 30 L70 30 L60 50 L50 30 L40 30 Z" fill="#8D6E63"/>
+  <path d="M40 95 L80 95 L80 90 L70 90 L60 70 L50 90 L40 90 Z" fill="#8D6E63"/>
+  <!-- 沙漏玻璃 -->
+  <path d="M50 30 L70 30 L60 50 Z" fill="#E8F5E9" opacity="0.8"/>
+  <path d="M50 90 L70 90 L60 70 Z" fill="#E8F5E9" opacity="0.8"/>
+  <!-- 沙子 - 上半 (1/2滿) -->
+  <path d="M54 38 L66 38 L60 48 Z" fill="#FFB74D"/>
+  <!-- 沙子 - 下半 (1/2滿) -->
+  <path d="M54 88 L66 88 L60 74 Z" fill="#FFB74D"/>
+  <!-- 流沙 -->
+  <line x1="60" y1="52" x2="60" y2="68" stroke="#FFB74D" stroke-width="2"/>
+  <!-- 沙漏支架 -->
+  <rect x="38" y="23" width="44" height="3" rx="1" fill="#6D4C41"/>
+  <rect x="38" y="94" width="44" height="3" rx="1" fill="#6D4C41"/>
+</svg>
