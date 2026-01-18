@@ -121,23 +121,23 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
       >
         {/* 藥材圖片區 */}
         <div 
-          className={`h-48 bg-gradient-to-br ${seasonColor.bg} flex items-center justify-center relative overflow-hidden`}
+          className={`h-56 bg-gradient-to-br ${seasonColor.bg} flex items-center justify-center relative overflow-hidden`}
         >
           <motion.div
             animate={isPlaying ? {
-              scale: breathPhase === 'inhale' ? 1.2 : breathPhase === 'hold' ? 1.2 : 1,
+              scale: breathPhase === 'inhale' ? 1.1 : breathPhase === 'hold' ? 1.1 : 1,
             } : {}}
             transition={{ duration: breathPhase === 'exhale' ? 6 : 4, ease: "easeInOut" }}
             className="relative z-10"
           >
-            <div className="w-32 h-32 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+            <div className="w-44 h-44 rounded-2xl bg-white/50 backdrop-blur-sm flex items-center justify-center overflow-hidden shadow-lg border-4 border-white">
               <img 
                 src={getHerbImagePath(herb.name)}
                 alt={herb.name}
-                className="w-28 h-28 object-contain"
+                className="w-full h-full object-contain p-2"
                 onError={(e) => {
                   e.target.style.display = 'none';
-                  e.target.parentElement.innerHTML = '<div class="w-24 h-24 flex items-center justify-center text-4xl">🌿</div>';
+                  e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center text-5xl">🌿</div>';
                 }}
               />
             </div>
