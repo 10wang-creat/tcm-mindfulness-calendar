@@ -81,11 +81,11 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
           transition={{ delay: 0.2 }}
           className="flex justify-center mb-3"
         >
-          <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white">
+          <div className="w-32 h-32 rounded-2xl overflow-hidden shadow-lg border-4 border-white bg-cream-50">
             <img 
               src={getImagePath(solarTerm.name)}
               alt={solarTerm.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               onError={(e) => {
                 e.target.style.display = 'none';
                 e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br ${seasonColor.bg} text-3xl">🌱</div>`;
