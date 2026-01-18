@@ -1,7 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Volume2, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getSolarTermImage } from '../data/calendarData';
+import { solarTermImages } from '../data/calendarData';
+
+// 使用 Vite 的 BASE_URL 構建正確路徑
+const getImagePath = (termName) => {
+  const imagePath = solarTermImages[termName];
+  if (!imagePath) return null;
+  // 移除開頭的 ./ 並加上 BASE_URL
+  const cleanPath = imagePath.replace(/^\.\//, '');
+  return `${import.meta.env.BASE_URL}${cleanPath}`;
+};
 
 export default function TodayView({ todayInfo, onOpenCalendar }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -74,7 +83,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
         >
           <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg border-4 border-white">
             <img 
-              src={getSolarTermImage(solarTerm.name)}
+              src={getImagePath(solarTerm.name)}
               alt={solarTerm.name}
               className="w-full h-full object-cover"
               onError={(e) => {
