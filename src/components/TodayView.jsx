@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, RotateCcw, ChevronDown, Headphones } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { ChevronDown, Headphones } from 'lucide-react';
+import { useState } from 'react';
 import { solarTermImages, herbImages, herbMeditations } from '../data/calendarData';
 import MeditationPlayer from './MeditationPlayer';
 
@@ -29,35 +29,8 @@ const getMeditationPath = (herbName) => {
 };
 
 export default function TodayView({ todayInfo, onOpenCalendar }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [breathPhase, setBreathPhase] = useState('inhale');
   const [showFullMeditation, setShowFullMeditation] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
-
-  // 呼吸引導計時器
-  useEffect(() => {
-    if (!isPlaying) return;
-    
-    const phases = [
-      { name: 'inhale', duration: 4000 },
-      { name: 'hold', duration: 4000 },
-      { name: 'exhale', duration: 6000 }
-    ];
-    
-    let currentIndex = 0;
-    
-    const cycle = () => {
-      setBreathPhase(phases[currentIndex].name);
-      currentIndex = (currentIndex + 1) % phases.length;
-    };
-    
-    cycle();
-    const interval = setInterval(() => {
-      cycle();
-    }, phases.reduce((sum, p) => sum + p.duration, 0) / 3);
-    
-    return () => clearInterval(interval);
-  }, [isPlaying]);
 
   const { herb, solarTerm, theme, seasonColor, meditation, dayOfYear, date } = todayInfo;
   const meditationSrc = getMeditationPath(herb.name);
@@ -65,12 +38,6 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
   const formatDate = (d) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
     return d.toLocaleDateString('zh-TW', options);
-  };
-
-  const breathText = {
-    inhale: '吸氣',
-    hold: '屏息',
-    exhale: '呼氣'
   };
 
   return (
@@ -133,13 +100,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
         <div 
           className={`h-56 bg-gradient-to-br ${seasonColor.bg} flex items-center justify-center relative overflow-hidden`}
         >
-          <motion.div
-            animate={isPlaying ? {
-              scale: breathPhase === 'inhale' ? 1.1 : breathPhase === 'hold' ? 1.1 : 1,
-            } : {}}
-            transition={{ duration: breathPhase === 'exhale' ? 6 : 4, ease: "easeInOut" }}
-            className="relative z-10"
-          >
+          <div className="relative z-10">
             <div className="w-44 h-44 rounded-2xl bg-white/50 backdrop-blur-sm flex items-center justify-center overflow-hidden shadow-lg border-4 border-white">
               <img 
                 src={getHerbImagePath(herb.name)}
@@ -151,23 +112,7 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
                 }}
               />
             </div>
-          </motion.div>
-
-          {/* 呼吸引導文字 */}
-          <AnimatePresence>
-            {isPlaying && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="absolute bottom-4 left-0 right-0 text-center"
-              >
-                <span className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-gray-700 font-medium">
-                  {breathText[breathPhase]}
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          </div>
         </div>
 
         {/* 藥材資訊 */}
@@ -177,34 +122,6 @@ export default function TodayView({ todayInfo, onOpenCalendar }) {
               {herb.name}
             </h3>
             <p className="text-lg text-gray-600">{herb.effect}</p>
-          </div>
-
-          {/* 呼吸引導控制 */}
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsPlaying(!isPlaying)}
-              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-colors ${
-                isPlaying 
-                  ? 'bg-gray-800 text-white' 
-                  : 'text-white'
-              }`}
-              style={!isPlaying ? { background: `linear-gradient(135deg, ${seasonColor.primary}, ${seasonColor.secondary})` } : {}}
-            >
-              {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-1" />}
-            </motion.button>
-            
-            {isPlaying && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsPlaying(false)}
-                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
-              >
-                <RotateCcw className="w-5 h-5 text-gray-600" />
-              </motion.button>
-            )}
           </div>
 
           {/* 冥想音頻播放器切換按鈕 */}
