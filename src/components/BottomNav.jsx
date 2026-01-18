@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
+import { Sun, Calendar, Leaf, TrendingUp } from 'lucide-react';
 
 export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
   const tabs = [
-    { id: 'today', icon: './logo/icon_today.png' },
-    { id: 'calendar', icon: './logo/icon_calendar.png' },
-    { id: 'herbs', icon: './logo/icon_meet_herbs.png' },
-    { id: 'stats', icon: './logo/icon_my_journey.png' }
+    { id: 'today', icon: Sun, label: '今日' },
+    { id: 'calendar', icon: Calendar, label: '日曆' },
+    { id: 'herbs', icon: Leaf, label: '藥材' },
+    { id: 'stats', icon: TrendingUp, label: '旅程' }
   ];
 
   return (
@@ -14,43 +15,47 @@ export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
         <div className="flex items-center justify-around py-2">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
+            
             return (
               <motion.button
                 key={tab.id}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => onTabChange(tab.id)}
-                className="relative p-2 rounded-2xl transition-all"
+                className="relative flex flex-col items-center min-w-[60px] py-1 px-3 rounded-xl transition-all"
               >
                 {/* 選中背景 */}
                 {isActive && (
                   <motion.div
                     layoutId="activeTabBg"
-                    className="absolute inset-0 bg-sage-50 rounded-2xl"
+                    className="absolute inset-0 bg-sage-50 rounded-xl"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
                 
                 {/* 圖標 */}
                 <div className="relative z-10">
-                  <img 
-                    src={tab.icon} 
-                    alt={tab.id}
-                    className={`w-10 h-10 object-contain transition-all duration-300 ${
+                  <Icon 
+                    size={24}
+                    strokeWidth={isActive ? 2.5 : 2}
+                    className={`transition-all duration-300 ${
                       isActive 
-                        ? 'opacity-100 scale-110' 
-                        : 'opacity-70 hover:opacity-90'
+                        ? 'text-sage-600' 
+                        : 'text-gray-400'
                     }`}
                   />
                 </div>
                 
-                {/* 選中指示點 */}
-                {isActive && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-sage-500"
-                  />
-                )}
+                {/* 文字標籤 */}
+                <span 
+                  className={`relative z-10 text-xs mt-1 font-medium transition-all duration-300 ${
+                    isActive 
+                      ? 'text-sage-600' 
+                      : 'text-gray-400'
+                  }`}
+                >
+                  {tab.label}
+                </span>
               </motion.button>
             );
           })}
