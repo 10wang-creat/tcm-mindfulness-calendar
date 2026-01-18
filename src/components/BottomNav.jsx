@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion';
-import { Home, Calendar, Leaf, BarChart3 } from 'lucide-react';
 
 export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
   const tabs = [
-    { id: 'today', label: '今日', icon: Home },
-    { id: 'calendar', label: '日曆', icon: Calendar },
-    { id: 'herbs', label: '藥材', icon: Leaf },
-    { id: 'stats', label: '統計', icon: BarChart3 }
+    { id: 'today', label: '今日', icon: './logo/icon_today.png' },
+    { id: 'calendar', label: '日曆', icon: './logo/icon_calendar.png' },
+    { id: 'herbs', label: '藥材', icon: './logo/icon_meet_herbs.png' },
+    { id: 'stats', label: '統計', icon: './logo/icon_my_journey.png' }
   ];
 
   return (
@@ -21,12 +20,16 @@ export default function BottomNav({ activeTab, onTabChange, seasonColor }) {
                 whileTap={{ scale: 0.9 }}
                 onClick={() => onTabChange(tab.id)}
                 className={`
-                  flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-colors
+                  flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-all
                   ${isActive ? 'text-gray-800' : 'text-gray-400 hover:text-gray-600'}
                 `}
               >
                 <div className="relative">
-                  <tab.icon className="w-6 h-6" />
+                  <img 
+                    src={tab.icon} 
+                    alt={tab.label}
+                    className={`w-6 h-6 object-contain transition-all ${isActive ? 'opacity-100' : 'opacity-50 grayscale'}`}
+                  />
                   {isActive && (
                     <motion.div
                       layoutId="activeIndicator"

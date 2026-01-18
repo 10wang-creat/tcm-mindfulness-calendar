@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Leaf, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 export default function Header({ season, solarTerm }) {
   const seasonColors = {
@@ -19,11 +19,15 @@ export default function Header({ season, solarTerm }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <motion.div 
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-              className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
             >
-              <Leaf className="w-6 h-6" />
+              <img 
+                src="./logo/logo_main_transparent.png" 
+                alt="中藥正念日曆" 
+                className="w-9 h-9 object-contain"
+              />
             </motion.div>
             <div>
               <h1 className="text-lg font-serif font-bold tracking-wide">中藥正念日曆</h1>
