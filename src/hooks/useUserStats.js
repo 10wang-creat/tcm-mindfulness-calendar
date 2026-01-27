@@ -9,6 +9,7 @@ const getDefaultStats = () => ({
   longestStreak: 0,
   lastMeditationDate: null,
   collectedHerbs: [],
+  favoriteHerbs: [], // 新增：收藏的藥材
   weeklyActivity: [0, 0, 0, 0, 0, 0, 0], // 週日到週六
   monthlyMeditations: 0,
   firstUseDate: null
@@ -109,9 +110,34 @@ export function useUserStats() {
     saveStats(defaultStats);
   }, [saveStats]);
 
+  // 切換收藏藥材
+  const toggleFavoriteHerb = useCallback((herbName) => {
+    setStats(prev => {
+      const isFavorite = prev.favoriteHerbs?.includes(herbName);
+      const newFavorites = isFavorite
+        ? prev.favoriteHerbs.filter(h => h !== herbName)
+        : [...(prev.favoriteHerbs || []), herbName];
+      
+      const newStats = {
+        ...prev,
+        favoriteHerbs: newFavorites
+      };
+      
+      saveStats(newStats);
+      return newStats;
+    });
+  }, [saveStats]);
+
+  // 檢查是否已收藏
+  const isFavorite = useCallback((herbName) => {
+    return stats.favoriteHerbs?.includes(herbName) || false;
+  }, [stats.favoriteHerbs]);
+
   return {
     stats,
     recordMeditation,
-    resetStats
+    resetStats,
+    toggleFavoriteHerb,
+    isFavorite
   };
 }
