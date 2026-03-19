@@ -327,6 +327,94 @@ function generateShareCard(herb, canvasRef) {
   img.src = herbImg(herb);
 }
 
+// ── Solar Term Share Card ──
+function generateSolarTermCard(term, canvasRef) {
+  const canvas = canvasRef.current; if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  canvas.width = 800; canvas.height = 1000;
+  // Background
+  const seasonColors = { spring:"#e8f0e4", summer:"#fde8d8", autumn:"#f0e0d0", winter:"#dde6ee" };
+  const bg = seasonColors[term.season] || "#f5f0e8";
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, 800, 1000);
+  // Decorative border
+  ctx.strokeStyle = "#c4a882"; ctx.lineWidth = 3; ctx.strokeRect(30, 30, 740, 940);
+  ctx.strokeStyle = "#d4c4a8"; ctx.lineWidth = 1; ctx.strokeRect(40, 40, 720, 920);
+  // Season label
+  const seasonNames = { spring:"春", summer:"夏", autumn:"秋", winter:"冬" };
+  ctx.fillStyle = "#b0a090"; ctx.font = "18px sans-serif"; ctx.textAlign = "center";
+  ctx.fillText(`— ${seasonNames[term.season] || ""} —`, 400, 80);
+  // Term name
+  ctx.fillStyle = "#4a3a2a"; ctx.font = "bold 64px serif"; ctx.fillText(term.name, 400, 160);
+  ctx.font = "22px sans-serif"; ctx.fillStyle = "#7a6a5a"; ctx.fillText(term.theme, 400, 200);
+  // Load solar term image
+  const img = new Image(); img.crossOrigin = "anonymous";
+  img.onload = () => {
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.1)"; ctx.shadowBlur = 20;
+    ctx.drawImage(img, 150, 240, 500, 500); ctx.restore();
+    // Date
+    ctx.textAlign = "center"; ctx.fillStyle = "#6a5a4a"; ctx.font = "20px serif";
+    ctx.fillText(`${term.date}`, 400, 800);
+    // Icon
+    ctx.font = "40px sans-serif"; ctx.fillText(term.icon, 400, 860);
+    // Branding
+    ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
+    ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 930);
+    const link = document.createElement("a");
+    link.download = `${term.name}_節氣圖卡.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.onerror = () => {
+    ctx.font = "120px serif"; ctx.fillStyle = "#ccc"; ctx.textAlign = "center"; ctx.fillText(term.icon, 400, 520);
+    ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif"; ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 930);
+    const link = document.createElement("a"); link.download = `${term.name}_節氣圖卡.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.src = solarTermImg(term.name);
+}
+
+// ── Solar Term Wallpaper ──
+function generateSolarTermWallpaper(term, size, canvasRef) {
+  const canvas = canvasRef.current; if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = size === "phone" ? 1170 : 2560; const h = size === "phone" ? 2532 : 1440;
+  canvas.width = w; canvas.height = h;
+  const seasonGrads = {
+    spring: ["#e8f0e4","#d8e8d0","#c8d8c0"],
+    summer: ["#fef5e8","#fde8d0","#f8d8b8"],
+    autumn: ["#f5ede4","#ecdcc8","#e0ccb0"],
+    winter: ["#e8edf5","#d8e0f0","#c8d4e8"],
+  };
+  const colors = seasonGrads[term.season] || seasonGrads.spring;
+  const grad = ctx.createRadialGradient(w/2, h*0.4, 100, w/2, h/2, w*0.8);
+  grad.addColorStop(0, colors[0]); grad.addColorStop(0.5, colors[1]); grad.addColorStop(1, colors[2]);
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+  // Texture
+  ctx.strokeStyle = "rgba(180,165,140,0.04)"; ctx.lineWidth = 1;
+  for (let i = 0; i < h; i += 4) { ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(w, i); ctx.stroke(); }
+  const img = new Image(); img.crossOrigin = "anonymous";
+  img.onload = () => {
+    const imgSize = size === "phone" ? 800 : 700;
+    const ix = (w - imgSize) / 2; const iy = size === "phone" ? h * 0.2 : (h - imgSize) / 2 - 60;
+    ctx.save(); ctx.globalAlpha = 0.92; ctx.drawImage(img, ix, iy, imgSize, imgSize); ctx.restore();
+    const nameY = size === "phone" ? h * 0.7 : h * 0.82;
+    ctx.textAlign = "center"; ctx.fillStyle = "#4a3a2a";
+    ctx.font = `bold ${size === "phone" ? 80 : 64}px serif`; ctx.fillText(term.name, w/2, nameY);
+    ctx.font = `${size === "phone" ? 32 : 26}px serif`; ctx.fillStyle = "#7a6a5a";
+    ctx.fillText(term.theme, w/2, nameY + (size === "phone" ? 55 : 45));
+    ctx.font = `${size === "phone" ? 24 : 20}px serif`; ctx.fillStyle = "#9a8a7a";
+    ctx.fillText(term.date, w/2, nameY + (size === "phone" ? 95 : 80));
+    const link = document.createElement("a"); link.download = `${term.name}_wallpaper_${size}.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.onerror = () => {
+    ctx.textAlign = "center"; ctx.fillStyle = "#4a3a2a"; ctx.font = "bold 120px serif"; ctx.fillText(term.name, w/2, h*0.45);
+    ctx.font = "40px serif"; ctx.fillStyle = "#7a6a5a"; ctx.fillText(term.theme, w/2, h*0.45+70);
+    const link = document.createElement("a"); link.download = `${term.name}_wallpaper_${size}.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.src = solarTermImg(term.name);
+}
+
 function generateWallpaper(herb, size, canvasRef) {
   const canvas = canvasRef.current; if (!canvas) return;
   const ctx = canvas.getContext("2d");
@@ -462,7 +550,13 @@ function TodayView({ t, stats, setStats, collected, setCollected, canvasRef }) {
               </div>
             </div>
           </div>
-          <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+            <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
+            <div style={{ display:"flex", gap:6 }}>
+              <button onClick={()=>generateSolarTermCard(term, canvasRef)} style={{ background:"rgba(255,255,255,0.6)", border:"none", borderRadius:10, padding:"5px 10px", fontSize:11, cursor:"pointer", color:t.accent, display:"flex", alignItems:"center", gap:3, backdropFilter:"blur(8px)" }}><I.Share/> 節氣圖卡</button>
+              <button onClick={()=>generateSolarTermWallpaper(term, "phone", canvasRef)} style={{ background:"rgba(255,255,255,0.6)", border:"none", borderRadius:10, padding:"5px 10px", fontSize:11, cursor:"pointer", color:t.accent, display:"flex", alignItems:"center", gap:3, backdropFilter:"blur(8px)" }}><I.Download/> 節氣桌布</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -578,7 +672,7 @@ function MedPlayer({ t, herb, med, term, stats, setStats }) {
   );
 }
 
-function CalendarView({ t, stats }) {
+function CalendarView({ t, stats, canvasRef }) {
   const [vd, setVd] = useState(new Date()); const [sel, setSel] = useState(null);
   const y=vd.getFullYear(); const m=vd.getMonth(); const fd=new Date(y,m,1).getDay(); const dim=new Date(y,m+1,0).getDate(); const today=fmtDate(new Date());
   const mTerms=SOLAR_TERMS_2026.filter(t=>{const d=new Date(t.date);return d.getFullYear()===y&&d.getMonth()===m;});
@@ -629,6 +723,12 @@ function CalendarView({ t, stats }) {
           </div>
           <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>{sHerb.desc}</p>
           <p style={{fontSize:13,color:t.text,lineHeight:1.7,fontStyle:"italic",padding:"10px 14px",background:t.accentLight,borderRadius:10}}>{sMed}</p>
+          {/* Solar term share buttons in calendar */}
+          <div style={{display:"flex",gap:8,marginTop:12}}>
+            <button onClick={()=>generateSolarTermCard(sTerm, canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:11,cursor:"pointer"}}><I.Share/> 節氣圖卡</button>
+            <button onClick={()=>generateSolarTermWallpaper(sTerm,"phone",canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:11,cursor:"pointer"}}><I.Download/> 手機桌布</button>
+            <button onClick={()=>generateSolarTermWallpaper(sTerm,"desktop",canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:11,cursor:"pointer"}}><I.Download/> 桌機桌布</button>
+          </div>
         </div>
       )}
       <style>{`@keyframes tcmFI{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
@@ -845,7 +945,7 @@ export default function App() {
       <canvas ref={canvasRef} style={{ display:"none" }} />
       <div style={{maxWidth:480,margin:"0 auto",padding:"8px 16px",minHeight:"100vh"}}>
         {view==="today"&&<TodayView t={t} stats={stats} setStats={setStats} collected={collected} setCollected={setCollected} canvasRef={canvasRef}/>}
-        {view==="calendar"&&<CalendarView t={t} stats={stats}/>}
+        {view==="calendar"&&<CalendarView t={t} stats={stats} canvasRef={canvasRef}/>}
         {view==="herbs"&&<HerbsView t={t} collected={collected} setCollected={setCollected} canvasRef={canvasRef}/>}
         {view==="journey"&&<JourneyView t={t} stats={stats} collected={collected}/>}
       </div>
