@@ -565,7 +565,9 @@ function generateWallpaper(herb, size, canvasRef) {
 // ============================================================
 function ImmersiveMeditation({ herb, onClose, t }) {
   const [breathPhase, setBreathPhase] = useState("inhale");
+  const [elapsed, setElapsed] = useState(0);
   const breathRef = useRef(null);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     const phases = ["inhale", "hold", "exhale", "rest"];
@@ -576,38 +578,115 @@ function ImmersiveMeditation({ herb, onClose, t }) {
       breathRef.current = setTimeout(() => { idx = (idx + 1) % phases.length; cycle(); }, durations[idx]);
     };
     cycle();
+    timerRef.current = setInterval(() => setElapsed(p => p + 1), 1000);
     audioEngine.playSoundscape(herb.category, getSeason(new Date()));
-    return () => { clearTimeout(breathRef.current); audioEngine.stop(); };
+    return () => { clearTimeout(breathRef.current); clearInterval(timerRef.current); audioEngine.stop(); };
   }, [herb]);
 
-  const label = { inhale: "吸氣", hold: "屏息", exhale: "呼氣", rest: "靜息" };
-  const scale = { inhale: 1.3, hold: 1.3, exhale: 0.85, rest: 0.85 };
+  const label = { inhale: "吸 氣", hold: "屏 息", exhale: "呼 氣", rest: "靜 息" };
+  const sublabel = { inhale: "緩緩吸入，感受能量充盈", hold: "輕輕停留，讓氣沉入丹田", exhale: "徐徐呼出，放下所有雜念", rest: "安然靜息，與自然合一" };
+  const isExpand = breathPhase === "inhale" || breathPhase === "hold";
   const rc = getRarityCfg(herb.id);
+  const hq = HERB_QUOTES[herb.id] || herb.effect;
+  const mn = Math.floor(elapsed / 60); const sc = elapsed % 60;
 
   return (
-    <div style={{ position:"fixed", inset:0, zIndex:300, background:"radial-gradient(ellipse at center, #2a2520 0%, #1a1510 60%, #0a0805 100%)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
-      <button onClick={onClose} style={{ position:"absolute", top:20, right:20, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.2)", borderRadius:12, color:"#d4c4a8", padding:"8px 20px", cursor:"pointer", fontSize:14, fontFamily:"inherit", backdropFilter:"blur(10px)" }}>
+    <div style={{ position:"fixed", inset:0, zIndex:300, background:"#0a0908", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", overflow:"hidden" }}>
+      {/* Ambient background glow that pulses with breath */}
+      <div style={{
+        position:"absolute", inset:0, opacity: isExpand ? 0.12 : 0.05,
+        background:"radial-gradient(ellipse at 50% 40%, rgba(196,168,130,0.4) 0%, rgba(30,25,20,0.1) 50%, transparent 70%)",
+        transition:"opacity 4s ease-in-out",
+      }} />
+
+      {/* Close button */}
+      <button onClick={onClose} style={{ position:"absolute", top:20, right:20, background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:12, color:"rgba(212,196,168,0.6)", padding:"8px 20px", cursor:"pointer", fontSize:13, fontFamily:"inherit", backdropFilter:"blur(10px)", zIndex:10, letterSpacing:1 }}>
         離開冥想
       </button>
-      <div style={{ position:"relative", marginBottom:40 }}>
+
+      {/* Timer */}
+      <div style={{ position:"absolute", top:24, left:24, color:"rgba(196,168,130,0.3)", fontSize:13, fontFamily:"inherit", letterSpacing:2 }}>
+        {mn}:{String(sc).padStart(2,"0")}
+      </div>
+
+      {/* Main visual area */}
+      <div style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center", zIndex:1 }}>
+
+        {/* Outer breathing ring */}
+        <div style={{ position:"relative", width:300, height:300, marginBottom:36 }}>
+          {/* Rotating decorative ring */}
+          <svg viewBox="0 0 300 300" style={{ position:"absolute", inset:0, width:"100%", height:"100%", animation:"tcmMedSpin 60s linear infinite" }}>
+            <circle cx="150" cy="150" r="146" fill="none" stroke="rgba(196,168,130,0.08)" strokeWidth="0.5" />
+            <circle cx="150" cy="150" r="140" fill="none" stroke="rgba(196,168,130,0.12)" strokeWidth="0.5" strokeDasharray="4 8" />
+            {[0,30,60,90,120,150,180,210,240,270,300,330].map(deg => (
+              <line key={deg} x1="150" y1="6" x2="150" y2="14" stroke="rgba(196,168,130,0.15)" strokeWidth="0.5" transform={`rotate(${deg} 150 150)`} />
+            ))}
+          </svg>
+
+          {/* Breathing pulse ring */}
+          <div style={{
+            position:"absolute", inset:20, borderRadius:"50%",
+            border:"1px solid rgba(196,168,130,0.2)",
+            transform: isExpand ? "scale(1.08)" : "scale(0.92)",
+            transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out" : "transform 0.3s ease",
+            boxShadow: isExpand ? "0 0 40px rgba(196,168,130,0.15), inset 0 0 30px rgba(196,168,130,0.05)" : "0 0 20px rgba(196,168,130,0.05)",
+          }} />
+
+          {/* Herb image — square with rounded corners, NOT circular crop */}
+          <div style={{
+            position:"absolute", top:"50%", left:"50%",
+            transform:`translate(-50%,-50%) scale(${isExpand ? 1.02 : 0.96})`,
+            transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out, opacity 3s ease" : "transform 0.3s ease, opacity 0.5s ease",
+            width:200, height:200, borderRadius:20, overflow:"hidden",
+            boxShadow:"0 8px 40px rgba(0,0,0,0.5)",
+            opacity: isExpand ? 0.95 : 0.65,
+          }}>
+            <img src={herbImg(herb)} alt={herb.name} style={{ width:"100%", height:"100%", objectFit:"cover" }}
+              onError={e=>{e.target.style.display='none'}} />
+          </div>
+        </div>
+
+        {/* Rarity */}
+        <div style={{ fontSize:11, letterSpacing:4, marginBottom:8, color:rc.color, opacity:0.7 }}>{"★".repeat(rc.stars)} {rc.label}</div>
+
+        {/* Herb name — large calligraphic style */}
+        <div className="font-serif-tc" style={{ fontSize:42, fontWeight:700, letterSpacing:12, color:"#d4c4a8", marginBottom:4, textShadow:"0 2px 20px rgba(0,0,0,0.5)" }}>{herb.name}</div>
+
+        {/* Pinyin */}
+        <div style={{ fontSize:14, fontStyle:"italic", color:"rgba(196,168,130,0.4)", letterSpacing:2, marginBottom:28 }}>{herb.pinyin}</div>
+
+        {/* Breath phase — main indicator */}
         <div style={{
-          width:260, height:260, borderRadius:"50%", border:"2px solid rgba(196,168,130,0.3)",
-          display:"flex", alignItems:"center", justifyContent:"center",
-          transform:`scale(${scale[breathPhase]})`,
-          transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out" : "transform 0.3s ease",
-          boxShadow:`0 0 60px rgba(196,168,130,${breathPhase === "hold" ? 0.3 : 0.15}), inset 0 0 40px rgba(196,168,130,0.05)`,
+          fontSize:32, letterSpacing:16, fontWeight:300, color:"#c4a882",
+          textShadow: isExpand ? "0 0 30px rgba(196,168,130,0.5)" : "0 0 10px rgba(196,168,130,0.2)",
+          transition:"text-shadow 3s ease",
+          marginBottom:8,
         }}>
-          <img src={herbImg(herb)} alt={herb.name} style={{ width:200, height:200, objectFit:"contain", opacity: (breathPhase === "hold" || breathPhase === "inhale") ? 0.85 : 0.5, transition:"opacity 3s ease", filter:"drop-shadow(0 0 20px rgba(196,168,130,0.3))" }}
-            onError={e=>{e.target.style.display='none'}} />
+          {label[breathPhase]}
+        </div>
+
+        {/* Breath guidance text */}
+        <div style={{ fontSize:13, color:"rgba(196,168,130,0.35)", letterSpacing:2, marginBottom:28, transition:"opacity 2s ease" }}>
+          {sublabel[breathPhase]}
+        </div>
+
+        {/* Divider */}
+        <div style={{ width:60, height:1, background:"rgba(196,168,130,0.15)", marginBottom:20 }} />
+
+        {/* Quote */}
+        <div style={{ fontSize:14, fontStyle:"italic", color:"rgba(196,168,130,0.3)", letterSpacing:1, maxWidth:320, textAlign:"center", lineHeight:1.6 }}>
+          「{hq}」
+        </div>
+
+        {/* Effect */}
+        <div style={{ fontSize:12, color:"rgba(196,168,130,0.2)", marginTop:10, letterSpacing:1 }}>
+          {herb.category} · {herb.effect}
         </div>
       </div>
-      <div style={{ textAlign:"center", color:"#d4c4a8" }}>
-        <div style={{ fontSize:12, letterSpacing:3, marginBottom:6, color:rc.color }}>{"★".repeat(rc.stars)} {rc.label}</div>
-        <div className="font-serif-tc" style={{ fontSize:38, fontWeight:600, letterSpacing:8, marginBottom:6 }}>{herb.name}</div>
-        <div style={{ fontSize:15, fontStyle:"italic", opacity:0.6, marginBottom:36 }}>{herb.pinyin}</div>
-        <div style={{ fontSize:28, letterSpacing:12, fontWeight:300, color:"#c4a882", textShadow:"0 0 20px rgba(196,168,130,0.4)" }}>{label[breathPhase]}</div>
-        <div style={{ fontSize:13, opacity:0.4, marginTop:14 }}>{herb.effect}</div>
-      </div>
+
+      <style>{`
+        @keyframes tcmMedSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }
