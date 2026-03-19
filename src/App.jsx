@@ -124,6 +124,19 @@ const HERBS = [
   { id:56, name:"通草", pinyin:"Tōngcǎo", img:"56_tetrapanax.png", category:"利水滲濕", nature:"微寒", taste:"甘、淡", meridian:"肺、胃", effect:"清熱利尿，通氣下乳", desc:"白色輕盈的草髓，疏通水道。如同打開一條清澈的溪流，讓氣水暢通無阻。" },
 ];
 
+// Solar term image mapping → public/solar-terms/
+const SOLAR_TERM_IMAGES = {
+  "立春": "01_lichun.png", "雨水": "02_yushui.png", "驚蟄": "03_jingzhe.png",
+  "春分": "04_chunfen.png", "清明": "05_qingming.png", "穀雨": "06_guyu.png",
+  "立夏": "07_lixia.png", "小滿": "08_xiaoman.png", "芒種": "09_mangzhong.png",
+  "夏至": "10_xiazhi.png", "小暑": "11_xiaoshu.png", "大暑": "12_dashu.png",
+  "立秋": "13_liqiu.png", "處暑": "14_chushu.png", "白露": "15_bailu.png",
+  "秋分": "16_qiufen.png", "寒露": "17_hanlu.png", "霜降": "18_shuangjiang.png",
+  "立冬": "19_lidong.png", "小雪": "20_xiaoxue.png", "大雪": "21_daxue.png",
+  "冬至": "22_dongzhi.png", "小寒": "23_xiaohan.png", "大寒": "24_dahan.png",
+};
+function solarTermImg(name) { return `./solar-terms/${SOLAR_TERM_IMAGES[name] || "01_lichun.png"}`; }
+
 const SOLAR_TERMS_2026 = [
   { name:"小寒", date:"2026-01-05", season:"winter", theme:"溫腎散寒", icon:"❄️" },
   { name:"大寒", date:"2026-01-20", season:"winter", theme:"深藏蓄勢", icon:"🌨️" },
@@ -433,14 +446,24 @@ function TodayView({ t, stats, setStats, collected, setCollected, canvasRef }) {
     <div style={{ paddingBottom:90 }}>
       {showMeditation && <ImmersiveMeditation herb={herb} onClose={()=>setShowMeditation(false)} t={t} />}
 
-      <div style={{ background:t.headerBg, margin:"-8px -16px 0", padding:"32px 24px 24px", borderRadius:"0 0 28px 28px", position:"relative", overflow:"hidden" }}>
-        <div style={{ position:"absolute", top:12, right:16, fontSize:56, opacity:0.12 }}>{term.icon}</div>
-        <div style={{ fontSize:12, color:t.textSec, letterSpacing:"0.15em", marginBottom:4 }}>{d.getFullYear()} 年 {d.getMonth()+1} 月 {d.getDate()} 日 星期{wd[d.getDay()]}</div>
-        <div style={{ display:"flex", alignItems:"baseline", gap:10, marginBottom:6 }}>
-          <span className="font-serif-tc" style={{ fontSize:28, fontWeight:700, color:t.text }}>{term.name}</span>
-          <span style={{ fontSize:13, color:t.accent, fontWeight:500 }}>{term.theme}</span>
+      <div style={{ background:t.headerBg, margin:"-8px -16px 0", borderRadius:"0 0 28px 28px", position:"relative", overflow:"hidden" }}>
+        {/* Solar term background image */}
+        <div style={{ position:"absolute", inset:0, opacity:0.18 }}>
+          <img src={solarTermImg(term.name)} alt={term.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>{e.target.style.display='none'}} />
         </div>
-        <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
+        <div style={{ position:"relative", padding:"32px 24px 24px" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:10 }}>
+            <img src={solarTermImg(term.name)} alt={term.name} style={{ width:56, height:56, borderRadius:16, objectFit:"cover", border:"2px solid rgba(255,255,255,0.6)", boxShadow:"0 2px 12px rgba(0,0,0,0.1)" }} onError={e=>{e.target.style.display='none'}} />
+            <div>
+              <div style={{ fontSize:12, color:t.textSec, letterSpacing:"0.15em", marginBottom:2 }}>{d.getFullYear()} 年 {d.getMonth()+1} 月 {d.getDate()} 日 星期{wd[d.getDay()]}</div>
+              <div style={{ display:"flex", alignItems:"baseline", gap:8 }}>
+                <span className="font-serif-tc" style={{ fontSize:28, fontWeight:700, color:t.text }}>{term.name}</span>
+                <span style={{ fontSize:13, color:t.accent, fontWeight:500 }}>{term.theme}</span>
+              </div>
+            </div>
+          </div>
+          <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
+        </div>
       </div>
 
       {/* Herb card with rarity & collection */}
@@ -587,11 +610,18 @@ function CalendarView({ t, stats }) {
         })}
       </div>
       {sel&&sHerb&&(
-        <div style={{background:t.card,borderRadius:20,padding:"20px 24px",marginTop:20,boxShadow:"0 2px 16px rgba(0,0,0,0.04)",border:"1px solid rgba(0,0,0,0.04)",animation:"tcmFI 0.3s ease"}}>
-          <div style={{display:"flex",gap:14,marginBottom:12}}>
+        <div style={{background:t.card,borderRadius:20,padding:"20px 24px",marginTop:20,boxShadow:"0 2px 16px rgba(0,0,0,0.04)",border:"1px solid rgba(0,0,0,0.04)",animation:"tcmFI 0.3s ease",position:"relative",overflow:"hidden"}}>
+          {/* Solar term background in calendar detail */}
+          <div style={{position:"absolute",top:0,right:0,width:120,height:120,opacity:0.1}}>
+            <img src={solarTermImg(sTerm?.name)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display='none'}} />
+          </div>
+          <div style={{display:"flex",gap:14,marginBottom:12,position:"relative"}}>
             <img src={herbImg(sHerb)} alt={sHerb.name} style={{width:60,height:60,borderRadius:12,objectFit:"cover",background:t.accentLight}} onError={e=>{e.target.style.display='none'}}/>
             <div style={{flex:1}}>
-              <div style={{fontSize:11,color:t.accent,fontWeight:600}}>{sTerm?.icon} {sTerm?.name} · {sTerm?.theme}</div>
+              <div style={{display:"flex",alignItems:"center",gap:6}}>
+                <img src={solarTermImg(sTerm?.name)} alt="" style={{width:20,height:20,borderRadius:6,objectFit:"cover"}} onError={e=>{e.target.style.display='none'}} />
+                <span style={{fontSize:11,color:t.accent,fontWeight:600}}>{sTerm?.icon} {sTerm?.name} · {sTerm?.theme}</span>
+              </div>
               <div className="font-serif-tc" style={{fontSize:20,fontWeight:700,color:t.text,marginTop:2}}>{sHerb.name}</div>
               <div style={{fontSize:11,color:t.textSec}}>{sHerb.pinyin} · {sHerb.category}</div>
             </div>
