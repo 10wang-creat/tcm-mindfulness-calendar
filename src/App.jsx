@@ -287,6 +287,25 @@ function herbImg(herb) { return `./herbs/${herb.img}`; }
 // SHARE CARD & WALLPAPER GENERATORS
 // ============================================================
 
+// ============================================================
+// SHARE UTILITY — Web Share API → LINE / Facebook / etc.
+// ============================================================
+async function shareOrDownload(canvas, filename, title, text) {
+  try {
+    const blob = await new Promise(r => canvas.toBlob(r, "image/png"));
+    const file = new File([blob], filename, { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ title, text, files: [file] });
+      return;
+    }
+  } catch (e) {
+    if (e.name === "AbortError") return;
+  }
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = canvas.toDataURL("image/png"); link.click();
+}
+
 function generateShareCard(herb, canvasRef) {
   const canvas = canvasRef.current; if (!canvas) return;
   const ctx = canvas.getContext("2d");
@@ -310,9 +329,7 @@ function generateShareCard(herb, canvasRef) {
     ctx.fillText(`分類：${herb.category}`, 80, 780);
     ctx.textAlign = "center"; ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
     ctx.fillText("— 本草圖鑑 TCM Herb Collection —", 400, 930);
-    const link = document.createElement("a");
-    link.download = `${herb.name}_${herb.pinyin}_card.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${herb.name}_${herb.pinyin}_card.png`, `${herb.name} 藥材卡片`, `${herb.name}（${herb.pinyin}）— ${herb.effect}\n#本草圖鑑 #中醫養生`);
   };
   img.onerror = () => {
     ctx.fillStyle = "#ddd"; ctx.fillRect(260, 270, 280, 280);
@@ -321,8 +338,7 @@ function generateShareCard(herb, canvasRef) {
     ctx.fillText(`功效：${herb.effect}`, 80, 660);
     ctx.textAlign = "center"; ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
     ctx.fillText("— 本草圖鑑 TCM Herb Collection —", 400, 930);
-    const link = document.createElement("a"); link.download = `${herb.name}_card.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${herb.name}_card.png`, `${herb.name} 藥材卡片`, `${herb.name} — ${herb.effect}`);
   };
   img.src = herbImg(herb);
 }
@@ -359,15 +375,12 @@ function generateSolarTermCard(term, canvasRef) {
     // Branding
     ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
     ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 930);
-    const link = document.createElement("a");
-    link.download = `${term.name}_節氣圖卡.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${term.name}_節氣圖卡.png`, `${term.name} 節氣圖卡`, `${term.icon} ${term.name} — ${term.theme}\n#二十四節氣 #本草圖鑑 #節氣養生`);
   };
   img.onerror = () => {
     ctx.font = "120px serif"; ctx.fillStyle = "#ccc"; ctx.textAlign = "center"; ctx.fillText(term.icon, 400, 520);
     ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif"; ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 930);
-    const link = document.createElement("a"); link.download = `${term.name}_節氣圖卡.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${term.name}_節氣圖卡.png`, `${term.name} 節氣圖卡`, `${term.icon} ${term.name} — ${term.theme}`);
   };
   img.src = solarTermImg(term.name);
 }
@@ -403,14 +416,12 @@ function generateSolarTermWallpaper(term, size, canvasRef) {
     ctx.fillText(term.theme, w/2, nameY + (size === "phone" ? 55 : 45));
     ctx.font = `${size === "phone" ? 24 : 20}px serif`; ctx.fillStyle = "#9a8a7a";
     ctx.fillText(term.date, w/2, nameY + (size === "phone" ? 95 : 80));
-    const link = document.createElement("a"); link.download = `${term.name}_wallpaper_${size}.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${term.name}_wallpaper_${size}.png`, `${term.name} 節氣桌布`, `${term.icon} ${term.name} — ${term.theme}\n#二十四節氣 #節氣桌布`);
   };
   img.onerror = () => {
     ctx.textAlign = "center"; ctx.fillStyle = "#4a3a2a"; ctx.font = "bold 120px serif"; ctx.fillText(term.name, w/2, h*0.45);
     ctx.font = "40px serif"; ctx.fillStyle = "#7a6a5a"; ctx.fillText(term.theme, w/2, h*0.45+70);
-    const link = document.createElement("a"); link.download = `${term.name}_wallpaper_${size}.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${term.name}_wallpaper_${size}.png`, `${term.name} 節氣桌布`, `${term.name} — ${term.theme}`);
   };
   img.src = solarTermImg(term.name);
 }
@@ -435,14 +446,12 @@ function generateWallpaper(herb, size, canvasRef) {
     ctx.textAlign = "center"; ctx.fillStyle = "#5a4a3a"; ctx.font = `bold ${size === "phone" ? 72 : 56}px serif`; ctx.fillText(herb.name, w/2, nameY);
     ctx.font = `italic ${size === "phone" ? 28 : 22}px Georgia, serif`; ctx.fillStyle = "#8a7a6a"; ctx.fillText(herb.pinyin, w/2, nameY + (size === "phone" ? 50 : 40));
     ctx.font = `${size === "phone" ? 24 : 20}px serif`; ctx.fillStyle = "#9a8a7a"; ctx.fillText(herb.effect, w/2, nameY + (size === "phone" ? 95 : 75));
-    const link = document.createElement("a"); link.download = `${herb.name}_wallpaper_${size}.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${herb.name}_wallpaper_${size}.png`, `${herb.name} 藥材桌布`, `${herb.name}（${herb.pinyin}）— ${herb.effect}\n#本草圖鑑 #藥材桌布`);
   };
   img.onerror = () => {
     const nameY = h * 0.45; ctx.textAlign = "center"; ctx.fillStyle = "#5a4a3a"; ctx.font = `bold 96px serif`; ctx.fillText(herb.name, w/2, nameY);
     ctx.font = `italic 32px Georgia, serif`; ctx.fillStyle = "#8a7a6a"; ctx.fillText(herb.pinyin, w/2, nameY + 60);
-    const link = document.createElement("a"); link.download = `${herb.name}_wallpaper_${size}.png`;
-    link.href = canvas.toDataURL("image/png"); link.click();
+    shareOrDownload(canvas, `${herb.name}_wallpaper_${size}.png`, `${herb.name} 藥材桌布`, `${herb.name} — ${herb.pinyin}`);
   };
   img.src = herbImg(herb);
 }
