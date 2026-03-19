@@ -62,6 +62,99 @@ function getRarity(id) { return HERB_RARITY[id] || "common"; }
 function getRarityCfg(id) { return RARITY[getRarity(id)]; }
 
 // ============================================================
+// HERB QUOTES — one poetic line per herb for share cards
+// ============================================================
+const HERB_QUOTES = {
+  1: "一顆紅潤小太陽，照亮肝腎的每個角落",
+  2: "補氣之長，為身體築起溫暖的屏障",
+  3: "端午艾香，是最古老的溫柔守護",
+  4: "百草之王，蓄積天地最深沉的力量",
+  5: "秋日清雅，一朵菊花勝過千言萬語",
+  6: "國老調和，所有藥方中最溫柔的存在",
+  7: "歸來之意，引血歸經的深沉呼喚",
+  8: "一觸清涼，喚醒神清氣爽的自己",
+  9: "不似人參霸道，卻能日日溫和相伴",
+  10: "如大地吸收雨水，讓身體恢復乾爽清朗",
+  11: "樸實無華，默默滋養三臟的根莖",
+  12: "日食三棗，藏著補氣養血的質樸力量",
+  13: "萬花釀成的甜蜜，是對身體最溫柔的善待",
+  14: "紅潤飽滿的外表下，是對心脾最溫暖的守護",
+  15: "九蒸九曬，是腎精最深層的滋養",
+  16: "如月光般柔和，撫平肝氣的躁動",
+  17: "千年守護，如絲般細膩的潤澤滋養",
+  18: "每一顆圓滿桂圓，都是對心脾的滋養",
+  19: "蘊含時間沉澱的智慧，補肝腎益精血",
+  20: "從青澀轉為深紫，甘酸之間是自然的饋贈",
+  21: "夜深人靜時，讓酸棗仁帶你進入深沉的休息",
+  22: "松柏之子，如松林清風帶走紛擾思緒",
+  23: "志在遠方，安定心神的同時開啟智慧門扉",
+  24: "合家歡樂，解開心結讓鬱悶散去",
+  25: "夜晚交纏的藤蔓，藏著安眠的秘密",
+  26: "遠古化石凝結的力量，如磐石般安定心神",
+  27: "大海的力量，沉穩而不可撼動",
+  28: "虹彩般的光澤裡，藏著安定的力量",
+  29: "大地深處的磁力，將浮越的陽氣穩穩拉回",
+  30: "千萬年時光的結晶，如遠古低語帶來寧靜",
+  31: "越老越醇，時間賦予的理氣之力",
+  32: "年輕而銳利，疏肝破氣的直接力道",
+  33: "打通堵塞，讓氣機重新暢通",
+  34: "森林深處的清風，疏通每一條氣道",
+  35: "氣病之總司，專門疏解肝氣的鬱結",
+  36: "順氣散寒的溫暖使者，疏通凝滯氣道",
+  37: "沉水不浮，香氣深沉悠遠的最深層寧靜",
+  38: "千年寺廟的記憶，在寧靜中找到內心安定",
+  39: "血中之氣藥，如穹頂般開闊氣血通道",
+  40: "一味丹參功同四物，通達心脈的力量",
+  41: "紅似火焰，讓凝滯的血液重新流動",
+  42: "春天桃花的力量，化開冬日的凝滯",
+  43: "止血不留瘀，活血藥中最智慧的平衡",
+  44: "名為益母，如母親般溫柔堅定的關懷",
+  45: "既活血又補血，剛柔並濟的療癒力量",
+  46: "一把溫柔的鑰匙，打開疼痛的枷鎖",
+  47: "打開心中的結，疏解情志的鬱悶",
+  48: "金黃色的智慧，東西方都推崇的寶藏",
+  49: "經冬不凋的生命力，化解體內的鬱熱",
+  50: "圓如銅錢的葉片，如清泉般通透",
+  51: "路邊常見的小草，卻有強大的利水力量",
+  52: "天生懂得與水共處，溫柔的排濕使者",
+  53: "沉穩內斂，默默守護脾胃的白色菌體",
+  54: "讓多餘的濕氣，如晨露般慢慢蒸發",
+  55: "如溪水般帶走暑熱，清涼而順暢",
+  56: "白色輕盈的草髓，讓氣水暢通無阻",
+};
+
+// ============================================================
+// SOLAR TERM QUOTES — one poetic line per term for share cards
+// ============================================================
+const SOLAR_TERM_QUOTES = {
+  "小寒": "寒氣漸深，正是溫養腎氣的好時節",
+  "大寒": "歲末深藏，為來年的春生蓄勢待發",
+  "立春": "萬物復甦，春風喚醒沉睡的大地",
+  "雨水": "春雨如絲，潤澤萬物也滋養身心",
+  "驚蟄": "春雷初響，陽氣升發萬物甦醒",
+  "春分": "晝夜等分，調和陰陽最好的時刻",
+  "清明": "天朗氣清，正是疏肝明目的時節",
+  "穀雨": "雨生百穀，大地最豐盛的饋贈",
+  "立夏": "夏季伊始，養心安神迎接熱情",
+  "小滿": "萬物漸盈，清熱祛濕保持清爽",
+  "芒種": "忙而有序，清心降火安然度夏",
+  "夏至": "陽氣最盛，養心清暑靜待陰生",
+  "小暑": "暑氣初升，消暑生津享清涼",
+  "大暑": "一年最熱，清熱養陰守護身心",
+  "立秋": "秋風送爽，潤肺養陰迎收穫",
+  "處暑": "暑氣漸退，清除餘熱好時節",
+  "白露": "晨露凝白，滋陰潤燥防秋燥",
+  "秋分": "收藏平衡，身心歸於安定從容",
+  "寒露": "涼意漸濃，潤燥溫補護正氣",
+  "霜降": "深秋養收，滋陰潤肺蓄精華",
+  "立冬": "冬藏之始，溫腎補陽好時節",
+  "小雪": "初雪輕揚，養血安神度寒冬",
+  "大雪": "瑞雪豐年，深度滋補養精蓄銳",
+  "冬至": "一陽初生，最長夜後迎光明",
+};
+
+
+// ============================================================
 // 56 HERBS DATABASE — matching public/herbs/ images
 // ============================================================
 
@@ -327,9 +420,12 @@ function generateShareCard(herb, canvasRef) {
     ctx.fillText(`歸經：${herb.meridian}`, 80, 700);
     ctx.fillText(`功效：${herb.effect}`, 80, 740);
     ctx.fillText(`分類：${herb.category}`, 80, 780);
-    ctx.textAlign = "center"; ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
+    const hq = HERB_QUOTES[herb.id] || herb.effect;
+    ctx.textAlign = "center"; ctx.fillStyle = "#6a5a4a"; ctx.font = "italic 18px Georgia, serif";
+    ctx.fillText(`「${hq}」`, 400, 850);
+    ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
     ctx.fillText("— 本草圖鑑 TCM Herb Collection —", 400, 930);
-    shareOrDownload(canvas, `${herb.name}_${herb.pinyin}_card.png`, `${herb.name} 藥材卡片`, `${herb.name}（${herb.pinyin}）— ${herb.effect}\n#本草圖鑑 #中醫養生`);
+    shareOrDownload(canvas, `${herb.name}_${herb.pinyin}_card.png`, `${herb.name} 藥材卡片`, `${herb.name}（${herb.pinyin}）\n「${hq}」\n#本草圖鑑 #中醫養生`);
   };
   img.onerror = () => {
     ctx.fillStyle = "#ddd"; ctx.fillRect(260, 270, 280, 280);
@@ -371,11 +467,13 @@ function generateSolarTermCard(term, canvasRef) {
     ctx.textAlign = "center"; ctx.fillStyle = "#6a5a4a"; ctx.font = "20px serif";
     ctx.fillText(`${term.date}`, 400, 800);
     // Icon
-    ctx.font = "40px sans-serif"; ctx.fillText(term.icon, 400, 860);
-    // Branding
+    const tq = SOLAR_TERM_QUOTES[term.name] || term.theme;
+    ctx.fillStyle = "#5a4a3a"; ctx.font = "italic 18px Georgia, serif";
+    ctx.fillText(`「${tq}」`, 400, 840);
+    ctx.font = "32px sans-serif"; ctx.fillText(term.icon, 400, 890);
     ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
     ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 930);
-    shareOrDownload(canvas, `${term.name}_節氣圖卡.png`, `${term.name} 節氣圖卡`, `${term.icon} ${term.name} — ${term.theme}\n#二十四節氣 #本草圖鑑 #節氣養生`);
+    shareOrDownload(canvas, `${term.name}_節氣圖卡.png`, `${term.name} 節氣圖卡`, `${term.icon} ${term.name}\n「${tq}」\n#二十四節氣 #本草圖鑑 #節氣養生`);
   };
   img.onerror = () => {
     ctx.font = "120px serif"; ctx.fillStyle = "#ccc"; ctx.textAlign = "center"; ctx.fillText(term.icon, 400, 520);
@@ -416,7 +514,10 @@ function generateSolarTermWallpaper(term, size, canvasRef) {
     ctx.fillText(term.theme, w/2, nameY + (size === "phone" ? 55 : 45));
     ctx.font = `${size === "phone" ? 24 : 20}px serif`; ctx.fillStyle = "#9a8a7a";
     ctx.fillText(term.date, w/2, nameY + (size === "phone" ? 95 : 80));
-    shareOrDownload(canvas, `${term.name}_wallpaper_${size}.png`, `${term.name} 節氣桌布`, `${term.icon} ${term.name} — ${term.theme}\n#二十四節氣 #節氣桌布`);
+    const twq = SOLAR_TERM_QUOTES[term.name] || term.theme;
+    ctx.font = `italic ${size === "phone" ? 22 : 18}px Georgia, serif`; ctx.fillStyle = "#7a6a5a";
+    ctx.fillText(`「${twq}」`, w/2, nameY + (size === "phone" ? 135 : 110));
+    shareOrDownload(canvas, `${term.name}_wallpaper_${size}.png`, `${term.name} 節氣桌布`, `${term.icon} ${term.name}\n「${twq}」\n#二十四節氣 #節氣桌布`);
   };
   img.onerror = () => {
     ctx.textAlign = "center"; ctx.fillStyle = "#4a3a2a"; ctx.font = "bold 120px serif"; ctx.fillText(term.name, w/2, h*0.45);
@@ -446,7 +547,10 @@ function generateWallpaper(herb, size, canvasRef) {
     ctx.textAlign = "center"; ctx.fillStyle = "#5a4a3a"; ctx.font = `bold ${size === "phone" ? 72 : 56}px serif`; ctx.fillText(herb.name, w/2, nameY);
     ctx.font = `italic ${size === "phone" ? 28 : 22}px Georgia, serif`; ctx.fillStyle = "#8a7a6a"; ctx.fillText(herb.pinyin, w/2, nameY + (size === "phone" ? 50 : 40));
     ctx.font = `${size === "phone" ? 24 : 20}px serif`; ctx.fillStyle = "#9a8a7a"; ctx.fillText(herb.effect, w/2, nameY + (size === "phone" ? 95 : 75));
-    shareOrDownload(canvas, `${herb.name}_wallpaper_${size}.png`, `${herb.name} 藥材桌布`, `${herb.name}（${herb.pinyin}）— ${herb.effect}\n#本草圖鑑 #藥材桌布`);
+    const hwq = HERB_QUOTES[herb.id] || herb.effect;
+    ctx.font = `italic ${size === "phone" ? 22 : 18}px Georgia, serif`; ctx.fillStyle = "#7a6a5a";
+    ctx.fillText(`「${hwq}」`, w/2, nameY + (size === "phone" ? 135 : 105));
+    shareOrDownload(canvas, `${herb.name}_wallpaper_${size}.png`, `${herb.name} 藥材桌布`, `${herb.name}\n「${hwq}」\n#本草圖鑑 #藥材桌布`);
   };
   img.onerror = () => {
     const nameY = h * 0.45; ctx.textAlign = "center"; ctx.fillStyle = "#5a4a3a"; ctx.font = `bold 96px serif`; ctx.fillText(herb.name, w/2, nameY);
