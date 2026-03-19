@@ -46,6 +46,22 @@ class MeditationAudioEngine {
 const audioEngine = new MeditationAudioEngine();
 
 // ============================================================
+// RARITY SYSTEM
+// ============================================================
+const RARITY = {
+  common:    { label: "常見", color: "#7a8b6e", stars: 1 },
+  rare:      { label: "珍稀", color: "#4a7fb5", stars: 2 },
+  legendary: { label: "傳說", color: "#c4963a", stars: 3 },
+};
+// herb id → rarity
+const HERB_RARITY = {
+  4: "legendary", 17: "legendary", 26: "legendary", 30: "legendary", 37: "legendary", 43: "legendary",
+  7: "rare", 15: "rare", 19: "rare", 21: "rare", 23: "rare", 28: "rare", 29: "rare", 38: "rare", 39: "rare", 40: "rare", 46: "rare",
+};
+function getRarity(id) { return HERB_RARITY[id] || "common"; }
+function getRarityCfg(id) { return RARITY[getRarity(id)]; }
+
+// ============================================================
 // 56 HERBS DATABASE — matching public/herbs/ images
 // ============================================================
 
@@ -135,32 +151,19 @@ const SOLAR_TERMS_2026 = [
   { name:"冬至", date:"2026-12-22", season:"winter", theme:"陽氣初升", icon:"🕯️" },
 ];
 
-// Solar term → herb IDs (using the 56 herbs)
 const TERM_HERBS = {
-  "小寒": [4, 2, 7, 14, 18, 15, 26, 37],
-  "大寒": [4, 2, 6, 15, 17, 18, 7, 30],
-  "立春": [8, 31, 35, 39, 5, 7, 3, 9],
-  "雨水": [53, 54, 31, 10, 11, 6, 49, 56],
-  "驚蟄": [5, 8, 35, 39, 32, 40, 49, 51],
-  "春分": [35, 8, 5, 1, 7, 24, 16, 23],
-  "清明": [5, 1, 35, 7, 39, 40, 24, 16],
-  "穀雨": [54, 53, 31, 10, 49, 50, 11, 14],
-  "立夏": [21, 53, 8, 5, 14, 18, 22, 25],
-  "小滿": [54, 49, 53, 8, 21, 50, 51, 56],
-  "芒種": [21, 5, 40, 47, 8, 24, 25, 50],
-  "夏至": [21, 8, 5, 53, 22, 25, 28, 55],
-  "小暑": [54, 8, 50, 49, 21, 55, 56, 52],
-  "大暑": [54, 49, 50, 55, 53, 56, 51, 52],
-  "立秋": [1, 15, 17, 11, 21, 16, 22, 13],
-  "處暑": [5, 1, 13, 15, 21, 31, 16, 53],
-  "白露": [1, 15, 21, 16, 22, 18, 11, 7],
-  "秋分": [1, 53, 21, 14, 31, 11, 15, 16],
-  "寒露": [1, 14, 18, 15, 11, 13, 31, 34],
-  "霜降": [1, 15, 14, 11, 18, 31, 17, 7],
-  "立冬": [4, 2, 7, 14, 18, 1, 15, 37],
-  "小雪": [7, 14, 18, 2, 1, 15, 17, 21],
-  "大雪": [4, 2, 7, 15, 18, 14, 17, 37],
-  "冬至": [4, 2, 7, 14, 1, 15, 18, 6],
+  "小寒": [4, 2, 7, 14, 18, 15, 26, 37], "大寒": [4, 2, 6, 15, 17, 18, 7, 30],
+  "立春": [8, 31, 35, 39, 5, 7, 3, 9], "雨水": [53, 54, 31, 10, 11, 6, 49, 56],
+  "驚蟄": [5, 8, 35, 39, 32, 40, 49, 51], "春分": [35, 8, 5, 1, 7, 24, 16, 23],
+  "清明": [5, 1, 35, 7, 39, 40, 24, 16], "穀雨": [54, 53, 31, 10, 49, 50, 11, 14],
+  "立夏": [21, 53, 8, 5, 14, 18, 22, 25], "小滿": [54, 49, 53, 8, 21, 50, 51, 56],
+  "芒種": [21, 5, 40, 47, 8, 24, 25, 50], "夏至": [21, 8, 5, 53, 22, 25, 28, 55],
+  "小暑": [54, 8, 50, 49, 21, 55, 56, 52], "大暑": [54, 49, 50, 55, 53, 56, 51, 52],
+  "立秋": [1, 15, 17, 11, 21, 16, 22, 13], "處暑": [5, 1, 13, 15, 21, 31, 16, 53],
+  "白露": [1, 15, 21, 16, 22, 18, 11, 7], "秋分": [1, 53, 21, 14, 31, 11, 15, 16],
+  "寒露": [1, 14, 18, 15, 11, 13, 31, 34], "霜降": [1, 15, 14, 11, 18, 31, 17, 7],
+  "立冬": [4, 2, 7, 14, 18, 1, 15, 37], "小雪": [7, 14, 18, 2, 1, 15, 17, 21],
+  "大雪": [4, 2, 7, 15, 18, 14, 17, 37], "冬至": [4, 2, 7, 14, 1, 15, 18, 6],
 };
 
 const MEDITATIONS = {
@@ -259,10 +262,141 @@ const I = {
   X: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
   Vol: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>,
   Chk: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>,
+  Share: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>,
+  Download: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+  Flip: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>,
+  Zen: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>,
 };
 
-// Herb image path helper
 function herbImg(herb) { return `./herbs/${herb.img}`; }
+
+// ============================================================
+// SHARE CARD & WALLPAPER GENERATORS
+// ============================================================
+
+function generateShareCard(herb, canvasRef) {
+  const canvas = canvasRef.current; if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  canvas.width = 800; canvas.height = 1000;
+  ctx.fillStyle = "#f5f0e8"; ctx.fillRect(0, 0, 800, 1000);
+  ctx.strokeStyle = "#c4a882"; ctx.lineWidth = 3; ctx.strokeRect(30, 30, 740, 940);
+  ctx.strokeStyle = "#d4c4a8"; ctx.lineWidth = 1; ctx.strokeRect(40, 40, 720, 920);
+  const rc = getRarityCfg(herb.id);
+  ctx.fillStyle = "#5a4a3a"; ctx.font = "bold 48px serif"; ctx.textAlign = "center"; ctx.fillText(herb.name, 400, 120);
+  ctx.font = "italic 22px Georgia, serif"; ctx.fillStyle = "#8a7a6a"; ctx.fillText(herb.pinyin, 400, 158);
+  ctx.fillStyle = rc.color; ctx.font = "18px sans-serif"; ctx.fillText("★".repeat(rc.stars) + " " + rc.label, 400, 190);
+
+  const img = new Image(); img.crossOrigin = "anonymous";
+  img.onload = () => {
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.12)"; ctx.shadowBlur = 20;
+    ctx.drawImage(img, 210, 220, 380, 380); ctx.restore();
+    ctx.textAlign = "left"; ctx.font = "20px serif"; ctx.fillStyle = "#5a4a3a";
+    ctx.fillText(`性味：${herb.nature}性 / ${herb.taste}`, 80, 660);
+    ctx.fillText(`歸經：${herb.meridian}`, 80, 700);
+    ctx.fillText(`功效：${herb.effect}`, 80, 740);
+    ctx.fillText(`分類：${herb.category}`, 80, 780);
+    ctx.textAlign = "center"; ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
+    ctx.fillText("— 本草圖鑑 TCM Herb Collection —", 400, 930);
+    const link = document.createElement("a");
+    link.download = `${herb.name}_${herb.pinyin}_card.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.onerror = () => {
+    ctx.fillStyle = "#ddd"; ctx.fillRect(260, 270, 280, 280);
+    ctx.fillStyle = "#999"; ctx.textAlign = "center"; ctx.font = "60px serif"; ctx.fillText(herb.name, 400, 430);
+    ctx.textAlign = "left"; ctx.font = "20px serif"; ctx.fillStyle = "#5a4a3a";
+    ctx.fillText(`功效：${herb.effect}`, 80, 660);
+    ctx.textAlign = "center"; ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
+    ctx.fillText("— 本草圖鑑 TCM Herb Collection —", 400, 930);
+    const link = document.createElement("a"); link.download = `${herb.name}_card.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.src = herbImg(herb);
+}
+
+function generateWallpaper(herb, size, canvasRef) {
+  const canvas = canvasRef.current; if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = size === "phone" ? 1170 : 2560; const h = size === "phone" ? 2532 : 1440;
+  canvas.width = w; canvas.height = h;
+  const grad = ctx.createRadialGradient(w/2, h*0.4, 100, w/2, h/2, w*0.8);
+  grad.addColorStop(0, "#f8f3eb"); grad.addColorStop(0.5, "#f0e8d8"); grad.addColorStop(1, "#e8dcc8");
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = "rgba(180,165,140,0.06)"; ctx.lineWidth = 1;
+  for (let i = 0; i < h; i += 4) { ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(w, i); ctx.stroke(); }
+
+  const img = new Image(); img.crossOrigin = "anonymous";
+  img.onload = () => {
+    const imgSize = size === "phone" ? 700 : 600;
+    const ix = (w - imgSize) / 2; const iy = size === "phone" ? h * 0.25 : (h - imgSize) / 2 - 40;
+    ctx.save(); ctx.globalAlpha = 0.9; ctx.drawImage(img, ix, iy, imgSize, imgSize); ctx.restore();
+    const nameY = size === "phone" ? h * 0.72 : h * 0.85;
+    ctx.textAlign = "center"; ctx.fillStyle = "#5a4a3a"; ctx.font = `bold ${size === "phone" ? 72 : 56}px serif`; ctx.fillText(herb.name, w/2, nameY);
+    ctx.font = `italic ${size === "phone" ? 28 : 22}px Georgia, serif`; ctx.fillStyle = "#8a7a6a"; ctx.fillText(herb.pinyin, w/2, nameY + (size === "phone" ? 50 : 40));
+    ctx.font = `${size === "phone" ? 24 : 20}px serif`; ctx.fillStyle = "#9a8a7a"; ctx.fillText(herb.effect, w/2, nameY + (size === "phone" ? 95 : 75));
+    const link = document.createElement("a"); link.download = `${herb.name}_wallpaper_${size}.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.onerror = () => {
+    const nameY = h * 0.45; ctx.textAlign = "center"; ctx.fillStyle = "#5a4a3a"; ctx.font = `bold 96px serif`; ctx.fillText(herb.name, w/2, nameY);
+    ctx.font = `italic 32px Georgia, serif`; ctx.fillStyle = "#8a7a6a"; ctx.fillText(herb.pinyin, w/2, nameY + 60);
+    const link = document.createElement("a"); link.download = `${herb.name}_wallpaper_${size}.png`;
+    link.href = canvas.toDataURL("image/png"); link.click();
+  };
+  img.src = herbImg(herb);
+}
+
+// ============================================================
+// IMMERSIVE MEDITATION MODE
+// ============================================================
+function ImmersiveMeditation({ herb, onClose, t }) {
+  const [breathPhase, setBreathPhase] = useState("inhale");
+  const breathRef = useRef(null);
+
+  useEffect(() => {
+    const phases = ["inhale", "hold", "exhale", "rest"];
+    const durations = [4000, 2000, 4000, 2000];
+    let idx = 0;
+    const cycle = () => {
+      setBreathPhase(phases[idx]);
+      breathRef.current = setTimeout(() => { idx = (idx + 1) % phases.length; cycle(); }, durations[idx]);
+    };
+    cycle();
+    audioEngine.playSoundscape(herb.category, getSeason(new Date()));
+    return () => { clearTimeout(breathRef.current); audioEngine.stop(); };
+  }, [herb]);
+
+  const label = { inhale: "吸氣", hold: "屏息", exhale: "呼氣", rest: "靜息" };
+  const scale = { inhale: 1.3, hold: 1.3, exhale: 0.85, rest: 0.85 };
+  const rc = getRarityCfg(herb.id);
+
+  return (
+    <div style={{ position:"fixed", inset:0, zIndex:300, background:"radial-gradient(ellipse at center, #2a2520 0%, #1a1510 60%, #0a0805 100%)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
+      <button onClick={onClose} style={{ position:"absolute", top:20, right:20, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.2)", borderRadius:12, color:"#d4c4a8", padding:"8px 20px", cursor:"pointer", fontSize:14, fontFamily:"inherit", backdropFilter:"blur(10px)" }}>
+        離開冥想
+      </button>
+      <div style={{ position:"relative", marginBottom:40 }}>
+        <div style={{
+          width:260, height:260, borderRadius:"50%", border:"2px solid rgba(196,168,130,0.3)",
+          display:"flex", alignItems:"center", justifyContent:"center",
+          transform:`scale(${scale[breathPhase]})`,
+          transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out" : "transform 0.3s ease",
+          boxShadow:`0 0 60px rgba(196,168,130,${breathPhase === "hold" ? 0.3 : 0.15}), inset 0 0 40px rgba(196,168,130,0.05)`,
+        }}>
+          <img src={herbImg(herb)} alt={herb.name} style={{ width:200, height:200, objectFit:"contain", opacity: (breathPhase === "hold" || breathPhase === "inhale") ? 0.85 : 0.5, transition:"opacity 3s ease", filter:"drop-shadow(0 0 20px rgba(196,168,130,0.3))" }}
+            onError={e=>{e.target.style.display='none'}} />
+        </div>
+      </div>
+      <div style={{ textAlign:"center", color:"#d4c4a8" }}>
+        <div style={{ fontSize:12, letterSpacing:3, marginBottom:6, color:rc.color }}>{"★".repeat(rc.stars)} {rc.label}</div>
+        <div className="font-serif-tc" style={{ fontSize:38, fontWeight:600, letterSpacing:8, marginBottom:6 }}>{herb.name}</div>
+        <div style={{ fontSize:15, fontStyle:"italic", opacity:0.6, marginBottom:36 }}>{herb.pinyin}</div>
+        <div style={{ fontSize:28, letterSpacing:12, fontWeight:300, color:"#c4a882", textShadow:"0 0 20px rgba(196,168,130,0.4)" }}>{label[breathPhase]}</div>
+        <div style={{ fontSize:13, opacity:0.4, marginTop:14 }}>{herb.effect}</div>
+      </div>
+    </div>
+  );
+}
 
 // ============================================================
 // COMPONENTS
@@ -283,15 +417,22 @@ function Nav({ view, setView, t }) {
   );
 }
 
-function TodayView({ t, stats, setStats }) {
+function TodayView({ t, stats, setStats, collected, setCollected, canvasRef }) {
   const today = fmtDate(new Date()); const term = getCurrentSolarTerm(today); const herb = getDayHerb(today);
   const med = getDayMeditation(herb, today);
   const [favs, setFavs] = useState(()=>ld("favs",[])); const isFav = favs.includes(herb.id);
   const togFav = () => { const n = isFav ? favs.filter(f=>f!==herb.id) : [...favs, herb.id]; setFavs(n); sv("favs", n); };
   const d = new Date(); const wd = ["日","一","二","三","四","五","六"];
+  const isCollected = collected.includes(herb.id);
+  const rc = getRarityCfg(herb.id);
+  const [showMeditation, setShowMeditation] = useState(false);
+
+  const collectHerb = () => { if (!isCollected) { const n = [...collected, herb.id]; setCollected(n); sv("collected", n); } };
 
   return (
     <div style={{ paddingBottom:90 }}>
+      {showMeditation && <ImmersiveMeditation herb={herb} onClose={()=>setShowMeditation(false)} t={t} />}
+
       <div style={{ background:t.headerBg, margin:"-8px -16px 0", padding:"32px 24px 24px", borderRadius:"0 0 28px 28px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:12, right:16, fontSize:56, opacity:0.12 }}>{term.icon}</div>
         <div style={{ fontSize:12, color:t.textSec, letterSpacing:"0.15em", marginBottom:4 }}>{d.getFullYear()} 年 {d.getMonth()+1} 月 {d.getDate()} 日 星期{wd[d.getDay()]}</div>
@@ -302,10 +443,13 @@ function TodayView({ t, stats, setStats }) {
         <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
       </div>
 
-      {/* Herb card with image */}
-      <div style={{ background:t.card, borderRadius:20, padding:"24px", marginTop:20, boxShadow:"0 2px 20px rgba(0,0,0,0.04)", border:"1px solid rgba(0,0,0,0.04)" }}>
+      {/* Herb card with rarity & collection */}
+      <div style={{ background:t.card, borderRadius:20, padding:"24px", marginTop:20, boxShadow:"0 2px 20px rgba(0,0,0,0.04)", border:`1px solid ${isCollected ? rc.color + '30' : 'rgba(0,0,0,0.04)'}` }}>
         <div style={{ display:"flex", gap:16, marginBottom:16 }}>
-          <img src={herbImg(herb)} alt={herb.name} style={{ width:88, height:88, borderRadius:16, objectFit:"cover", background:t.accentLight }} onError={e=>{e.target.style.display='none'}} />
+          <div style={{ position:"relative" }}>
+            <img src={herbImg(herb)} alt={herb.name} style={{ width:88, height:88, borderRadius:16, objectFit:"cover", background:t.accentLight }} onError={e=>{e.target.style.display='none'}} />
+            <div style={{ position:"absolute", top:-4, right:-4, fontSize:10, color:rc.color, background:t.card, borderRadius:8, padding:"1px 4px", border:`1px solid ${rc.color}40`, letterSpacing:1 }}>{"★".repeat(rc.stars)}</div>
+          </div>
           <div style={{ flex:1 }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
               <div>
@@ -319,15 +463,25 @@ function TodayView({ t, stats, setStats }) {
         </div>
         <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
           {[`性 ${herb.nature}`,`味 ${herb.taste}`, herb.meridian].map((tag,i)=><span key={i} style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:t.accentLight, color:t.accent, fontWeight:500 }}>{tag}</span>)}
+          <span style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:rc.color+"15", color:rc.color, fontWeight:500 }}>{"★".repeat(rc.stars)} {rc.label}</span>
         </div>
         <p style={{ fontSize:14, color:t.text, lineHeight:1.8, marginBottom:8 }}>{herb.desc}</p>
-        <div style={{ fontSize:12, color:t.accent, fontWeight:500 }}>功效：{herb.effect}</div>
+        <div style={{ fontSize:12, color:t.accent, fontWeight:500, marginBottom:14 }}>功效：{herb.effect}</div>
+
+        {/* Action buttons */}
+        <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+          {!isCollected && <button onClick={collectHerb} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:"none", cursor:"pointer", fontSize:12, fontWeight:500, background:t.accent, color:"#fff" }}>✓ 收藏卡牌</button>}
+          {isCollected && <span style={{ fontSize:12, padding:"7px 14px", borderRadius:20, background:t.accentLight, color:t.accent }}>✓ 已收藏</span>}
+          <button onClick={()=>setShowMeditation(true)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.accent}40`, cursor:"pointer", fontSize:12, background:"transparent", color:t.accent }}><I.Zen/> 沉浸冥想</button>
+          <button onClick={()=>generateShareCard(herb, canvasRef)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.accent}40`, cursor:"pointer", fontSize:12, background:"transparent", color:t.accent }}><I.Share/> 分享</button>
+          <button onClick={()=>generateWallpaper(herb, "phone", canvasRef)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.accent}40`, cursor:"pointer", fontSize:12, background:"transparent", color:t.accent }}><I.Download/> 桌布</button>
+        </div>
       </div>
 
       <MedPlayer t={t} herb={herb} med={med} term={term} stats={stats} setStats={setStats} />
 
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:12, marginTop:20 }}>
-        {[{ l:"冥想天數", v:stats.totalDays||0 },{ l:"連續天數", v:stats.streak||0 },{ l:"收藏藥材", v:favs.length }].map((s,i)=>(
+        {[{ l:"冥想天數", v:stats.totalDays||0 },{ l:"連續天數", v:stats.streak||0 },{ l:"收藏卡牌", v:collected.length }].map((s,i)=>(
           <div key={i} style={{ background:t.card, borderRadius:16, padding:"16px 12px", textAlign:"center", boxShadow:"0 1px 8px rgba(0,0,0,0.03)", border:"1px solid rgba(0,0,0,0.04)" }}>
             <div className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.accent }}>{s.v}</div>
             <div style={{ fontSize:11, color:t.textSec, marginTop:4 }}>{s.l}</div>
@@ -452,17 +606,50 @@ function CalendarView({ t, stats }) {
   );
 }
 
-function HerbsView({ t }) {
+function HerbsView({ t, collected, setCollected, canvasRef }) {
   const [search, setSearch] = useState(""); const [cat, setCat] = useState("全部"); const [sel, setSel] = useState(null);
+  const [flipped, setFlipped] = useState(false);
+  const [showWpMenu, setShowWpMenu] = useState(false);
+  const [showMeditation, setShowMeditation] = useState(null);
   const cats = ["全部","補氣","補血","養心安神","重鎮安神","理氣","活血化瘀","利水滲濕"];
   const filtered = useMemo(()=>HERBS.filter(h=>{const ms=!search||h.name.includes(search)||h.pinyin.toLowerCase().includes(search.toLowerCase())||h.effect.includes(search);const mc=cat==="全部"||h.category===cat;return ms&&mc;}),[search,cat]);
 
+  const collectedCount = collected.length;
+  const progress = Math.round((collectedCount / HERBS.length) * 100);
+
+  const toggleCollect = (id) => {
+    const n = collected.includes(id) ? collected.filter(i=>i!==id) : [...collected, id];
+    setCollected(n); sv("collected", n);
+  };
+
   return (
     <div style={{paddingBottom:90}}>
+      {showMeditation && <ImmersiveMeditation herb={showMeditation} onClose={()=>setShowMeditation(null)} t={t} />}
+
       <div style={{padding:"20px 0 12px"}}>
         <h1 className="font-serif-tc" style={{fontSize:24,fontWeight:700,color:t.text,marginBottom:4}}>本草圖鑑</h1>
         <p style={{fontSize:13,color:t.textSec}}>收錄 {HERBS.length} 種中藥材</p>
       </div>
+
+      {/* Collection Progress */}
+      <div style={{ background:t.card, borderRadius:16, padding:"14px 18px", marginBottom:12, border:"1px solid rgba(0,0,0,0.04)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+          <span style={{ fontSize:13, color:t.textSec }}>收藏進度</span>
+          <span style={{ fontSize:13, fontWeight:600, color:t.accent }}>{collectedCount} / {HERBS.length} ({progress}%)</span>
+        </div>
+        <div style={{ height:6, background:"rgba(0,0,0,0.04)", borderRadius:3, overflow:"hidden" }}>
+          <div style={{ height:"100%", borderRadius:3, background:`linear-gradient(90deg, ${t.accent}, ${t.warm})`, width:`${progress}%`, transition:"width 0.5s ease" }} />
+        </div>
+        <div style={{ display:"flex", gap:10, marginTop:8 }}>
+          {Object.entries(RARITY).map(([key, cfg]) => {
+            const count = HERBS.filter(h => getRarity(h.id) === key && collected.includes(h.id)).length;
+            const total = HERBS.filter(h => getRarity(h.id) === key).length;
+            return (<span key={key} style={{ fontSize:11, color:cfg.color }}>{"★".repeat(cfg.stars)} {cfg.label} {count}/{total}</span>);
+          })}
+        </div>
+      </div>
+
+      {/* Search */}
       <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:t.card,borderRadius:14,border:"1px solid rgba(0,0,0,0.06)",marginBottom:12}}>
         <I.Search/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="搜尋藥材名稱、功效..." style={{flex:1,border:"none",background:"none",outline:"none",fontSize:14,color:t.text,fontFamily:"inherit"}}/>
         {search&&<button onClick={()=>setSearch("")} style={{background:"none",border:"none",cursor:"pointer",color:t.textSec}}><I.X/></button>}
@@ -470,40 +657,86 @@ function HerbsView({ t }) {
       <div className="no-scrollbar" style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:12,scrollbarWidth:"none"}}>
         {cats.map(c=><button key={c} onClick={()=>setCat(c)} style={{whiteSpace:"nowrap",padding:"6px 14px",borderRadius:20,border:"none",cursor:"pointer",fontSize:12,fontWeight:500,flexShrink:0,background:cat===c?t.accent:t.accentLight,color:cat===c?"#fff":t.accent}}>{c}</button>)}
       </div>
+
+      {/* Card Grid with Collection Status */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-        {filtered.map(h=>(
-          <button key={h.id} onClick={()=>setSel(h)} style={{background:t.card,borderRadius:16,padding:14,border:"1px solid rgba(0,0,0,0.04)",boxShadow:"0 1px 8px rgba(0,0,0,0.03)",cursor:"pointer",textAlign:"left"}}>
-            <img src={herbImg(h)} alt={h.name} style={{width:"100%",height:100,borderRadius:12,objectFit:"cover",background:t.accentLight,marginBottom:10}} onError={e=>{e.target.style.display='none'}}/>
+        {filtered.map(h=>{
+          const isCol = collected.includes(h.id);
+          const rc = getRarityCfg(h.id);
+          return (
+          <button key={h.id} onClick={()=>{setSel(h);setFlipped(false);setShowWpMenu(false);}} style={{background:t.card,borderRadius:16,padding:14,border:`1px solid ${isCol ? rc.color+'30' : 'rgba(0,0,0,0.04)'}`,boxShadow:"0 1px 8px rgba(0,0,0,0.03)",cursor:"pointer",textAlign:"left",position:"relative",transition:"all 0.2s"}}>
+            {/* Rarity stars */}
+            <div style={{ position:"absolute", top:8, right:8, fontSize:9, color:rc.color, letterSpacing:1 }}>{"★".repeat(rc.stars)}</div>
+            {/* Collected badge */}
+            {isCol && <div style={{ position:"absolute", top:8, left:8, width:18, height:18, borderRadius:"50%", background:t.accent, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#fff" }}>✓</div>}
+            <img src={herbImg(h)} alt={h.name} style={{width:"100%",height:100,borderRadius:12,objectFit:"cover",background:t.accentLight,marginBottom:10, filter:isCol?"none":"grayscale(0.4) opacity(0.6)", transition:"filter 0.3s"}} onError={e=>{e.target.style.display='none'}}/>
             <div className="font-serif-tc" style={{fontSize:16,fontWeight:700,color:t.text}}>{h.name}</div>
             <div style={{fontSize:11,color:t.textSec,marginTop:2}}>{h.pinyin}</div>
             <div style={{fontSize:10,marginTop:6,padding:"3px 8px",borderRadius:8,background:t.accentLight,color:t.accent,display:"inline-block"}}>{h.category}</div>
-          </button>
-        ))}
+          </button>);
+        })}
       </div>
       {filtered.length===0&&<div style={{textAlign:"center",padding:"40px 0",color:t.textSec}}>找不到符合條件的藥材</div>}
 
+      {/* Enhanced Detail Modal with Flip, Collect, Share, Meditate, Wallpaper */}
       {sel&&(
-        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.4)",zIndex:200,display:"flex",alignItems:"flex-end",justifyContent:"center",animation:"tcmFI 0.2s ease"}} onClick={()=>setSel(null)}>
-          <div onClick={e=>e.stopPropagation()} style={{background:t.bg,borderRadius:"24px 24px 0 0",padding:"24px 24px 40px",width:"100%",maxWidth:480,maxHeight:"80vh",overflowY:"auto",animation:"tcmSU 0.3s ease"}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
-              <div style={{display:"flex",gap:14}}>
-                <img src={herbImg(sel)} alt={sel.name} style={{width:72,height:72,borderRadius:16,objectFit:"cover",background:t.accentLight}} onError={e=>{e.target.style.display='none'}}/>
-                <div>
-                  <div style={{fontSize:11,color:t.accent,fontWeight:600}}>{sel.category}</div>
-                  <div className="font-serif-tc" style={{fontSize:24,fontWeight:700,color:t.text,marginTop:2}}>{sel.name}</div>
-                  <div style={{fontSize:13,color:t.textSec}}>{sel.pinyin}</div>
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"tcmFI 0.2s ease"}} onClick={()=>setSel(null)}>
+          <div onClick={e=>e.stopPropagation()} style={{ width:"100%", maxWidth:400 }}>
+            {/* Flip card container */}
+            <div style={{ perspective:1000, minHeight:440 }}>
+              <div style={{ position:"relative", transformStyle:"preserve-3d", transform:flipped?"rotateY(180deg)":"rotateY(0)", transition:"transform 0.6s cubic-bezier(0.4,0,0.2,1)", minHeight:440 }}>
+                {/* FRONT */}
+                <div style={{ position:"absolute", width:"100%", minHeight:440, backfaceVisibility:"hidden", background:t.bg, borderRadius:24, overflow:"hidden", border:`2px solid ${getRarityCfg(sel.id).color}40`, boxShadow:"0 16px 48px rgba(0,0,0,0.25)" }}>
+                  <div style={{ height:4, background:`linear-gradient(90deg, transparent, ${getRarityCfg(sel.id).color}, transparent)` }} />
+                  <div style={{ padding:"20px 24px 24px", textAlign:"center" }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+                      <span style={{ fontSize:12, color:getRarityCfg(sel.id).color, letterSpacing:2 }}>{"★".repeat(getRarityCfg(sel.id).stars)} {getRarityCfg(sel.id).label}</span>
+                      <span style={{ fontSize:11, color:t.textSec, background:"rgba(0,0,0,0.04)", borderRadius:12, padding:"3px 10px" }}>{sel.category}</span>
+                    </div>
+                    <h2 className="font-serif-tc" style={{ fontSize:32, fontWeight:700, letterSpacing:6, margin:"0 0 4px", color:t.text }}>{sel.name}</h2>
+                    <p style={{ fontSize:13, color:t.textSec, fontStyle:"italic", margin:"0 0 16px" }}>{sel.pinyin}</p>
+                    <div style={{ width:200, height:200, margin:"0 auto 16px", display:"flex", alignItems:"center", justifyContent:"center", background:"rgba(0,0,0,0.02)", borderRadius:20 }}>
+                      <img src={herbImg(sel)} alt={sel.name} style={{ width:"88%", height:"88%", objectFit:"contain" }} onError={e=>{e.target.style.display='none'}} />
+                    </div>
+                    <p style={{ fontSize:14, color:t.text, lineHeight:1.7, marginBottom:8 }}>{sel.effect}</p>
+                    <div style={{ fontSize:12, color:t.textSec }}>點擊「翻轉」查看詳細資訊</div>
+                  </div>
+                </div>
+
+                {/* BACK */}
+                <div style={{ position:"absolute", width:"100%", minHeight:440, backfaceVisibility:"hidden", transform:"rotateY(180deg)", background:t.bg, borderRadius:24, overflow:"hidden", border:`2px solid ${getRarityCfg(sel.id).color}40`, boxShadow:"0 16px 48px rgba(0,0,0,0.25)" }}>
+                  <div style={{ height:4, background:`linear-gradient(90deg, transparent, ${getRarityCfg(sel.id).color}, transparent)` }} />
+                  <div style={{ padding:"24px" }}>
+                    <h3 className="font-serif-tc" style={{ fontSize:22, letterSpacing:4, margin:"0 0 20px", textAlign:"center", color:t.text }}>{sel.name} 詳細資訊</h3>
+                    {[["性　味", `${sel.nature}性 / ${sel.taste}`],["歸　經", sel.meridian],["功　效", sel.effect],["分　類", sel.category]].map(([label, value])=>(
+                      <div key={label} style={{ display:"flex", gap:12, marginBottom:14, fontSize:14, borderBottom:"1px solid rgba(0,0,0,0.05)", paddingBottom:14 }}>
+                        <span style={{ color:t.textSec, minWidth:55, fontWeight:600 }}>{label}</span>
+                        <span style={{ color:t.text }}>{value}</span>
+                      </div>
+                    ))}
+                    <p style={{ fontSize:13, color:t.text, lineHeight:1.8, marginTop:8 }}>{sel.desc}</p>
+                    <div style={{ fontSize:12, color:t.textSec, textAlign:"center", marginTop:10 }}>← 點擊「翻轉」回到正面</div>
+                  </div>
                 </div>
               </div>
-              <button onClick={()=>setSel(null)} style={{background:"rgba(0,0,0,0.05)",border:"none",borderRadius:12,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",color:t.textSec}}><I.X/></button>
             </div>
-            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:16}}>
-              {[`性味：${sel.nature}性 ${sel.taste}`,`歸經：${sel.meridian}`].map((tag,i)=><span key={i} style={{fontSize:12,padding:"5px 12px",borderRadius:20,background:t.accentLight,color:t.accent}}>{tag}</span>)}
+
+            {/* Action buttons below card */}
+            <div style={{ display:"flex", gap:8, justifyContent:"center", marginTop:16, flexWrap:"wrap" }}>
+              <button onClick={()=>setFlipped(!flipped)} style={abtn(t.textSec)}><I.Flip/> 翻轉</button>
+              <button onClick={()=>toggleCollect(sel.id)} style={abtn(collected.includes(sel.id)?"#c44":"#5a7a4e")}>
+                {collected.includes(sel.id)?"💔 取消":"✓ 收藏"}
+              </button>
+              <button onClick={()=>{setSel(null);setShowMeditation(sel);}} style={abtn("#4a6a8a")}><I.Zen/> 冥想</button>
+              <button onClick={()=>generateShareCard(sel, canvasRef)} style={abtn(t.accent)}><I.Share/> 圖卡</button>
+              <button onClick={()=>setShowWpMenu(!showWpMenu)} style={abtn("#6a7a5a")}><I.Download/> 桌布</button>
             </div>
-            <div style={{background:t.card,borderRadius:16,padding:"16px 18px",marginBottom:16,border:"1px solid rgba(0,0,0,0.04)"}}>
-              <div style={{fontSize:12,fontWeight:600,color:t.accent,marginBottom:6}}>功效</div>
-              <div style={{fontSize:14,color:t.text,lineHeight:1.6}}>{sel.effect}</div>
-            </div>
-            <p style={{fontSize:14,color:t.text,lineHeight:1.8}}>{sel.desc}</p>
+            {showWpMenu && (
+              <div style={{ display:"flex", gap:8, justifyContent:"center", marginTop:8 }}>
+                <button onClick={()=>{generateWallpaper(sel,"phone",canvasRef);setShowWpMenu(false);}} style={abtn("#6a5a4a")}>📱 手機</button>
+                <button onClick={()=>{generateWallpaper(sel,"desktop",canvasRef);setShowWpMenu(false);}} style={abtn("#6a5a4a")}>🖥️ 桌機</button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -512,7 +745,11 @@ function HerbsView({ t }) {
   );
 }
 
-function JourneyView({ t, stats }) {
+function abtn(bg) {
+  return { display:"flex", alignItems:"center", gap:4, padding:"8px 14px", borderRadius:14, border:"none", background:bg, color:"#fff", fontSize:12, cursor:"pointer", fontFamily:"inherit", boxShadow:"0 2px 8px rgba(0,0,0,0.15)" };
+}
+
+function JourneyView({ t, stats, collected }) {
   const lv=Math.floor((stats.totalDays||0)/7)+1; const xpIn=(stats.totalDays||0)%7; const xpProg=xpIn/7;
   const lvNames=["初學者","入門者","修習者","靜心者","覺察者","內觀者","明心者","養生者","通達者","大師"];
   const lvName=lvNames[Math.min(lv-1,lvNames.length-1)];
@@ -526,6 +763,10 @@ function JourneyView({ t, stats }) {
     {n:"週週不斷",d:"連續冥想 7 天",u:(stats.streak||0)>=7,i:"⚡"},
     {n:"靜坐一時",d:"累計冥想 60 分鐘",u:(stats.totalMinutes||0)>=60,i:"⏰"},
     {n:"深度冥想",d:"累計冥想 300 分鐘",u:(stats.totalMinutes||0)>=300,i:"🧘"},
+    {n:"卡牌收藏家",d:"收藏 10 張藥材卡牌",u:collected.length>=10,i:"🃏"},
+    {n:"圖鑑大師",d:"收藏全部 56 張卡牌",u:collected.length>=56,i:"👑"},
+    {n:"珍稀獵人",d:"收藏所有珍稀藥材",u:HERBS.filter(h=>getRarity(h.id)==="rare").every(h=>collected.includes(h.id)),i:"💎"},
+    {n:"傳說收集者",d:"收藏所有傳說藥材",u:HERBS.filter(h=>getRarity(h.id)==="legendary").every(h=>collected.includes(h.id)),i:"🏆"},
   ];
   return (
     <div style={{paddingBottom:90}}>
@@ -538,7 +779,7 @@ function JourneyView({ t, stats }) {
         <div style={{fontSize:11,color:t.textSec}}>{xpIn} / 7 天升級</div>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:24}}>
-        {[{l:"冥想天數",v:stats.totalDays||0,i:"📅"},{l:"連續天數",v:stats.streak||0,i:"🔥"},{l:"總分鐘數",v:stats.totalMinutes||0,i:"⏱️"},{l:"探索藥材",v:(stats.herbsExplored||[]).length,i:"🌿"}].map((s,i)=>(
+        {[{l:"冥想天數",v:stats.totalDays||0,i:"📅"},{l:"連續天數",v:stats.streak||0,i:"🔥"},{l:"總分鐘數",v:stats.totalMinutes||0,i:"⏱️"},{l:"收藏卡牌",v:collected.length+"/"+HERBS.length,i:"🃏"}].map((s,i)=>(
           <div key={i} style={{background:t.card,borderRadius:16,padding:"18px 16px",boxShadow:"0 1px 8px rgba(0,0,0,0.03)",border:"1px solid rgba(0,0,0,0.04)"}}>
             <div style={{fontSize:20,marginBottom:8}}>{s.i}</div>
             <div className="font-serif-tc" style={{fontSize:26,fontWeight:700,color:t.text}}>{s.v}</div>
@@ -566,16 +807,27 @@ function JourneyView({ t, stats }) {
 export default function App() {
   const [view, setView] = useState("today");
   const [stats, setStats] = useState(()=>ld("stats",{totalDays:0,totalMinutes:0,streak:0,lastDate:null,herbsExplored:[],meditatedDates:[]}));
+  const [collected, setCollected] = useState(()=>ld("collected",[]));
+  const canvasRef = useRef(null);
   const season = getSeason(new Date()); const t = THEMES[season];
   return (
     <div style={{minHeight:"100vh",background:t.bg,fontFamily:"'Noto Serif TC','Noto Sans TC','Hiragino Sans','Microsoft YaHei',serif"}}>
+      <canvas ref={canvasRef} style={{ display:"none" }} />
       <div style={{maxWidth:480,margin:"0 auto",padding:"8px 16px",minHeight:"100vh"}}>
-        {view==="today"&&<TodayView t={t} stats={stats} setStats={setStats}/>}
+        {view==="today"&&<TodayView t={t} stats={stats} setStats={setStats} collected={collected} setCollected={setCollected} canvasRef={canvasRef}/>}
         {view==="calendar"&&<CalendarView t={t} stats={stats}/>}
-        {view==="herbs"&&<HerbsView t={t}/>}
-        {view==="journey"&&<JourneyView t={t} stats={stats}/>}
+        {view==="herbs"&&<HerbsView t={t} collected={collected} setCollected={setCollected} canvasRef={canvasRef}/>}
+        {view==="journey"&&<JourneyView t={t} stats={stats} collected={collected}/>}
       </div>
       <Nav view={view} setView={setView} t={t}/>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Noto Sans TC', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-serif-tc { font-family: 'Noto Serif TC', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
   );
 }
