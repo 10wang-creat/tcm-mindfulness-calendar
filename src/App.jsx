@@ -625,18 +625,18 @@ function ImmersiveMeditation({ herb, onClose, t }) {
         ))}
       </div>
 
-      {/* Close button */}
-      <button onClick={onClose} style={{ position:"absolute", top:20, right:20, background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:12, color:"rgba(212,196,168,0.6)", padding:"8px 20px", cursor:"pointer", fontSize:13, fontFamily:"inherit", backdropFilter:"blur(10px)", zIndex:10, letterSpacing:1 }}>
-        離開冥想
-      </button>
-
-      {/* Timer */}
-      <div style={{ position:"absolute", top:24, left:24, color:"rgba(196,168,130,0.35)", fontSize:13, fontFamily:"inherit", letterSpacing:2, zIndex:10 }}>
-        {mn}:{String(sc).padStart(2,"0")}
+      {/* Top bar — timer + close, NOT overlapping the image */}
+      <div style={{ position:"relative", zIndex:10, width:"100%", maxWidth:400, display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 20px 8px", flexShrink:0 }}>
+        <div style={{ color:"rgba(196,168,130,0.4)", fontSize:13, fontFamily:"inherit", letterSpacing:2 }}>
+          {mn}:{String(sc).padStart(2,"0")}
+        </div>
+        <button onClick={onClose} style={{ background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:12, color:"rgba(212,196,168,0.6)", padding:"8px 20px", cursor:"pointer", fontSize:13, fontFamily:"inherit", letterSpacing:1 }}>
+          離開冥想
+        </button>
       </div>
 
       {/* Main visual area */}
-      <div style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center", zIndex:1 }}>
+      <div style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center", zIndex:1, flex:1, justifyContent:"center" }}>
 
         {/* Breathing card area — rounded square design */}
         <div style={{ position:"relative", width:280, height:280, marginBottom:32 }}>
