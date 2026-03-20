@@ -33,7 +33,8 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB 上限
+        globPatterns: ['**/*.{js,css,html,ico,svg,woff2}'], // 排除 png（圖片太大，改用 runtimeCaching）
         runtimeCaching: [
           {
             urlPattern: /\/herbs\/.*/i,
