@@ -506,22 +506,23 @@ function generateSolarTermCard(term, canvasRef) {
     // Icon
     const tq = SOLAR_TERM_QUOTES[term.name] || term.theme;
     const tc = SOLAR_TERM_CUSTOMS[term.name];
-    // Customs section
+    // Date
+    ctx.textAlign = "center"; ctx.fillStyle = "#8a7a6a"; ctx.font = "16px serif";
+    ctx.fillText(term.date, 400, 775);
+    // Customs & tea (centered, two lines)
     if (tc) {
-      ctx.fillStyle = "#6a5a4a"; ctx.font = "bold 16px sans-serif"; ctx.textAlign = "left";
-      ctx.fillText("習俗", 80, 790);
-      ctx.font = "15px sans-serif"; ctx.fillStyle = "#5a4a3a";
-      ctx.fillText(tc.customs.join(" · "), 130, 790);
-      ctx.fillStyle = "#6a5a4a"; ctx.font = "bold 16px sans-serif";
-      ctx.fillText("茶飲", 80, 820);
-      ctx.font = "15px sans-serif"; ctx.fillStyle = "#8a6a4a";
-      ctx.fillText(tc.tea, 130, 820);
+      ctx.font = "14px sans-serif"; ctx.fillStyle = "#5a4a3a";
+      ctx.fillText("習俗：" + tc.customs.join(" · "), 400, 808);
+      ctx.fillStyle = "#8a6a4a"; ctx.font = "14px sans-serif";
+      ctx.fillText("推薦茶飲：" + tc.tea, 400, 832);
     }
-    ctx.textAlign = "center";
+    // Quote
     ctx.fillStyle = "#5a4a3a"; ctx.font = "italic 16px Georgia, serif";
-    ctx.fillText(`「${tq}」`, 400, 860);
-    ctx.font = "28px sans-serif"; ctx.fillText(term.icon, 400, 900);
-    ctx.fillStyle = "#b0a090"; ctx.font = "16px sans-serif";
+    ctx.fillText(`「${tq}」`, 400, 868);
+    // Icon
+    ctx.font = "24px sans-serif"; ctx.fillText(term.icon, 400, 905);
+    // Branding
+    ctx.fillStyle = "#b0a090"; ctx.font = "14px sans-serif";
     ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 940);
     const shareText = tc ? `${term.icon} ${term.name}\n「${tq}」\n習俗：${tc.customs.join("、")}\n推薦茶飲：${tc.tea}\n#二十四節氣 #本草圖鑑 #節氣養生` : `${term.icon} ${term.name}\n「${tq}」\n#二十四節氣 #本草圖鑑 #節氣養生`;
     shareOrDownload(canvas, `${term.name}_節氣圖卡.png`, `${term.name} 節氣圖卡`, shareText);
