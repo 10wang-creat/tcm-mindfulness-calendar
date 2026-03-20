@@ -452,14 +452,15 @@ function generateShareCard(herb, canvasRef) {
   img.onload = () => {
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.12)"; ctx.shadowBlur = 24;
     ctx.drawImage(img, 115, 100, 850, 850); ctx.restore();
-    let y = 990;
-    ctx.textAlign = "center"; ctx.font = "28px sans-serif"; ctx.fillStyle = "#4a3a2a";
-    ctx.fillText(`${herb.nature}性 / ${herb.taste}　　歸經：${herb.meridian}`, 540, y); y += 46;
-    ctx.font = "28px sans-serif";
-    ctx.fillText(`功效：${herb.effect}`, 540, y); y += 54;
+    let y = 1000;
+    ctx.textAlign = "center";
+    ctx.font = "34px sans-serif"; ctx.fillStyle = "#3a2a1a";
+    ctx.fillText(`${herb.nature}性 / ${herb.taste}　歸經：${herb.meridian}`, 540, y); y += 54;
+    ctx.font = "bold 34px sans-serif"; ctx.fillStyle = "#3a2a1a";
+    ctx.fillText(`功效：${herb.effect}`, 540, y); y += 58;
     const hq = HERB_QUOTES[herb.id] || herb.effect;
-    ctx.fillStyle = "#5a4a3a"; ctx.font = "italic 28px Georgia, serif";
-    ctx.fillText(`「${hq}」`, 540, y); y += 54;
+    ctx.fillStyle = "#4a3a2a"; ctx.font = "italic 32px Georgia, serif";
+    ctx.fillText(`「${hq}」`, 540, y); y += 56;
     ctx.fillStyle = "#b0a090"; ctx.font = "20px sans-serif";
     ctx.fillText("— 本草圖鑑 TCM Herb Collection —", 540, y);
     shareOrDownload(canvas, `${herb.name}_${herb.pinyin}_card.png`, `${herb.name} 藥材卡片`, `${herb.name}（${herb.pinyin}）\n「${hq}」\n#本草圖鑑 #中醫養生`);
@@ -500,18 +501,20 @@ function generateSolarTermCard(term, canvasRef) {
     const tc = SOLAR_TERM_CUSTOMS[term.name];
     ctx.textAlign = "center";
     let y = 1000;
-    // Date
-    ctx.fillStyle = "#8a7a6a"; ctx.font = "28px serif"; ctx.fillText(term.date, 540, y); y += 52;
     // Customs
     if (tc) {
-      ctx.font = "30px sans-serif"; ctx.fillStyle = "#4a3a2a";
-      ctx.fillText("習俗：" + tc.customs.join("、"), 540, y); y += 48;
-      ctx.fillStyle = "#8a6040"; ctx.font = "30px sans-serif";
-      ctx.fillText("推薦茶飲：" + tc.tea, 540, y); y += 52;
+      ctx.font = "bold 36px sans-serif"; ctx.fillStyle = "#3a2a1a";
+      ctx.fillText("習俗", 540, y); y += 50;
+      ctx.font = "34px sans-serif"; ctx.fillStyle = "#4a3a2a";
+      ctx.fillText(tc.customs.join("、"), 540, y); y += 56;
+      ctx.font = "bold 36px sans-serif"; ctx.fillStyle = "#8a6040";
+      ctx.fillText("推薦茶飲", 540, y); y += 50;
+      ctx.font = "34px sans-serif"; ctx.fillStyle = "#7a5a30";
+      ctx.fillText(tc.tea, 540, y); y += 58;
     }
     // Quote
-    ctx.fillStyle = "#5a4a3a"; ctx.font = "italic 28px Georgia, serif";
-    ctx.fillText(`「${tq}」`, 540, y); y += 50;
+    ctx.fillStyle = "#4a3a2a"; ctx.font = "italic 32px Georgia, serif";
+    ctx.fillText(`「${tq}」`, 540, y); y += 56;
     // Branding
     ctx.fillStyle = "#b0a090"; ctx.font = "20px sans-serif";
     ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 540, y);
