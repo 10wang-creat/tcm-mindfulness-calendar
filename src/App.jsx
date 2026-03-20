@@ -451,7 +451,7 @@ function generateShareCard(herb, canvasRef) {
   const img = new Image(); img.crossOrigin = "anonymous";
   img.onload = () => {
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.12)"; ctx.shadowBlur = 24;
-    ctx.drawImage(img, 140, 80, 800, 800); ctx.restore();
+    ctx.drawImage(img, 140, 70, 800, 800); ctx.restore();
     let y = 1000;
     ctx.textAlign = "center";
     ctx.font = "36px sans-serif"; ctx.fillStyle = "#3a2a1a";
@@ -498,21 +498,21 @@ function generateSolarTermCard(term, canvasRef) {
   const img = new Image(); img.crossOrigin = "anonymous";
   img.onload = () => {
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.1)"; ctx.shadowBlur = 24;
-    ctx.drawImage(img, 140, 80, 800, 800); ctx.restore();
+    ctx.drawImage(img, 140, 70, 800, 800); ctx.restore();
     const tq = SOLAR_TERM_QUOTES[term.name] || term.theme;
     const tc = SOLAR_TERM_CUSTOMS[term.name];
     ctx.textAlign = "center";
-    let y = 1020;
-    // Customs (label + content on same line)
+    let y = 1030;
+    // Customs (label + content on same line, large font)
     if (tc) {
-      ctx.font = "36px sans-serif"; ctx.fillStyle = "#3a2a1a";
-      ctx.fillText("習俗：" + tc.customs.join("、"), 540, y); y += 60;
-      ctx.font = "36px sans-serif"; ctx.fillStyle = "#7a5530";
-      ctx.fillText("推薦茶飲：" + tc.tea, 540, y); y += 64;
+      ctx.font = "44px sans-serif"; ctx.fillStyle = "#3a2a1a";
+      ctx.fillText("習俗：" + tc.customs.join("、"), 540, y); y += 72;
+      ctx.font = "44px sans-serif"; ctx.fillStyle = "#7a5530";
+      ctx.fillText("推薦茶飲：" + tc.tea, 540, y); y += 76;
     }
     // Quote
-    ctx.fillStyle = "#4a3a2a"; ctx.font = "italic 34px Georgia, serif";
-    ctx.fillText(`「${tq}」`, 540, y); y += 60;
+    ctx.fillStyle = "#4a3a2a"; ctx.font = "italic 40px Georgia, serif";
+    ctx.fillText(`「${tq}」`, 540, y); y += 68;
     // Branding
     ctx.fillStyle = "#b0a090"; ctx.font = "20px sans-serif";
     ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 540, y);
