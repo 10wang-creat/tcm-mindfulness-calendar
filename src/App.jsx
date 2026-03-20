@@ -153,6 +153,36 @@ const SOLAR_TERM_QUOTES = {
   "冬至": "一陽初生，最長夜後迎光明",
 };
 
+// ============================================================
+// SOLAR TERM CUSTOMS (節氣習俗) — traditional practices
+// ============================================================
+const SOLAR_TERM_CUSTOMS = {
+  "小寒": { customs: ["喝臘八粥","吃糯米飯","醃臘肉"], health: "宜溫補腎陽，多食羊肉、桂圓、核桃", tea: "桂圓紅棗茶" },
+  "大寒": { customs: ["除舊佈新","備年貨","蒸年糕"], health: "宜養精蓄銳，早睡晚起藏陽氣", tea: "薑母紅茶" },
+  "立春": { customs: ["咬春（吃春餅）","迎春","打春牛"], health: "宜養肝護陽，多食豆芽、韭菜", tea: "菊花枸杞茶" },
+  "雨水": { customs: ["接壽（女婿送禮）","拉保保","回娘屋"], health: "宜健脾祛濕，少食生冷油膩", tea: "薏仁茯苓茶" },
+  "驚蟄": { customs: ["祭白虎","打小人","吃梨潤燥"], health: "宜清肝瀉火，多食梨、荸薺", tea: "菊花決明子茶" },
+  "春分": { customs: ["放風箏","吃春菜","豎蛋","吃太陽糕"], health: "宜調和陰陽，飲食寒熱均衡", tea: "玫瑰花茶" },
+  "清明": { customs: ["掃墓祭祖","踏青","插柳","吃青團"], health: "宜疏肝養肝，宜戶外活動舒展筋骨", tea: "薄荷綠茶" },
+  "穀雨": { customs: ["喝穀雨茶","賞牡丹","祭倉頡"], health: "宜健脾化濕，食山藥、扁豆", tea: "陳皮普洱茶" },
+  "立夏": { customs: ["稱體重","吃蛋","嘗新","鬥蛋"], health: "宜養心安神，清淡飲食為主", tea: "蓮子心茶" },
+  "小滿": { customs: ["搶水","祭車神","吃苦菜"], health: "宜清熱祛濕，多食苦瓜、綠豆", tea: "荷葉薏仁茶" },
+  "芒種": { customs: ["送花神","安苗","煮梅"], health: "宜清心降火，防暑濕侵襲", tea: "烏梅湯" },
+  "夏至": { customs: ["吃麵條","祭地","消夏避伏"], health: "宜養心清暑，午休養心氣", tea: "酸梅湯" },
+  "小暑": { customs: ["曬書畫","食新米","吃藕"], health: "宜消暑生津，多食瓜果蔬菜", tea: "金銀花茶" },
+  "大暑": { customs: ["曬伏薑","飲伏茶","燒伏香"], health: "宜清熱養陰，避免過度勞累", tea: "西瓜翠衣茶" },
+  "立秋": { customs: ["貼秋膘","啃秋瓜","曬秋"], health: "宜潤肺養陰，漸進溫補", tea: "百合銀耳茶" },
+  "處暑": { customs: ["放河燈","開漁節","吃鴨子"], health: "宜清除餘熱，滋陰潤燥", tea: "雪梨膏" },
+  "白露": { customs: ["收清露","飲白露茶","釀米酒"], health: "宜滋陰潤燥，防秋燥傷肺", tea: "杏仁百合茶" },
+  "秋分": { customs: ["祭月","吃秋菜","送秋牛圖"], health: "宜收斂神氣，陰平陽秘", tea: "桂花烏龍茶" },
+  "寒露": { customs: ["登高望遠","賞菊","飲菊花酒"], health: "宜潤燥溫補，防寒保暖", tea: "枸杞菊花茶" },
+  "霜降": { customs: ["賞楓紅","吃柿子","進補"], health: "宜養陰潤肺，平補為要", tea: "蜂蜜柚子茶" },
+  "立冬": { customs: ["補冬（吃薑母鴨）","釀黃酒","吃餃子"], health: "宜溫腎補陽，固護陽氣", tea: "桂圓薑茶" },
+  "小雪": { customs: ["醃臘肉","吃糍粑","曬魚乾"], health: "宜養血安神，溫補不燥", tea: "紅棗桂圓茶" },
+  "大雪": { customs: ["醃肉","觀賞封河","進補"], health: "宜深度滋補，早睡養精蓄銳", tea: "當歸生薑羊肉湯" },
+  "冬至": { customs: ["吃湯圓","祭祖","吃水餃","數九"], health: "宜溫陽補氣，一陽初生宜靜養", tea: "黃耆紅棗茶" },
+};
+
 
 // ============================================================
 // 56 HERBS DATABASE — matching public/herbs/ images
@@ -234,20 +264,20 @@ const SOLAR_TERMS_2026 = [
   { name:"小寒", date:"2026-01-05", season:"winter", theme:"溫腎散寒", icon:"❄️" },
   { name:"大寒", date:"2026-01-20", season:"winter", theme:"深藏蓄勢", icon:"🌨️" },
   { name:"立春", date:"2026-02-04", season:"spring", theme:"萬物復甦", icon:"🌱" },
-  { name:"雨水", date:"2026-02-19", season:"spring", theme:"春雨潤澤", icon:"🌧️" },
-  { name:"驚蟄", date:"2026-03-06", season:"spring", theme:"升陽護肝", icon:"⚡" },
-  { name:"春分", date:"2026-03-21", season:"spring", theme:"陰陽平衡", icon:"⚖️" },
+  { name:"雨水", date:"2026-02-18", season:"spring", theme:"春雨潤澤", icon:"🌧️" },
+  { name:"驚蟄", date:"2026-03-05", season:"spring", theme:"升陽護肝", icon:"⚡" },
+  { name:"春分", date:"2026-03-20", season:"spring", theme:"陰陽平衡", icon:"⚖️" },
   { name:"清明", date:"2026-04-05", season:"spring", theme:"疏肝明目", icon:"🍃" },
   { name:"穀雨", date:"2026-04-20", season:"spring", theme:"雨生百穀", icon:"🌾" },
-  { name:"立夏", date:"2026-05-06", season:"summer", theme:"養心安神", icon:"☀️" },
+  { name:"立夏", date:"2026-05-05", season:"summer", theme:"養心安神", icon:"☀️" },
   { name:"小滿", date:"2026-05-21", season:"summer", theme:"清熱祛濕", icon:"🌿" },
-  { name:"芒種", date:"2026-06-06", season:"summer", theme:"清心降火", icon:"🌾" },
+  { name:"芒種", date:"2026-06-05", season:"summer", theme:"清心降火", icon:"🌾" },
   { name:"夏至", date:"2026-06-21", season:"summer", theme:"養心清暑", icon:"🔆" },
   { name:"小暑", date:"2026-07-07", season:"summer", theme:"消暑生津", icon:"🌡️" },
   { name:"大暑", date:"2026-07-23", season:"summer", theme:"清熱養陰", icon:"🔥" },
   { name:"立秋", date:"2026-08-07", season:"autumn", theme:"潤肺養陰", icon:"🍂" },
   { name:"處暑", date:"2026-08-23", season:"autumn", theme:"清餘熱", icon:"🌅" },
-  { name:"白露", date:"2026-09-08", season:"autumn", theme:"滋陰潤燥", icon:"💧" },
+  { name:"白露", date:"2026-09-07", season:"autumn", theme:"滋陰潤燥", icon:"💧" },
   { name:"秋分", date:"2026-09-23", season:"autumn", theme:"平衡收藏", icon:"🍁" },
   { name:"寒露", date:"2026-10-08", season:"autumn", theme:"潤燥溫補", icon:"🌙" },
   { name:"霜降", date:"2026-10-23", season:"autumn", theme:"養陰潤肺", icon:"🌫️" },
@@ -335,6 +365,13 @@ function getDayMeditation(herb, dateStr) {
   return ms[doy % ms.length];
 }
 function fmtDate(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+// ============================================================
+// 2026 LUNAR CALENDAR (農曆) — generated from lunarcalendar lib
+// ============================================================
+const LUNAR_DAYS = {"01-01":"十三","01-02":"十四","01-03":"十五","01-04":"十六","01-05":"十七","01-06":"十八","01-07":"十九","01-08":"二十","01-09":"廿一","01-10":"廿二","01-11":"廿三","01-12":"廿四","01-13":"廿五","01-14":"廿六","01-15":"廿七","01-16":"廿八","01-17":"廿九","01-18":"三十","01-19":"十二月","01-20":"初二","01-21":"初三","01-22":"初四","01-23":"初五","01-24":"初六","01-25":"初七","01-26":"初八","01-27":"初九","01-28":"初十","01-29":"十一","01-30":"十二","01-31":"十三","02-01":"十四","02-02":"十五","02-03":"十六","02-04":"十七","02-05":"十八","02-06":"十九","02-07":"二十","02-08":"廿一","02-09":"廿二","02-10":"廿三","02-11":"廿四","02-12":"廿五","02-13":"廿六","02-14":"廿七","02-15":"廿八","02-16":"廿九","02-17":"正月","02-18":"初二","02-19":"初三","02-20":"初四","02-21":"初五","02-22":"初六","02-23":"初七","02-24":"初八","02-25":"初九","02-26":"初十","02-27":"十一","02-28":"十二","03-01":"十三","03-02":"十四","03-03":"十五","03-04":"十六","03-05":"十七","03-06":"十八","03-07":"十九","03-08":"二十","03-09":"廿一","03-10":"廿二","03-11":"廿三","03-12":"廿四","03-13":"廿五","03-14":"廿六","03-15":"廿七","03-16":"廿八","03-17":"廿九","03-18":"三十","03-19":"二月","03-20":"初二","03-21":"初三","03-22":"初四","03-23":"初五","03-24":"初六","03-25":"初七","03-26":"初八","03-27":"初九","03-28":"初十","03-29":"十一","03-30":"十二","03-31":"十三","04-01":"十四","04-02":"十五","04-03":"十六","04-04":"十七","04-05":"十八","04-06":"十九","04-07":"二十","04-08":"廿一","04-09":"廿二","04-10":"廿三","04-11":"廿四","04-12":"廿五","04-13":"廿六","04-14":"廿七","04-15":"廿八","04-16":"廿九","04-17":"三月","04-18":"初二","04-19":"初三","04-20":"初四","04-21":"初五","04-22":"初六","04-23":"初七","04-24":"初八","04-25":"初九","04-26":"初十","04-27":"十一","04-28":"十二","04-29":"十三","04-30":"十四","05-01":"十五","05-02":"十六","05-03":"十七","05-04":"十八","05-05":"十九","05-06":"二十","05-07":"廿一","05-08":"廿二","05-09":"廿三","05-10":"廿四","05-11":"廿五","05-12":"廿六","05-13":"廿七","05-14":"廿八","05-15":"廿九","05-16":"三十","05-17":"四月","05-18":"初二","05-19":"初三","05-20":"初四","05-21":"初五","05-22":"初六","05-23":"初七","05-24":"初八","05-25":"初九","05-26":"初十","05-27":"十一","05-28":"十二","05-29":"十三","05-30":"十四","05-31":"十五","06-01":"十六","06-02":"十七","06-03":"十八","06-04":"十九","06-05":"二十","06-06":"廿一","06-07":"廿二","06-08":"廿三","06-09":"廿四","06-10":"廿五","06-11":"廿六","06-12":"廿七","06-13":"廿八","06-14":"廿九","06-15":"五月","06-16":"初二","06-17":"初三","06-18":"初四","06-19":"初五","06-20":"初六","06-21":"初七","06-22":"初八","06-23":"初九","06-24":"初十","06-25":"十一","06-26":"十二","06-27":"十三","06-28":"十四","06-29":"十五","06-30":"十六","07-01":"十七","07-02":"十八","07-03":"十九","07-04":"二十","07-05":"廿一","07-06":"廿二","07-07":"廿三","07-08":"廿四","07-09":"廿五","07-10":"廿六","07-11":"廿七","07-12":"廿八","07-13":"廿九","07-14":"六月","07-15":"初二","07-16":"初三","07-17":"初四","07-18":"初五","07-19":"初六","07-20":"初七","07-21":"初八","07-22":"初九","07-23":"初十","07-24":"十一","07-25":"十二","07-26":"十三","07-27":"十四","07-28":"十五","07-29":"十六","07-30":"十七","07-31":"十八","08-01":"十九","08-02":"二十","08-03":"廿一","08-04":"廿二","08-05":"廿三","08-06":"廿四","08-07":"廿五","08-08":"廿六","08-09":"廿七","08-10":"廿八","08-11":"廿九","08-12":"三十","08-13":"七月","08-14":"初二","08-15":"初三","08-16":"初四","08-17":"初五","08-18":"初六","08-19":"初七","08-20":"初八","08-21":"初九","08-22":"初十","08-23":"十一","08-24":"十二","08-25":"十三","08-26":"十四","08-27":"十五","08-28":"十六","08-29":"十七","08-30":"十八","08-31":"十九","09-01":"二十","09-02":"廿一","09-03":"廿二","09-04":"廿三","09-05":"廿四","09-06":"廿五","09-07":"廿六","09-08":"廿七","09-09":"廿八","09-10":"廿九","09-11":"八月","09-12":"初二","09-13":"初三","09-14":"初四","09-15":"初五","09-16":"初六","09-17":"初七","09-18":"初八","09-19":"初九","09-20":"初十","09-21":"十一","09-22":"十二","09-23":"十三","09-24":"十四","09-25":"十五","09-26":"十六","09-27":"十七","09-28":"十八","09-29":"十九","09-30":"二十","10-01":"廿一","10-02":"廿二","10-03":"廿三","10-04":"廿四","10-05":"廿五","10-06":"廿六","10-07":"廿七","10-08":"廿八","10-09":"廿九","10-10":"九月","10-11":"初二","10-12":"初三","10-13":"初四","10-14":"初五","10-15":"初六","10-16":"初七","10-17":"初八","10-18":"初九","10-19":"初十","10-20":"十一","10-21":"十二","10-22":"十三","10-23":"十四","10-24":"十五","10-25":"十六","10-26":"十七","10-27":"十八","10-28":"十九","10-29":"二十","10-30":"廿一","10-31":"廿二","11-01":"廿三","11-02":"廿四","11-03":"廿五","11-04":"廿六","11-05":"廿七","11-06":"廿八","11-07":"廿九","11-08":"三十","11-09":"十月","11-10":"初二","11-11":"初三","11-12":"初四","11-13":"初五","11-14":"初六","11-15":"初七","11-16":"初八","11-17":"初九","11-18":"初十","11-19":"十一","11-20":"十二","11-21":"十三","11-22":"十四","11-23":"十五","11-24":"十六","11-25":"十七","11-26":"十八","11-27":"十九","11-28":"二十","11-29":"廿一","11-30":"廿二","12-01":"廿三","12-02":"廿四","12-03":"廿五","12-04":"廿六","12-05":"廿七","12-06":"廿八","12-07":"廿九","12-08":"三十","12-09":"十一月","12-10":"初二","12-11":"初三","12-12":"初四","12-13":"初五","12-14":"初六","12-15":"初七","12-16":"初八","12-17":"初九","12-18":"初十","12-19":"十一","12-20":"十二","12-21":"十三","12-22":"十四","12-23":"十五","12-24":"十六","12-25":"十七","12-26":"十八","12-27":"十九","12-28":"二十","12-29":"廿一","12-30":"廿二","12-31":"廿三"};
+const FESTIVALS = {"01-01":"元旦","01-05":"小寒","01-20":"大寒","01-26":"臘八節","02-04":"立春","02-14":"情人節","02-16":"除夕","02-17":"春節","02-18":"雨水","02-28":"和平紀念日","03-03":"元宵節","03-05":"驚蟄","03-08":"婦女節","03-12":"植樹節","03-20":"春分","04-04":"兒童節","04-05":"清明節","04-19":"上巳節","04-20":"穀雨","05-01":"勞動節","05-05":"立夏","05-10":"母親節","05-21":"小滿","06-05":"芒種","06-19":"端午節","06-21":"夏至","07-07":"小暑","07-23":"大暑","08-07":"立秋","08-08":"父親節","08-19":"七夕","08-23":"處暑","08-27":"中元節","09-07":"白露","09-23":"秋分","09-25":"中秋節","09-28":"教師節","10-08":"寒露","10-10":"國慶日","10-18":"重陽節","10-23":"霜降","10-31":"萬聖節","11-07":"立冬","11-22":"小雪","12-07":"大雪","12-22":"冬至","12-25":"聖誕節"};
+function getLunarDay(m,d) { const k=String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0"); return FESTIVALS[k] || LUNAR_DAYS[k] || ""; }
 
 // ============================================================
 // THEME
@@ -565,9 +602,7 @@ function generateWallpaper(herb, size, canvasRef) {
 // ============================================================
 function ImmersiveMeditation({ herb, onClose, t }) {
   const [breathPhase, setBreathPhase] = useState("inhale");
-  const [elapsed, setElapsed] = useState(0);
   const breathRef = useRef(null);
-  const timerRef = useRef(null);
 
   useEffect(() => {
     const phases = ["inhale", "hold", "exhale", "rest"];
@@ -578,173 +613,38 @@ function ImmersiveMeditation({ herb, onClose, t }) {
       breathRef.current = setTimeout(() => { idx = (idx + 1) % phases.length; cycle(); }, durations[idx]);
     };
     cycle();
-    timerRef.current = setInterval(() => setElapsed(p => p + 1), 1000);
     audioEngine.playSoundscape(herb.category, getSeason(new Date()));
-    return () => { clearTimeout(breathRef.current); clearInterval(timerRef.current); audioEngine.stop(); };
+    return () => { clearTimeout(breathRef.current); audioEngine.stop(); };
   }, [herb]);
 
-  const label = { inhale: "吸 氣", hold: "屏 息", exhale: "呼 氣", rest: "靜 息" };
-  const sublabel = { inhale: "緩緩吸入，感受能量充盈", hold: "輕輕停留，讓氣沉入丹田", exhale: "徐徐呼出，放下所有雜念", rest: "安然靜息，與自然合一" };
-  const isExpand = breathPhase === "inhale" || breathPhase === "hold";
+  const label = { inhale: "吸氣", hold: "屏息", exhale: "呼氣", rest: "靜息" };
+  const scale = { inhale: 1.3, hold: 1.3, exhale: 0.85, rest: 0.85 };
   const rc = getRarityCfg(herb.id);
-  const hq = HERB_QUOTES[herb.id] || herb.effect;
-  const mn = Math.floor(elapsed / 60); const sc = elapsed % 60;
 
   return (
-    <div style={{ position:"fixed", inset:0, zIndex:300, background:"radial-gradient(ellipse at 50% 35%, #2a2318 0%, #1a1510 40%, #100e0a 70%, #080705 100%)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", overflow:"hidden" }}>
-
-      {/* Layered ambient backgrounds */}
-      {/* Layer 1: warm center glow that pulses */}
-      <div style={{
-        position:"absolute", inset:0,
-        background:"radial-gradient(ellipse at 50% 38%, rgba(196,150,80,0.18) 0%, transparent 55%)",
-        opacity: isExpand ? 1 : 0.4,
-        transition:"opacity 4s ease-in-out",
-      }} />
-      {/* Layer 2: subtle warm ring behind the card area */}
-      <div style={{
-        position:"absolute", top:"15%", left:"50%", transform:"translateX(-50%)",
-        width:400, height:400, borderRadius:"50%",
-        background:"radial-gradient(circle, rgba(180,140,80,0.08) 0%, transparent 70%)",
-        opacity: isExpand ? 0.8 : 0.3,
-        transition:"opacity 4s ease-in-out",
-      }} />
-      {/* Layer 3: floating particles */}
-      <div style={{ position:"absolute", inset:0, overflow:"hidden", pointerEvents:"none" }}>
-        {[...Array(12)].map((_,i) => (
-          <div key={i} style={{
-            position:"absolute",
-            left:`${15 + (i * 7) % 70}%`,
-            top:`${10 + (i * 13) % 80}%`,
-            width: i % 3 === 0 ? 3 : 2,
-            height: i % 3 === 0 ? 3 : 2,
-            borderRadius:"50%",
-            background:`rgba(196,168,130,${0.15 + (i % 4) * 0.05})`,
-            animation:`tcmFloat ${6 + i % 4}s ease-in-out ${i * 0.5}s infinite alternate`,
-          }} />
-        ))}
-      </div>
-
-      {/* Top bar — timer + close, NOT overlapping the image */}
-      <div style={{ position:"relative", zIndex:10, width:"100%", maxWidth:400, display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 20px 8px", flexShrink:0 }}>
-        <div style={{ color:"rgba(196,168,130,0.4)", fontSize:13, fontFamily:"inherit", letterSpacing:2 }}>
-          {mn}:{String(sc).padStart(2,"0")}
-        </div>
-        <button onClick={onClose} style={{ background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:12, color:"rgba(212,196,168,0.6)", padding:"8px 20px", cursor:"pointer", fontSize:13, fontFamily:"inherit", letterSpacing:1 }}>
-          離開冥想
-        </button>
-      </div>
-
-      {/* Main visual area */}
-      <div style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center", zIndex:1, flex:1, justifyContent:"center" }}>
-
-        {/* Breathing card area — rounded square design */}
-        <div style={{ position:"relative", width:280, height:280, marginBottom:32 }}>
-          {/* Outer glow frame — rounded square pulse */}
-          <div style={{
-            position:"absolute", inset:-16, borderRadius:32,
-            border:`1.5px solid rgba(196,168,130,${isExpand ? 0.28 : 0.08})`,
-            boxShadow: isExpand
-              ? "0 0 50px rgba(196,150,90,0.2), 0 0 100px rgba(196,150,90,0.08), inset 0 0 40px rgba(196,150,90,0.05)"
-              : "0 0 15px rgba(196,150,90,0.04)",
-            transform: isExpand ? "scale(1.04)" : "scale(0.97)",
-            transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "all 4s ease-in-out" : "all 0.5s ease",
-          }} />
-
-          {/* Middle decorative frame — dashed rounded square */}
-          <div style={{
-            position:"absolute", inset:-6, borderRadius:28,
-            border:`0.5px dashed rgba(196,168,130,${isExpand ? 0.18 : 0.06})`,
-            transform: isExpand ? "scale(1.02)" : "scale(0.98)",
-            transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "all 4s ease-in-out" : "all 0.5s ease",
-            animation:"tcmMedSpin 90s linear infinite",
-          }} />
-
-          {/* Inner breathing frame — rounded square */}
-          <div style={{
-            position:"absolute", inset:6, borderRadius:22,
-            border:`1px solid rgba(196,168,130,${isExpand ? 0.3 : 0.1})`,
-            transform: isExpand ? "scale(1.03)" : "scale(0.96)",
-            transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "all 4s ease-in-out" : "all 0.5s ease",
-            boxShadow: isExpand ? "0 0 25px rgba(196,150,90,0.1), inset 0 0 20px rgba(196,150,90,0.04)" : "none",
-          }} />
-
-          {/* Corner accents */}
-          {[[0,0],[1,0],[0,1],[1,1]].map(([cx,cy],i) => (
-            <div key={i} style={{
-              position:"absolute",
-              [cy?"bottom":"top"]: -20, [cx?"right":"left"]: -20,
-              width:8, height:8,
-              borderTop: cy ? "none" : `1px solid rgba(196,168,130,${isExpand ? 0.3 : 0.1})`,
-              borderBottom: cy ? `1px solid rgba(196,168,130,${isExpand ? 0.3 : 0.1})` : "none",
-              borderLeft: cx ? "none" : `1px solid rgba(196,168,130,${isExpand ? 0.3 : 0.1})`,
-              borderRight: cx ? `1px solid rgba(196,168,130,${isExpand ? 0.3 : 0.1})` : "none",
-              transition:"border-color 3s ease",
-            }} />
-          ))}
-
-          {/* Herb image — square with rounded corners */}
-          <div style={{
-            position:"absolute", inset:16, borderRadius:18, overflow:"hidden",
-            transform:`scale(${isExpand ? 1.01 : 0.97})`,
-            transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out, opacity 3s ease, box-shadow 4s ease" : "all 0.5s ease",
-            boxShadow: isExpand
-              ? "0 8px 40px rgba(0,0,0,0.5), 0 0 50px rgba(180,140,80,0.1)"
-              : "0 4px 20px rgba(0,0,0,0.4)",
-            opacity: isExpand ? 0.95 : 0.6,
-          }}>
-            <img src={herbImg(herb)} alt={herb.name} style={{ width:"100%", height:"100%", objectFit:"cover" }}
-              onError={e=>{e.target.style.display='none'}} />
-          </div>
-        </div>
-
-        {/* Rarity */}
-        <div style={{ fontSize:11, letterSpacing:4, marginBottom:8, color:rc.color, opacity:0.8 }}>{"★".repeat(rc.stars)} {rc.label}</div>
-
-        {/* Herb name */}
-        <div className="font-serif-tc" style={{ fontSize:42, fontWeight:700, letterSpacing:12, color:"#d4c4a8", marginBottom:4, textShadow:"0 2px 20px rgba(0,0,0,0.5)" }}>{herb.name}</div>
-
-        {/* Pinyin */}
-        <div style={{ fontSize:14, fontStyle:"italic", color:"rgba(196,168,130,0.45)", letterSpacing:2, marginBottom:28 }}>{herb.pinyin}</div>
-
-        {/* Breath phase — main indicator with stronger glow */}
+    <div style={{ position:"fixed", inset:0, zIndex:300, background:"radial-gradient(ellipse at center, #2a2520 0%, #1a1510 60%, #0a0805 100%)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
+      <button onClick={onClose} style={{ position:"absolute", top:20, right:20, background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.2)", borderRadius:12, color:"#d4c4a8", padding:"8px 20px", cursor:"pointer", fontSize:14, fontFamily:"inherit", backdropFilter:"blur(10px)" }}>
+        離開冥想
+      </button>
+      <div style={{ position:"relative", marginBottom:40 }}>
         <div style={{
-          fontSize:32, letterSpacing:16, fontWeight:300,
-          color: isExpand ? "#d4b878" : "#a09070",
-          textShadow: isExpand ? "0 0 40px rgba(212,184,120,0.6), 0 0 80px rgba(212,184,120,0.2)" : "0 0 10px rgba(160,144,112,0.2)",
-          transition:"all 3s ease",
-          marginBottom:8,
+          width:260, height:260, borderRadius:"50%", border:"2px solid rgba(196,168,130,0.3)",
+          display:"flex", alignItems:"center", justifyContent:"center",
+          transform:`scale(${scale[breathPhase]})`,
+          transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out" : "transform 0.3s ease",
+          boxShadow:`0 0 60px rgba(196,168,130,${breathPhase === "hold" ? 0.3 : 0.15}), inset 0 0 40px rgba(196,168,130,0.05)`,
         }}>
-          {label[breathPhase]}
-        </div>
-
-        {/* Breath guidance text */}
-        <div style={{ fontSize:13, color:"rgba(196,168,130,0.4)", letterSpacing:2, marginBottom:28, transition:"opacity 2s ease" }}>
-          {sublabel[breathPhase]}
-        </div>
-
-        {/* Divider */}
-        <div style={{ width:60, height:1, background:"rgba(196,168,130,0.15)", marginBottom:20 }} />
-
-        {/* Quote */}
-        <div style={{ fontSize:14, fontStyle:"italic", color:"rgba(196,168,130,0.35)", letterSpacing:1, maxWidth:320, textAlign:"center", lineHeight:1.6 }}>
-          「{hq}」
-        </div>
-
-        {/* Effect */}
-        <div style={{ fontSize:12, color:"rgba(196,168,130,0.22)", marginTop:10, letterSpacing:1 }}>
-          {herb.category} · {herb.effect}
+          <img src={herbImg(herb)} alt={herb.name} style={{ width:200, height:200, objectFit:"contain", opacity: (breathPhase === "hold" || breathPhase === "inhale") ? 0.85 : 0.5, transition:"opacity 3s ease", filter:"drop-shadow(0 0 20px rgba(196,168,130,0.3))" }}
+            onError={e=>{e.target.style.display='none'}} />
         </div>
       </div>
-
-      <style>{`
-        @keyframes tcmMedSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes tcmFloat {
-          0% { transform: translateY(0px) scale(1); opacity: 0.3; }
-          50% { opacity: 0.7; }
-          100% { transform: translateY(-30px) scale(1.5); opacity: 0.15; }
-        }
-      `}</style>
+      <div style={{ textAlign:"center", color:"#d4c4a8" }}>
+        <div style={{ fontSize:12, letterSpacing:3, marginBottom:6, color:rc.color }}>{"★".repeat(rc.stars)} {rc.label}</div>
+        <div className="font-serif-tc" style={{ fontSize:38, fontWeight:600, letterSpacing:8, marginBottom:6 }}>{herb.name}</div>
+        <div style={{ fontSize:15, fontStyle:"italic", opacity:0.6, marginBottom:36 }}>{herb.pinyin}</div>
+        <div style={{ fontSize:28, letterSpacing:12, fontWeight:300, color:"#c4a882", textShadow:"0 0 20px rgba(196,168,130,0.4)" }}>{label[breathPhase]}</div>
+        <div style={{ fontSize:13, opacity:0.4, marginTop:14 }}>{herb.effect}</div>
+      </div>
     </div>
   );
 }
@@ -800,6 +700,13 @@ function TodayView({ t, stats, setStats, collected, setCollected, canvasRef }) {
               </div>
             </div>
           </div>
+          {/* Solar term customs on today view */}
+          {SOLAR_TERM_CUSTOMS[term.name] && (
+            <div style={{ fontSize:11, color:t.textSec, marginBottom:6, lineHeight:1.6 }}>
+              <span style={{color:t.accent,fontWeight:600}}>習俗：</span>{SOLAR_TERM_CUSTOMS[term.name].customs.join("、")}
+              <span style={{marginLeft:8,color:t.warm,fontWeight:600}}>茶飲：</span>{SOLAR_TERM_CUSTOMS[term.name].tea}
+            </div>
+          )}
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
             <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
             <div style={{ display:"flex", gap:6 }}>
@@ -946,41 +853,51 @@ function CalendarView({ t, stats, canvasRef }) {
           const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
           const isT=ds===today; const isS=ds===sel; const isST=mTerms.some(tt=>tt.date===ds);
           const hasMed=(stats.meditatedDates||[]).includes(ds);
-          return (<button key={i} onClick={()=>setSel(isS?null:ds)} style={{position:"relative",background:isS?t.accent:isT?t.accentLight:"transparent",border:"none",borderRadius:12,padding:"10px 0",cursor:"pointer",color:isS?"#fff":isT?t.accent:t.text,fontWeight:isT||isS?700:400,fontSize:14,transition:"all 0.15s"}}>
-            {d}
-            {isST&&<div style={{position:"absolute",bottom:3,left:"50%",transform:"translateX(-50%)",width:4,height:4,borderRadius:"50%",background:isS?"#fff":t.accent}}/>}
-            {hasMed&&!isST&&<div style={{position:"absolute",bottom:3,left:"50%",transform:"translateX(-50%)",width:4,height:4,borderRadius:"50%",background:isS?"#fff":t.warm}}/>}
+          const lunar = getLunarDay(m+1, d);
+          const fest = FESTIVALS[String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")];
+          const isMonth = LUNAR_DAYS[String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")]?.includes("月");
+          return (<button key={i} onClick={()=>setSel(isS?null:ds)} style={{position:"relative",background:isS?t.accent:isT?t.accentLight:"transparent",border:"none",borderRadius:12,padding:"6px 0 4px",cursor:"pointer",color:isS?"#fff":isT?t.accent:t.text,fontWeight:isT||isS?700:400,fontSize:14,transition:"all 0.15s",minHeight:48}}>
+            <div>{d}</div>
+            <div style={{fontSize:8,marginTop:1,lineHeight:1,color:isS?"rgba(255,255,255,0.7)":fest?"#c44":isMonth?t.accent:t.textSec,fontWeight:fest||isMonth?600:400,letterSpacing:fest?0:0.5}}>{lunar}</div>
+            {isST&&<div style={{position:"absolute",bottom:2,left:"50%",transform:"translateX(-50%)",width:4,height:4,borderRadius:"50%",background:isS?"#fff":t.accent}}/>}
+            {hasMed&&!isST&&<div style={{position:"absolute",bottom:2,left:"50%",transform:"translateX(-50%)",width:4,height:4,borderRadius:"50%",background:isS?"#fff":t.warm}}/>}
           </button>);
         })}
       </div>
-      {sel&&sHerb&&(
-        <div style={{background:t.card,borderRadius:20,padding:"20px 24px",marginTop:20,boxShadow:"0 2px 16px rgba(0,0,0,0.04)",border:"1px solid rgba(0,0,0,0.04)",animation:"tcmFI 0.3s ease",position:"relative",overflow:"hidden"}}>
-          {/* Solar term background in calendar detail */}
-          <div style={{position:"absolute",top:0,right:0,width:120,height:120,opacity:0.1}}>
-            <img src={solarTermImg(sTerm?.name)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display='none'}} />
-          </div>
-          <div style={{display:"flex",gap:14,marginBottom:12,position:"relative"}}>
-            <img src={herbImg(sHerb)} alt={sHerb.name} style={{width:60,height:60,borderRadius:12,objectFit:"cover",background:t.accentLight}} onError={e=>{e.target.style.display='none'}}/>
-            <div style={{flex:1}}>
-              <div style={{display:"flex",alignItems:"center",gap:6}}>
-                <img src={solarTermImg(sTerm?.name)} alt="" style={{width:20,height:20,borderRadius:6,objectFit:"cover"}} onError={e=>{e.target.style.display='none'}} />
-                <span style={{fontSize:11,color:t.accent,fontWeight:600}}>{sTerm?.icon} {sTerm?.name} · {sTerm?.theme}</span>
+
+      {/* Always-visible solar term customs card — always shows today's term */}
+      {(() => {
+        const activeTerm = sel ? getCurrentSolarTerm(sel) : getCurrentSolarTerm(fmtDate(new Date()));
+        const customs = SOLAR_TERM_CUSTOMS[activeTerm?.name];
+        if (!customs || !activeTerm) return null;
+        return (
+          <div style={{background:t.card,borderRadius:20,padding:"20px 24px",marginTop:20,boxShadow:"0 2px 16px rgba(0,0,0,0.04)",border:"1px solid rgba(0,0,0,0.04)"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+              <img src={solarTermImg(activeTerm.name)} alt="" style={{width:40,height:40,borderRadius:10,objectFit:"cover"}} onError={e=>{e.target.style.display='none'}} />
+              <div>
+                <div className="font-serif-tc" style={{fontSize:18,fontWeight:700,color:t.text}}>{activeTerm.icon} {activeTerm.name}習俗</div>
+                <div style={{fontSize:11,color:t.textSec}}>{activeTerm.theme} · {activeTerm.date}</div>
               </div>
-              <div className="font-serif-tc" style={{fontSize:20,fontWeight:700,color:t.text,marginTop:2}}>{sHerb.name}</div>
-              <div style={{fontSize:11,color:t.textSec}}>{sHerb.pinyin} · {sHerb.category}</div>
             </div>
-            <span style={{fontSize:12,color:t.textSec}}>{sel.replace(/-/g,"/")}</span>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
+              {customs.customs.map((cu,i)=><span key={i} style={{fontSize:12,padding:"5px 12px",borderRadius:14,background:t.accentLight,color:t.accent,fontWeight:500}}>{cu}</span>)}
+            </div>
+            <div style={{fontSize:13,color:t.text,lineHeight:1.8,marginBottom:8}}>
+              <span style={{fontWeight:600,color:t.accent}}>養生提示　</span>{customs.health}
+            </div>
+            <div style={{fontSize:13,color:t.text,lineHeight:1.8,display:"flex",alignItems:"center",gap:6}}>
+              <span style={{fontWeight:600,color:t.warm}}>推薦茶飲　</span>
+              <span style={{padding:"3px 10px",borderRadius:10,background:t.warm+"15",color:t.warm,fontSize:12}}>{customs.tea}</span>
+            </div>
+            {/* Share buttons */}
+            <div style={{display:"flex",gap:8,marginTop:14,paddingTop:12,borderTop:"1px solid rgba(0,0,0,0.04)"}}>
+              <button onClick={()=>generateSolarTermCard(activeTerm, canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"7px 14px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:12,cursor:"pointer",fontFamily:"inherit"}}><I.Share/> 分享節氣圖卡</button>
+              <button onClick={()=>generateSolarTermWallpaper(activeTerm,"phone",canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"7px 14px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:12,cursor:"pointer",fontFamily:"inherit"}}><I.Download/> 節氣桌布</button>
+            </div>
           </div>
-          <p style={{fontSize:13,color:t.textSec,lineHeight:1.7,marginBottom:10}}>{sHerb.desc}</p>
-          <p style={{fontSize:13,color:t.text,lineHeight:1.7,fontStyle:"italic",padding:"10px 14px",background:t.accentLight,borderRadius:10}}>{sMed}</p>
-          {/* Solar term share buttons in calendar */}
-          <div style={{display:"flex",gap:8,marginTop:12}}>
-            <button onClick={()=>generateSolarTermCard(sTerm, canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:11,cursor:"pointer"}}><I.Share/> 節氣圖卡</button>
-            <button onClick={()=>generateSolarTermWallpaper(sTerm,"phone",canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:11,cursor:"pointer"}}><I.Download/> 手機桌布</button>
-            <button onClick={()=>generateSolarTermWallpaper(sTerm,"desktop",canvasRef)} style={{display:"flex",alignItems:"center",gap:4,padding:"6px 12px",borderRadius:14,border:`1px solid ${t.accent}30`,background:"transparent",color:t.accent,fontSize:11,cursor:"pointer"}}><I.Download/> 桌機桌布</button>
-          </div>
-        </div>
-      )}
+        );
+      })()}
+
       <style>{`@keyframes tcmFI{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
   );
