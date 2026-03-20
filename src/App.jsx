@@ -499,31 +499,27 @@ function generateSolarTermCard(term, canvasRef) {
   const img = new Image(); img.crossOrigin = "anonymous";
   img.onload = () => {
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,0.1)"; ctx.shadowBlur = 20;
-    ctx.drawImage(img, 150, 240, 500, 500); ctx.restore();
-    // Date
-    ctx.textAlign = "center"; ctx.fillStyle = "#6a5a4a"; ctx.font = "20px serif";
-    ctx.fillText(`${term.date}`, 400, 800);
-    // Icon
+    ctx.drawImage(img, 150, 230, 500, 500); ctx.restore();
     const tq = SOLAR_TERM_QUOTES[term.name] || term.theme;
     const tc = SOLAR_TERM_CUSTOMS[term.name];
+    ctx.textAlign = "center";
     // Date
-    ctx.textAlign = "center"; ctx.fillStyle = "#8a7a6a"; ctx.font = "16px serif";
-    ctx.fillText(term.date, 400, 775);
-    // Customs & tea (centered, two lines)
+    ctx.fillStyle = "#8a7a6a"; ctx.font = "16px serif";
+    ctx.fillText(term.date, 400, 760);
+    // Customs & tea
     if (tc) {
       ctx.font = "14px sans-serif"; ctx.fillStyle = "#5a4a3a";
-      ctx.fillText("習俗：" + tc.customs.join(" · "), 400, 808);
-      ctx.fillStyle = "#8a6a4a"; ctx.font = "14px sans-serif";
-      ctx.fillText("推薦茶飲：" + tc.tea, 400, 832);
+      ctx.fillText("習俗：" + tc.customs.join("、"), 400, 790);
+      ctx.fillStyle = "#8a6a4a";
+      ctx.fillText("推薦茶飲：" + tc.tea, 400, 815);
     }
     // Quote
     ctx.fillStyle = "#5a4a3a"; ctx.font = "italic 16px Georgia, serif";
-    ctx.fillText(`「${tq}」`, 400, 868);
-    // Icon
-    ctx.font = "24px sans-serif"; ctx.fillText(term.icon, 400, 905);
-    // Branding
+    ctx.fillText(`「${tq}」`, 400, tc ? 850 : 800);
+    // Icon + Branding
+    ctx.font = "24px sans-serif"; ctx.fillText(term.icon, 400, tc ? 885 : 835);
     ctx.fillStyle = "#b0a090"; ctx.font = "14px sans-serif";
-    ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, 940);
+    ctx.fillText("— 本草圖鑑 · 二十四節氣 —", 400, tc ? 920 : 870);
     const shareText = tc ? `${term.icon} ${term.name}\n「${tq}」\n習俗：${tc.customs.join("、")}\n推薦茶飲：${tc.tea}\n#二十四節氣 #本草圖鑑 #節氣養生` : `${term.icon} ${term.name}\n「${tq}」\n#二十四節氣 #本草圖鑑 #節氣養生`;
     shareOrDownload(canvas, `${term.name}_節氣圖卡.png`, `${term.name} 節氣圖卡`, shareText);
   };
