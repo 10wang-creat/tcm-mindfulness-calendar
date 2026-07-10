@@ -6,13 +6,17 @@ export default {
   ],
   theme: {
     extend: {
+      // 夏季冷柔色盤（與 src/theme.js 對齊）
       colors: {
-        'tcm-brown': '#8B4513',
-        'tcm-green': '#2D5016',
-        'tcm-red': '#C41E3A',
-        'tcm-cream': '#FAF8F5',
-        'tcm-paper': '#F5F5F0',
-        'tcm-ink': '#1A1A1A',
+        'tcm-navy': '#34435E',      // 藏藍（錨色）
+        'tcm-sage': '#6E967F',      // 鼠尾草綠（品牌錨）
+        'tcm-lavender': '#BBADD8',  // 薰衣草
+        'tcm-wisteria': '#8981C2',  // 紫藤
+        'tcm-mist': '#AAC9E8',      // 霧藍
+        'tcm-sea': '#6D93C8',       // 海藍
+        'tcm-mint': '#A9D7BC',      // 薄荷
+        'tcm-pearl': '#F0EEF3',     // 珍珠白
+        'tcm-silver': '#C3CBD8',    // 銀
       },
       fontFamily: {
         'serif-tc': ['Noto Serif TC', 'serif'],

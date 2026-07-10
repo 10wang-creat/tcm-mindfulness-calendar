@@ -1,352 +1,87 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
-import { useState, useMemo } from 'react';
-import { herbImages } from '../data/calendarData';
+import { useState } from "react";
+import { useTheme } from "../theme.js";
+import { SOLAR_TERMS_2026, SOLAR_TERM_CUSTOMS, getCurrentSolarTerm, solarTermImg } from "../data/solarTerms.js";
+import { LUNAR_DAYS, FESTIVALS, getLunarDay } from "../data/lunar.js";
+import { generateSolarTermCard, generateSolarTermWallpaper } from "../lib/shareCards.js";
+import { fmtDate } from "../lib/storage.js";
+import { I } from "./Icons.jsx";
 
-// 藥材 emoji 映射
-const herbEmojis = {
-  "補氣": "🌿",
-  "補血": "🔴",
-  "活血": "🌸",
-  "安神": "💜",
-  "清熱": "💧",
-  "滋陰": "🫧",
-  "理氣": "🌾",
-  "健脾": "🟡",
-  "default": "🌱"
-};
+export default function CalendarView({ stats, canvasRef }) {
+  const t = useTheme();
+  const [vd, setVd] = useState(new Date());
+  const [sel, setSel] = useState(null);
+  const y = vd.getFullYear(); const m = vd.getMonth();
+  const fd = new Date(y, m, 1).getDay();
+  const dim = new Date(y, m + 1, 0).getDate();
+  const today = fmtDate(new Date());
+  const mTerms = SOLAR_TERMS_2026.filter(tt => { const d = new Date(tt.date); return d.getFullYear() === y && d.getMonth() === m; });
+  const days = [];
+  for (let i = 0; i < fd; i++) days.push(null);
+  for (let d = 1; d <= dim; d++) days.push(d);
 
-// 根據藥材功效取得 emoji
-const getHerbEmoji = (herb) => {
-  if (!herb?.effect) return herbEmojis.default;
-  if (herb.effect.includes('補氣') || herb.effect.includes('益氣')) return herbEmojis['補氣'];
-  if (herb.effect.includes('補血') || herb.effect.includes('養血')) return herbEmojis['補血'];
-  if (herb.effect.includes('活血') || herb.effect.includes('化瘀')) return herbEmojis['活血'];
-  if (herb.effect.includes('安神') || herb.effect.includes('寧心')) return herbEmojis['安神'];
-  if (herb.effect.includes('清熱') || herb.effect.includes('利濕')) return herbEmojis['清熱'];
-  if (herb.effect.includes('滋陰')) return herbEmojis['滋陰'];
-  if (herb.effect.includes('理氣')) return herbEmojis['理氣'];
-  if (herb.effect.includes('健脾')) return herbEmojis['健脾'];
-  return herbEmojis.default;
-};
-
-// 取得藥材圖片路徑
-const getHerbImagePath = (herbName) => {
-  const imagePath = herbImages[herbName];
-  if (!imagePath) return null;
-  const cleanPath = imagePath.replace(/^\.\//, '');
-  return `${import.meta.env.BASE_URL}${cleanPath}`;
-};
-
-export default function CalendarView({ 
-  calendarDays, 
-  selectedDate, 
-  monthSolarTerms,
-  onSelectDate, 
-  onPrevMonth, 
-  onNextMonth, 
-  onGoToToday 
-}) {
-  const [viewMode, setViewMode] = useState('month'); // month or week
-  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
-  
-  const monthName = selectedDate.toLocaleDateString('zh-TW', { 
-    year: 'numeric', 
-    month: 'long' 
-  });
-
-  // 取得當前季節
-  const getCurrentSeason = () => {
-    const month = selectedDate.getMonth() + 1;
-    if (month >= 3 && month <= 5) return { name: '春', theme: '生發' };
-    if (month >= 6 && month <= 8) return { name: '夏', theme: '養長' };
-    if (month >= 9 && month <= 11) return { name: '秋', theme: '收斂' };
-    return { name: '冬', theme: '養藏' };
-  };
-
-  const season = getCurrentSeason();
-
-  const seasonColors = {
-    "春": { bg: "bg-green-50", dot: "bg-green-500", text: "text-green-700", gradient: "from-green-600 to-emerald-600" },
-    "夏": { bg: "bg-red-50", dot: "bg-red-500", text: "text-red-700", gradient: "from-red-500 to-orange-500" },
-    "秋": { bg: "bg-orange-50", dot: "bg-orange-500", text: "text-orange-700", gradient: "from-amber-500 to-orange-500" },
-    "冬": { bg: "bg-blue-50", dot: "bg-blue-500", text: "text-blue-700", gradient: "from-teal-600 to-blue-600" }
-  };
-
-  // 找到當前選中日期的藥材資料
-  const selectedDayData = useMemo(() => {
-    return calendarDays.find(day => 
-      day.date.getDate() === selectedDate.getDate() && 
-      day.isCurrentMonth
-    );
-  }, [calendarDays, selectedDate]);
-
-  // 檢查是否是節氣日
-  const getTermForDay = (day) => {
-    if (!day.isCurrentMonth) return null;
-    return monthSolarTerms.find(t => 
-      new Date(t.date).getDate() === day.date.getDate()
-    );
-  };
-
-  // 週視圖的日期過濾
-  const displayDays = useMemo(() => {
-    if (viewMode === 'month') return calendarDays;
-    
-    // 找到選中日期所在的那一週
-    const selectedIndex = calendarDays.findIndex(d => 
-      d.date.getDate() === selectedDate.getDate() && d.isCurrentMonth
-    );
-    const weekStart = Math.floor(selectedIndex / 7) * 7;
-    return calendarDays.slice(weekStart, weekStart + 7);
-  }, [calendarDays, selectedDate, viewMode]);
+  // 節氣習俗卡（選取日或今日所屬節氣）
+  const activeTerm = getCurrentSolarTerm(sel || today);
+  const customs = SOLAR_TERM_CUSTOMS[activeTerm?.name];
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-[calc(100vh-4rem)]"
-    >
-      {/* 沉浸式頭部區域 */}
-      <div className={`bg-gradient-to-r ${seasonColors[season.name]?.gradient || seasonColors['冬'].gradient} text-white px-4 py-5 rounded-b-3xl`}>
-        {/* 月份導航 */}
-        <div className="flex items-center justify-between mb-4">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onPrevMonth}
-            className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </motion.button>
-          
-          <div className="text-center">
-            <h1 className="text-xl font-bold">{monthName}</h1>
-            <p className="text-white/70 text-sm">{season.name}季 · {season.theme}</p>
-          </div>
-          
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={onNextMonth}
-            className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </motion.button>
+    <div style={{ paddingBottom:90 }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"20px 0 16px" }}>
+        <button onClick={() => setVd(new Date(y, m - 1, 1))} style={{ background:"none", border:"none", cursor:"pointer", color:t.text, padding:8 }}><I.CL/></button>
+        <div style={{ textAlign:"center" }}>
+          <div className="font-serif-tc" style={{ fontSize:22, fontWeight:700, color:t.text }}>{y} 年 {m + 1} 月</div>
+          {mTerms.length > 0 && <div style={{ fontSize:12, color:t.accent, marginTop:4 }}>{mTerms.map(tt => `${tt.icon} ${tt.name}`).join("  ")}</div>}
         </div>
-
-        {/* 節氣標籤 */}
-        {monthSolarTerms.length > 0 && (
-          <div className="flex gap-2 justify-center">
-            {monthSolarTerms.map(term => (
-              <div 
-                key={term.name}
-                className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs flex items-center gap-1.5"
-              >
-                <span className={`w-2 h-2 rounded-full ${
-                  term.season === '春' ? 'bg-green-300' :
-                  term.season === '夏' ? 'bg-red-300' :
-                  term.season === '秋' ? 'bg-orange-300' :
-                  'bg-blue-300'
-                }`}></span>
-                {term.name} {new Date(term.date).getDate()}日
-              </div>
-            ))}
-          </div>
-        )}
+        <button onClick={() => setVd(new Date(y, m + 1, 1))} style={{ background:"none", border:"none", cursor:"pointer", color:t.text, padding:8 }}><I.CR/></button>
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:2, marginBottom:4 }}>{["日", "一", "二", "三", "四", "五", "六"].map(w => <div key={w} style={{ textAlign:"center", fontSize:11, color:t.textSec, padding:"6px 0", fontWeight:500 }}>{w}</div>)}</div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(7,1fr)", gap:3 }}>
+        {days.map((d, i) => {
+          if (!d) return <div key={i}/>;
+          const ds = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          const key = String(m + 1).padStart(2, "0") + "-" + String(d).padStart(2, "0");
+          const isT = ds === today; const isS = ds === sel;
+          const isST = mTerms.some(tt => tt.date === ds);
+          const hasMed = (stats.meditatedDates || []).includes(ds);
+          const lunar = getLunarDay(m + 1, d);
+          const fest = FESTIVALS[key];
+          const isMonth = LUNAR_DAYS[key]?.includes("月");
+          return (
+            <button key={i} onClick={() => setSel(isS ? null : ds)} style={{ position:"relative", background:isS ? t.accent : isT ? t.accentLight : "transparent", border:"none", borderRadius:12, padding:"6px 0 4px", cursor:"pointer", color:isS ? "#fff" : isT ? t.accent : t.text, fontWeight:isT || isS ? 700 : 400, fontSize:14, transition:"all 0.15s", minHeight:48 }}>
+              <div>{d}</div>
+              <div style={{ fontSize:8, marginTop:1, lineHeight:1, color:isS ? "rgba(255,255,255,0.7)" : fest ? "#C4708D" : isMonth ? t.accent : t.textSec, fontWeight:fest || isMonth ? 600 : 400, letterSpacing:fest ? 0 : 0.5 }}>{lunar}</div>
+              {isST && <div style={{ position:"absolute", bottom:2, left:"50%", transform:"translateX(-50%)", width:4, height:4, borderRadius:"50%", background:isS ? "#fff" : t.accent }}/>}
+              {hasMed && !isST && <div style={{ position:"absolute", bottom:2, left:"50%", transform:"translateX(-50%)", width:4, height:4, borderRadius:"50%", background:isS ? "#fff" : t.sub }}/>}
+            </button>
+          );
+        })}
       </div>
 
-      {/* 視圖切換與今天按鈕 */}
-      <div className="px-4 py-3 flex items-center justify-between">
-        <div className="flex bg-gray-200 rounded-lg p-1">
-          <button 
-            onClick={() => setViewMode('month')}
-            className={`px-4 py-1.5 text-sm rounded-md transition-all ${
-              viewMode === 'month' 
-                ? 'bg-white shadow-sm text-teal-600 font-medium' 
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            月
-          </button>
-          <button 
-            onClick={() => setViewMode('week')}
-            className={`px-4 py-1.5 text-sm rounded-md transition-all ${
-              viewMode === 'week' 
-                ? 'bg-white shadow-sm text-teal-600 font-medium' 
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            週
-          </button>
-        </div>
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          onClick={onGoToToday}
-          className="bg-teal-600 text-white px-4 py-1.5 rounded-full text-sm flex items-center gap-1.5 shadow-sm hover:bg-teal-700 transition-colors"
-        >
-          <CalendarIcon className="w-4 h-4" />
-          今天
-        </motion.button>
-      </div>
-
-      {/* 日曆區域 */}
-      <div className="px-4">
-        {/* 星期標題 */}
-        <div className="grid grid-cols-7 mb-2">
-          {weekDays.map((day, index) => (
-            <div 
-              key={day} 
-              className={`text-center text-xs font-medium py-2 ${
-                index === 0 ? 'text-red-400' : index === 6 ? 'text-blue-400' : 'text-gray-400'
-              }`}
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-
-        {/* 日期格子 */}
-        <div className={`grid grid-cols-7 gap-1 ${viewMode === 'week' ? 'mb-4' : ''}`}>
-          {displayDays.map((day, index) => {
-            const daySeasonColors = seasonColors[day.solarTerm?.season] || seasonColors[season.name];
-            const isWeekend = index % 7 === 0 || index % 7 === 6;
-            const term = getTermForDay(day);
-            const isSolarTermDay = !!term;
-            const herbEmoji = day.herb ? getHerbEmoji(day.herb) : null;
-            
-            return (
-              <motion.button
-                key={index}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => onSelectDate(day.date)}
-                className={`
-                  relative aspect-square rounded-xl flex flex-col items-center justify-center
-                  transition-all duration-200
-                  ${!day.isCurrentMonth ? 'opacity-30' : ''}
-                  ${day.isSelected ? 'bg-teal-600 text-white shadow-lg scale-105' : 'bg-white hover:bg-gray-50'}
-                  ${isSolarTermDay && !day.isSelected ? 'ring-2 ring-offset-1 ring-blue-400' : ''}
-                  ${day.isToday && !day.isSelected ? 'ring-2 ring-gray-300' : ''}
-                `}
-              >
-                <span className={`
-                  text-sm font-medium
-                  ${day.isSelected ? 'text-white' : ''}
-                  ${!day.isSelected && day.isToday ? 'text-teal-600 font-bold' : ''}
-                  ${!day.isSelected && !day.isToday && isWeekend ? (index % 7 === 0 ? 'text-red-400' : 'text-blue-400') : ''}
-                  ${!day.isSelected && !day.isToday && !isWeekend ? 'text-gray-700' : ''}
-                `}>
-                  {day.date.getDate()}
-                </span>
-                
-                {/* 藥材 emoji 指示 */}
-                {herbEmoji && day.isCurrentMonth && (
-                  <span className={`text-[10px] mt-0.5 ${day.isSelected ? 'opacity-80' : ''}`}>
-                    {herbEmoji}
-                  </span>
-                )}
-
-                {/* 節氣標記 */}
-                {isSolarTermDay && (
-                  <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold ${
-                    day.isSelected ? 'bg-white text-teal-600' : 'bg-yellow-400 text-yellow-900'
-                  }`}>
-                    節
-                  </div>
-                )}
-              </motion.button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 選中日期詳情卡片 */}
-      <AnimatePresence mode="wait">
-        {selectedDayData && (
-          <motion.div
-            key={selectedDate.toDateString()}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="px-4 mt-4 pb-24"
-          >
-            <div className="bg-white rounded-2xl p-4 shadow-lg">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-gray-400 text-xs">已選日期</p>
-                  <h3 className="text-lg font-bold text-gray-800">
-                    {selectedDate.getMonth() + 1}月{selectedDate.getDate()}日
-                  </h3>
-                </div>
-                {(() => {
-                  const term = monthSolarTerms.find(t => 
-                    new Date(t.date).getDate() === selectedDate.getDate()
-                  );
-                  return term ? (
-                    <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium">
-                      {term.name}
-                    </span>
-                  ) : null;
-                })()}
-              </div>
-              
-              {selectedDayData.herb ? (
-                <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl">
-                  <div className="w-14 h-14 bg-white rounded-lg flex items-center justify-center shadow-sm overflow-hidden">
-                    {getHerbImagePath(selectedDayData.herb.name) ? (
-                      <img 
-                        src={getHerbImagePath(selectedDayData.herb.name)}
-                        alt={selectedDayData.herb.name}
-                        className="w-12 h-12 object-contain"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = `<span class="text-2xl">${getHerbEmoji(selectedDayData.herb)}</span>`;
-                        }}
-                      />
-                    ) : (
-                      <span className="text-2xl">{getHerbEmoji(selectedDayData.herb)}</span>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800">{selectedDayData.herb.name}</p>
-                    <p className="text-gray-500 text-sm">{selectedDayData.herb.effect}</p>
-                  </div>
-                  <div className="text-gray-400">
-                    <ChevronRight className="w-5 h-5" />
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-4 text-gray-400">
-                  <p className="text-sm">此日尚無藥材資料</p>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* 圖例 */}
-      <div className="px-4 mt-2 mb-24">
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-xs font-medium text-gray-500 mb-3">📖 日曆圖例</p>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-teal-600 rounded-lg shadow-sm"></div>
-              <span className="text-gray-600">已選日期</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-white rounded-lg ring-2 ring-blue-400 ring-offset-1"></div>
-              <span className="text-gray-600">節氣日</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center text-[10px]">🌿</div>
-              <span className="text-gray-600">有藥材資料</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center text-[8px] font-bold text-yellow-900">節</div>
-              <span className="text-gray-600">節氣標記</span>
+      {/* 節氣習俗卡 */}
+      {customs && activeTerm && (
+        <div style={{ background:t.card, borderRadius:20, padding:"20px 24px", marginTop:20, boxShadow:"0 2px 16px rgba(52,67,94,0.05)", border:"1px solid rgba(52,67,94,0.05)" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
+            <img src={solarTermImg(activeTerm.name)} alt="" style={{ width:40, height:40, borderRadius:10, objectFit:"cover" }} onError={e => { e.target.style.display = "none"; }} />
+            <div>
+              <div className="font-serif-tc" style={{ fontSize:18, fontWeight:700, color:t.text }}>{activeTerm.icon} {activeTerm.name}習俗</div>
+              <div style={{ fontSize:11, color:t.textSec }}>{activeTerm.theme} · {activeTerm.date}</div>
             </div>
           </div>
+          <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
+            {customs.customs.map((cu, i) => <span key={i} style={{ fontSize:12, padding:"5px 12px", borderRadius:14, background:t.accentLight, color:t.accent, fontWeight:500 }}>{cu}</span>)}
+          </div>
+          <div style={{ fontSize:13, color:t.text, lineHeight:1.8, marginBottom:8 }}>
+            <span style={{ fontWeight:600, color:t.accent }}>養生提示　</span>{customs.health}
+          </div>
+          <div style={{ fontSize:13, color:t.text, lineHeight:1.8, display:"flex", alignItems:"center", gap:6 }}>
+            <span style={{ fontWeight:600, color:t.sub }}>推薦茶飲　</span>
+            <span style={{ padding:"3px 10px", borderRadius:10, background:t.subLight, color:t.sub, fontSize:12 }}>{customs.tea}</span>
+          </div>
+          <div style={{ display:"flex", gap:8, marginTop:14, paddingTop:12, borderTop:"1px solid rgba(52,67,94,0.05)" }}>
+            <button onClick={() => generateSolarTermCard(activeTerm, canvasRef)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:14, border:`1px solid ${t.accent}30`, background:"transparent", color:t.accent, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}><I.Share/> 分享節氣圖卡</button>
+            <button onClick={() => generateSolarTermWallpaper(activeTerm, "phone", canvasRef)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:14, border:`1px solid ${t.accent}30`, background:"transparent", color:t.accent, fontSize:12, cursor:"pointer", fontFamily:"inherit" }}><I.Download/> 節氣桌布</button>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      )}
+    </div>
   );
 }
