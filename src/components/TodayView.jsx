@@ -43,9 +43,10 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
 
       {/* 節氣頁首 */}
       <div style={{ background:t.headerBg, margin:"-8px -16px 0", borderRadius:"0 0 28px 28px", position:"relative", overflow:"hidden" }}>
-        <div style={{ position:"absolute", inset:0, opacity:0.18 }}>
+        <div style={{ position:"absolute", inset:0, opacity:t.dark ? 0.12 : 0.18 }}>
           <img src={solarTermImg(term.name)} alt={term.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e => { e.target.style.display = "none"; }} />
         </div>
+        {t.dark && <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(16,19,26,0.45) 0%, rgba(16,19,26,0.7) 100%)" }} />}
         <div style={{ position:"relative", padding:"32px 24px 24px" }}>
           <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:10 }}>
             <img src={solarTermImg(term.name)} alt={term.name} style={{ width:56, height:56, borderRadius:16, objectFit:"cover", border:"2px solid rgba(255,255,255,0.6)", boxShadow:"0 2px 12px rgba(52,67,94,0.12)" }} onError={e => { e.target.style.display = "none"; }} />
@@ -71,8 +72,8 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
             <div style={{ fontSize:13, color:t.textSec }}>{term.icon} 節氣養生 · {herb.category}</div>
             <div style={{ display:"flex", gap:6 }}>
-              <button onClick={() => generateSolarTermCard(term, canvasRef)} style={{ background:"rgba(255,255,255,0.6)", border:"none", borderRadius:10, padding:"5px 10px", fontSize:11, cursor:"pointer", color:t.accent, display:"flex", alignItems:"center", gap:3, backdropFilter:"blur(8px)" }}><I.Share/> 節氣圖卡</button>
-              <button onClick={() => generateSolarTermWallpaper(term, "phone", canvasRef)} style={{ background:"rgba(255,255,255,0.6)", border:"none", borderRadius:10, padding:"5px 10px", fontSize:11, cursor:"pointer", color:t.accent, display:"flex", alignItems:"center", gap:3, backdropFilter:"blur(8px)" }}><I.Download/> 節氣桌布</button>
+              <button onClick={() => generateSolarTermCard(term, canvasRef)} style={{ background:t.dark ? "rgba(46,56,78,0.75)" : "rgba(255,255,255,0.6)", border:"none", borderRadius:10, padding:"6px 11px", fontSize:12, cursor:"pointer", color:t.dark ? "#DCE6F5" : t.accent, display:"flex", alignItems:"center", gap:3, backdropFilter:"blur(8px)" }}><I.Share/> 節氣圖卡</button>
+              <button onClick={() => generateSolarTermWallpaper(term, "phone", canvasRef)} style={{ background:t.dark ? "rgba(46,56,78,0.75)" : "rgba(255,255,255,0.6)", border:"none", borderRadius:10, padding:"6px 11px", fontSize:12, cursor:"pointer", color:t.dark ? "#DCE6F5" : t.accent, display:"flex", alignItems:"center", gap:3, backdropFilter:"blur(8px)" }}><I.Download/> 節氣桌布</button>
             </div>
           </div>
         </div>
