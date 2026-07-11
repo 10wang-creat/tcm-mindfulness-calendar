@@ -4,7 +4,7 @@ import { herbImg, getRarityCfg } from "../data/herbs.js";
 import { getCurrentSolarTerm, solarTermImg, SOLAR_TERM_CUSTOMS } from "../data/solarTerms.js";
 import { getDayHerb, getDayMeditation } from "../data/meditations.js";
 import { generateShareCard, generateSolarTermCard, generateSolarTermWallpaper, generateWallpaper } from "../lib/shareCards.js";
-import { ld, sv, fmtDate } from "../lib/storage.js";
+import { sv, fmtDate } from "../lib/storage.js";
 import { I } from "./Icons.jsx";
 import MedPlayer from "./MedPlayer.jsx";
 import ImmersiveMeditation from "./ImmersiveMeditation.jsx";
@@ -19,9 +19,6 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
   const term = getCurrentSolarTerm(dateStr);
   const herb = getDayHerb(dateStr);
   const med = getDayMeditation(herb, dateStr);
-  const [favs, setFavs] = useState(() => ld("favs", []));
-  const isFav = favs.includes(herb.id);
-  const togFav = () => { const n = isFav ? favs.filter(f => f !== herb.id) : [...favs, herb.id]; setFavs(n); sv("favs", n); };
   const d = new Date(dateStr + "T00:00:00");
   const shiftDay = (n) => {
     const nd = new Date(dateStr + "T00:00:00");
@@ -34,8 +31,9 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
   const [showMeditation, setShowMeditation] = useState(false);
   const customs = SOLAR_TERM_CUSTOMS[term.name];
 
-  const collectHerb = () => {
-    if (!isCollected) { const n = [...collected, herb.id]; setCollected(n); sv("collected", n); }
+  const toggleCollect = () => {
+    const n = isCollected ? collected.filter(i => i !== herb.id) : [...collected, herb.id];
+    setCollected(n); sv("collected", n);
   };
 
   return (
@@ -93,7 +91,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
                 <div className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.text }}>{herb.name}</div>
                 <div style={{ fontSize:12, color:t.textSec, marginTop:2 }}>{herb.pinyin}</div>
               </div>
-              <button onClick={togFav} style={{ background:isFav ? t.accentLight : "rgba(52,67,94,0.04)", border:"none", borderRadius:12, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:isFav ? "#C4708D" : t.textSec }}><I.Heart f={isFav}/></button>
+              <button onClick={toggleCollect} title={isCollected ? "已收藏（點擊取消）" : "收藏到本草圖鑑"} style={{ background:isCollected ? t.accentLight : "rgba(52,67,94,0.04)", border:"none", borderRadius:12, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:isCollected ? "#C4708D" : t.textSec }}><I.Heart f={isCollected}/></button>
             </div>
           </div>
         </div>
@@ -105,8 +103,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
         <div style={{ fontSize:12, color:t.accent, fontWeight:500, marginBottom:14 }}>功效：{herb.effect}</div>
 
         <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-          {!isCollected && <button onClick={collectHerb} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:"none", cursor:"pointer", fontSize:12, fontWeight:500, background:t.accent, color:"#fff" }}>✓ 收藏卡牌</button>}
-          {isCollected && <span style={{ fontSize:12, padding:"7px 14px", borderRadius:20, background:t.accentLight, color:t.accent }}>✓ 已收藏</span>}
+          <button onClick={toggleCollect} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:"none", cursor:"pointer", fontSize:12, fontWeight:500, background:isCollected ? t.accentLight : t.accent, color:isCollected ? t.accent : "#fff" }}>{isCollected ? "✓ 已收藏" : "♡ 收藏藥材"}</button>
           <button onClick={() => setShowMeditation(true)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.accent}40`, cursor:"pointer", fontSize:12, background:"transparent", color:t.accent }}><I.Zen/> 沉浸冥想</button>
           <button onClick={() => generateShareCard(herb, canvasRef)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.accent}40`, cursor:"pointer", fontSize:12, background:"transparent", color:t.accent }}><I.Share/> 分享</button>
           <button onClick={() => generateWallpaper(herb, "phone", canvasRef)} style={{ display:"flex", alignItems:"center", gap:4, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.accent}40`, cursor:"pointer", fontSize:12, background:"transparent", color:t.accent }}><I.Download/> 桌布</button>
