@@ -13,7 +13,14 @@ export default function ImmersiveMeditation({ herb, onClose }) {
   const audioRef = useRef(null);
   const audioSrc = meditationAudioSrc(herb.id, 5);
   const [mode, setMode] = useState(() => (audioSrc ? ld("immMode", "voice") : "scape"));
+  const [bgMuted, setBgMuted] = useState(() => ld("immBgMuted", false));
   const setModeSaved = (m) => { setMode(m); sv("immMode", m); };
+  const isVoice = mode === "voice" && audioSrc;
+  const toggleBgMute = () => {
+    const n = !bgMuted; setBgMuted(n); sv("immBgMuted", n);
+    const base = (isVoice && audioRef.current && !audioRef.current.ended) ? 0.5 : 1;
+    audioEngine.setVolume(n ? 0 : base);
+  };
 
   // 呼吸節律
   useEffect(() => {
@@ -35,11 +42,11 @@ export default function ImmersiveMeditation({ herb, onClose }) {
     if (mode === "voice" && audioSrc) {
       a = new Audio(audioSrc);
       audioRef.current = a;
-      audioEngine.playSoundscape(herb.category, season, 0.5);   // 音景墊在語音底下
-      a.onended = () => { audioEngine.setVolume(1); };           // 語音結束音景轉為完整音量
-      a.play().catch(() => { audioEngine.playSoundscape(herb.category, season, 1); });
+      audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 0.5);   // 音景墊在語音底下
+      a.onended = () => { if (!bgMuted) audioEngine.setVolume(1); };          // 語音結束音景轉為完整音量
+      a.play().catch(() => { audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 1); });
     } else {
-      audioEngine.playSoundscape(herb.category, season, 1);
+      audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 1);
     }
     return () => {
       if (a) { a.pause(); a.onended = null; }
@@ -80,7 +87,9 @@ export default function ImmersiveMeditation({ herb, onClose }) {
         <div style={{ fontSize:12, letterSpacing:3, marginBottom:6, color:"#BBADD8" }}>{"★".repeat(rc.stars)} {rc.label}</div>
         <div className="font-serif-tc" style={{ fontSize:38, fontWeight:600, letterSpacing:8, marginBottom:6 }}>{herb.name}</div>
         <div style={{ fontSize:15, fontStyle:"italic", opacity:0.6, marginBottom:36 }}>{herb.pinyin}</div>
-        <div style={{ fontSize:28, letterSpacing:12, fontWeight:300, color:"#BBADD8", textShadow:"0 0 20px rgba(187,173,216,0.45)" }}>{label[breathPhase]}</div>
+        {isVoice
+          ? <div style={{ fontSize:16, letterSpacing:4, fontWeight:300, color:"#BBADD8", opacity:0.85 }}>跟著聲音，慢慢呼吸</div>
+          : <div style={{ fontSize:28, letterSpacing:12, fontWeight:300, color:"#BBADD8", textShadow:"0 0 20px rgba(187,173,216,0.45)" }}>{label[breathPhase]}</div>}
         <div style={{ fontSize:13, opacity:0.4, marginTop:14 }}>{herb.effect}</div>
       </div>
 
@@ -93,6 +102,9 @@ export default function ImmersiveMeditation({ herb, onClose }) {
           <I.Vol/> 自然音景
         </button>
       </div>
+      <button onClick={toggleBgMute} style={{ marginTop:14, display:"flex", alignItems:"center", gap:6, padding:"6px 16px", borderRadius:20, cursor:"pointer", fontSize:12, fontFamily:"inherit", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(187,173,216,0.2)", color: bgMuted ? "#7C86A0" : "#C9D4E8", opacity: bgMuted ? 0.7 : 1 }}>
+        <I.Vol/> {bgMuted ? "背景音：關" : "背景音：開"}
+      </button>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import MedPlayer from "./MedPlayer.jsx";
 
 const LEVEL_NAMES = ["初學者", "入門者", "修習者", "靜心者", "覺察者", "內觀者", "明心者", "養生者", "通達者", "大師"];
 
-export default function JourneyView({ stats, setStats, collected, medFavs = [], setMedFavs }) {
+export default function JourneyView({ stats, setStats, collected, medFavs = [], setMedFavs, dark, toggleDark }) {
   const t = useTheme();
   const today = fmtDate(new Date());
   const [playHerb, setPlayHerb] = useState(null);
@@ -37,7 +37,14 @@ export default function JourneyView({ stats, setStats, collected, medFavs = [], 
   ];
   return (
     <div style={{ paddingBottom:90 }}>
-      <div style={{ padding:"20px 0 16px" }}><h1 className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.text }}>我的旅程</h1></div>
+      <div style={{ padding:"20px 0 16px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <h1 className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.text }}>我的旅程</h1>
+        {toggleDark && (
+          <button onClick={toggleDark} title="切換日間／夜間" style={{ display:"flex", alignItems:"center", gap:6, padding:"7px 14px", borderRadius:20, border:`1px solid ${t.sub}40`, background:t.card, color:t.text, fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
+            {dark ? "☀️ 日間" : "🌙 夜間"}
+          </button>
+        )}
+      </div>
       <div style={{ background:t.gradient, borderRadius:20, padding:24, marginBottom:20, position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:12, right:16, fontSize:48, opacity:0.1 }}>🏔️</div>
         <div style={{ fontSize:12, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:4 }}>等級 {lv}</div>

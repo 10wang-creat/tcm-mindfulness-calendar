@@ -8,7 +8,7 @@ import { generateSolarTermCard, generateSolarTermWallpaper } from "../lib/shareC
 import { fmtDate } from "../lib/storage.js";
 import { I } from "./Icons.jsx";
 
-export default function CalendarView({ stats, canvasRef }) {
+export default function CalendarView({ stats, canvasRef, goToDate }) {
   const t = useTheme();
   const [vd, setVd] = useState(new Date());
   const [sel, setSel] = useState(null);
@@ -65,10 +65,13 @@ export default function CalendarView({ stats, canvasRef }) {
         <div style={{ background:t.card, borderRadius:20, padding:"16px 20px", marginTop:20, boxShadow:"0 2px 16px rgba(52,67,94,0.05)", border:"1px solid rgba(52,67,94,0.05)", display:"flex", alignItems:"center", gap:14 }}>
           <img src={herbImg(dayHerb)} alt={dayHerb.name} style={{ width:52, height:52, borderRadius:12, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
           <div style={{ flex:1 }}>
-            <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:2 }}>{activeDate === today ? "今日藥材" : `${activeDate.slice(5)} 藥材`} · {dayHerb.category}</div>
+            <div style={{ fontSize:12, color:t.accent, fontWeight:600, letterSpacing:"0.08em", marginBottom:2 }}>{activeDate === today ? "今日藥材" : `${activeDate.slice(5)} 藥材`} · {dayHerb.category}</div>
             <div className="font-serif-tc" style={{ fontSize:20, fontWeight:700, color:t.text }}>{dayHerb.name}</div>
             <div style={{ fontSize:12, color:t.textSec, marginTop:2 }}>功效：{dayHerb.effect}</div>
           </div>
+          {goToDate && (
+            <button onClick={() => goToDate(activeDate)} title="到今日頁看這天" style={{ alignSelf:"stretch", display:"flex", alignItems:"center", gap:4, padding:"0 12px", borderRadius:12, border:`1px solid ${t.accent}40`, background:"transparent", color:t.accent, fontSize:12, cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>開啟 <I.CR/></button>
+          )}
         </div>
       )}
 

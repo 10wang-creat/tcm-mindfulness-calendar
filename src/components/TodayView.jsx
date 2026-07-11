@@ -4,17 +4,16 @@ import { herbImg, getRarityCfg } from "../data/herbs.js";
 import { getCurrentSolarTerm, solarTermImg, SOLAR_TERM_CUSTOMS } from "../data/solarTerms.js";
 import { getDayHerb, getDayMeditation } from "../data/meditations.js";
 import { generateShareCard, generateSolarTermCard, generateSolarTermWallpaper, generateWallpaper } from "../lib/shareCards.js";
-import { sv, fmtDate } from "../lib/storage.js";
+import { ld, sv, fmtDate } from "../lib/storage.js";
 import { I } from "./Icons.jsx";
 import MedPlayer from "./MedPlayer.jsx";
 import ImmersiveMeditation from "./ImmersiveMeditation.jsx";
 
 const WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
 
-export default function TodayView({ stats, setStats, collected, setCollected, medFavs, setMedFavs, canvasRef }) {
+export default function TodayView({ stats, setStats, collected, setCollected, medFavs, setMedFavs, dateStr, setDateStr, canvasRef }) {
   const t = useTheme();
   const today = fmtDate(new Date());
-  const [dateStr, setDateStr] = useState(today);
   const isToday = dateStr === today;
   const term = getCurrentSolarTerm(dateStr);
   const herb = getDayHerb(dateStr);
@@ -30,6 +29,8 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
   const rc = getRarityCfg(herb.id);
   const [showMeditation, setShowMeditation] = useState(false);
   const customs = SOLAR_TERM_CUSTOMS[term.name];
+  const [showHint, setShowHint] = useState(() => !ld("seenHint", false) && (stats.totalDays || 0) === 0);
+  const dismissHint = () => { setShowHint(false); sv("seenHint", true); };
 
   const toggleCollect = () => {
     const n = isCollected ? collected.filter(i => i !== herb.id) : [...collected, herb.id];
@@ -77,6 +78,16 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
         </div>
       </div>
 
+      {/* 新手引導 */}
+      {showHint && (
+        <div style={{ display:"flex", alignItems:"flex-start", gap:10, background:t.accentLight, borderRadius:14, padding:"14px 16px", marginTop:16 }}>
+          <div style={{ flex:1, fontSize:13, color:t.text, lineHeight:1.7 }}>
+            歡迎來到本草冥想。每天回來看看<b>當日藥材</b>，點愛心收藏它，再聽一段<b>冥想</b>放鬆一下。用左右箭頭可以回顧過去的日子，慢慢養成自己的節奏。
+          </div>
+          <button onClick={dismissHint} title="知道了" style={{ background:"transparent", border:"none", cursor:"pointer", color:t.textSec, flexShrink:0 }}><I.X/></button>
+        </div>
+      )}
+
       {/* 今日藥材卡 */}
       <div style={{ background:t.card, borderRadius:20, padding:"24px", marginTop:20, boxShadow:"0 2px 20px rgba(52,67,94,0.05)", border:`1px solid ${isCollected ? rc.color + "30" : "rgba(52,67,94,0.05)"}` }}>
         <div style={{ display:"flex", gap:16, marginBottom:16 }}>
@@ -96,7 +107,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
           </div>
         </div>
         <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
-          {[`性 ${herb.nature}`, `味 ${herb.taste}`, herb.meridian].map((tag, i) => <span key={i} style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:t.accentLight, color:t.accent, fontWeight:500 }}>{tag}</span>)}
+          {[`性 ${herb.nature}`, `味 ${herb.taste}`, herb.meridian].map((tag, i) => <span key={i} style={{ fontSize:12, padding:"4px 10px", borderRadius:20, background:t.accentLight, color:t.accent, fontWeight:500 }}>{tag}</span>)}
           <span style={{ fontSize:11, padding:"4px 10px", borderRadius:20, background:rc.color + "15", color:rc.color, fontWeight:500 }}>{"★".repeat(rc.stars)} {rc.label}</span>
         </div>
         <p style={{ fontSize:14, color:t.text, lineHeight:1.8, marginBottom:8 }}>{herb.desc}</p>
@@ -116,7 +127,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
         {[{ l:"冥想天數", v:stats.totalDays || 0 }, { l:"連續天數", v:stats.streak || 0 }, { l:"收藏卡牌", v:collected.length }].map((s, i) => (
           <div key={i} style={{ background:t.card, borderRadius:16, padding:"16px 12px", textAlign:"center", boxShadow:"0 1px 8px rgba(52,67,94,0.04)", border:"1px solid rgba(52,67,94,0.05)" }}>
             <div className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.accent }}>{s.v}</div>
-            <div style={{ fontSize:11, color:t.textSec, marginTop:4 }}>{s.l}</div>
+            <div style={{ fontSize:12, color:t.textSec, marginTop:4 }}>{s.l}</div>
           </div>
         ))}
       </div>
