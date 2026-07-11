@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useTheme } from "../theme.js";
 import { SOLAR_TERMS_2026, SOLAR_TERM_CUSTOMS, getCurrentSolarTerm, solarTermImg } from "../data/solarTerms.js";
+import { getDayHerb } from "../data/meditations.js";
+import { herbImg } from "../data/herbs.js";
 import { LUNAR_DAYS, FESTIVALS, getLunarDay } from "../data/lunar.js";
 import { generateSolarTermCard, generateSolarTermWallpaper } from "../lib/shareCards.js";
 import { fmtDate } from "../lib/storage.js";
@@ -20,8 +22,10 @@ export default function CalendarView({ stats, canvasRef }) {
   for (let d = 1; d <= dim; d++) days.push(d);
 
   // 節氣習俗卡（選取日或今日所屬節氣）
-  const activeTerm = getCurrentSolarTerm(sel || today);
+  const activeDate = sel || today;
+  const activeTerm = getCurrentSolarTerm(activeDate);
   const customs = SOLAR_TERM_CUSTOMS[activeTerm?.name];
+  const dayHerb = getDayHerb(activeDate);
 
   return (
     <div style={{ paddingBottom:90 }}>
@@ -55,6 +59,18 @@ export default function CalendarView({ stats, canvasRef }) {
           );
         })}
       </div>
+
+      {/* 當日藥材 */}
+      {dayHerb && (
+        <div style={{ background:t.card, borderRadius:20, padding:"16px 20px", marginTop:20, boxShadow:"0 2px 16px rgba(52,67,94,0.05)", border:"1px solid rgba(52,67,94,0.05)", display:"flex", alignItems:"center", gap:14 }}>
+          <img src={herbImg(dayHerb)} alt={dayHerb.name} style={{ width:52, height:52, borderRadius:12, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:2 }}>{activeDate === today ? "今日藥材" : `${activeDate.slice(5)} 藥材`} · {dayHerb.category}</div>
+            <div className="font-serif-tc" style={{ fontSize:20, fontWeight:700, color:t.text }}>{dayHerb.name}</div>
+            <div style={{ fontSize:12, color:t.textSec, marginTop:2 }}>功效：{dayHerb.effect}</div>
+          </div>
+        </div>
+      )}
 
       {/* 節氣習俗卡 */}
       {customs && activeTerm && (

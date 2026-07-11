@@ -1,11 +1,21 @@
+import { useState } from "react";
 import { useTheme } from "../theme.js";
-import { HERBS, getRarity } from "../data/herbs.js";
+import { HERBS, getRarity, herbImg } from "../data/herbs.js";
+import { getDayMeditation } from "../data/meditations.js";
+import { getCurrentSolarTerm } from "../data/solarTerms.js";
+import { fmtDate, sv } from "../lib/storage.js";
 import { I } from "./Icons.jsx";
+import MedPlayer from "./MedPlayer.jsx";
 
 const LEVEL_NAMES = ["初學者", "入門者", "修習者", "靜心者", "覺察者", "內觀者", "明心者", "養生者", "通達者", "大師"];
 
-export default function JourneyView({ stats, collected }) {
+export default function JourneyView({ stats, setStats, collected, medFavs = [], setMedFavs }) {
   const t = useTheme();
+  const today = fmtDate(new Date());
+  const [playHerb, setPlayHerb] = useState(null);
+  const favHerbs = HERBS.filter(h => medFavs.includes(h.id));
+  const removeMedFav = (id) => { const n = medFavs.filter(x => x !== id); setMedFavs(n); sv("medFavs", n); };
+
   const lv = Math.floor((stats.totalDays || 0) / 7) + 1;
   const xpIn = (stats.totalDays || 0) % 7;
   const xpProg = xpIn / 7;
@@ -44,6 +54,29 @@ export default function JourneyView({ stats, collected }) {
           </div>
         ))}
       </div>
+
+      {/* 冥想音檔收藏 */}
+      <h2 className="font-serif-tc" style={{ fontSize:18, fontWeight:700, color:t.text, marginBottom:14 }}>冥想收藏 ({favHerbs.length})</h2>
+      {favHerbs.length === 0 ? (
+        <div style={{ background:"rgba(52,67,94,0.02)", borderRadius:14, padding:"18px 16px", fontSize:13, color:t.textSec, lineHeight:1.7, marginBottom:24 }}>
+          在冥想播放器上點「收藏」，喜歡的冥想音檔就會收進這裡，隨時回來重播。
+        </div>
+      ) : (
+        <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:24 }}>
+          {favHerbs.map(h => (
+            <div key={h.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 14px", background:t.card, borderRadius:14, border:"1px solid rgba(52,67,94,0.05)" }}>
+              <img src={herbImg(h)} alt={h.name} style={{ width:40, height:40, borderRadius:10, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
+              <div style={{ flex:1 }}>
+                <div className="font-serif-tc" style={{ fontSize:15, fontWeight:600, color:t.text }}>{h.name}</div>
+                <div style={{ fontSize:11, color:t.textSec, marginTop:2 }}>{h.category} · {h.effect}</div>
+              </div>
+              <button onClick={() => setPlayHerb(h)} title="播放" style={{ background:t.accent, border:"none", borderRadius:"50%", width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:"#fff" }}><I.Play/></button>
+              <button onClick={() => removeMedFav(h.id)} title="移除收藏" style={{ background:"transparent", border:"none", cursor:"pointer", color:"#C4708D", display:"flex", alignItems:"center" }}><I.Heart f={true}/></button>
+            </div>
+          ))}
+        </div>
+      )}
+
       <h2 className="font-serif-tc" style={{ fontSize:18, fontWeight:700, color:t.text, marginBottom:14 }}>成就 ({achs.filter(a => a.u).length}/{achs.length})</h2>
       <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
         {achs.map((a, i) => (
@@ -54,6 +87,18 @@ export default function JourneyView({ stats, collected }) {
           </div>
         ))}
       </div>
+
+      {/* 重播收藏冥想的彈窗 */}
+      {playHerb && (
+        <div style={{ position:"fixed", inset:0, zIndex:200, background:"rgba(20,26,40,0.55)", backdropFilter:"blur(4px)", display:"flex", alignItems:"center", justifyContent:"center", padding:16 }} onClick={() => setPlayHerb(null)}>
+          <div style={{ width:"100%", maxWidth:440, maxHeight:"90vh", overflowY:"auto" }} onClick={e => e.stopPropagation()}>
+            <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:8 }}>
+              <button onClick={() => setPlayHerb(null)} style={{ background:"rgba(255,255,255,0.9)", border:"none", borderRadius:12, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:t.text }}><I.X/></button>
+            </div>
+            <MedPlayer herb={playHerb} med={getDayMeditation(playHerb, today)} term={getCurrentSolarTerm(today)} stats={stats} setStats={setStats} medFavs={medFavs} setMedFavs={setMedFavs} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

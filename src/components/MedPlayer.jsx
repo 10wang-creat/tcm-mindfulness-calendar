@@ -5,19 +5,26 @@ import { meditationAudioSrc } from "../data/meditations.js";
 import { ld, sv, fmtDate } from "../lib/storage.js";
 import { I } from "./Icons.jsx";
 
-const DURS = [{ l:"3分鐘", v:180 }, { l:"5分鐘", v:300 }, { l:"10分鐘", v:600 }, { l:"15分鐘", v:900 }];
+const DURS = [{ l:"5分鐘", v:300 }, { l:"10分鐘", v:600 }];
 
 // 冥想計時播放器 — 支援語音引導 mp3 與合成音景兩種模式
-export default function MedPlayer({ herb, med, term, stats, setStats }) {
+export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = [], setMedFavs }) {
   const t = useTheme();
   const audioSrc = meditationAudioSrc(herb.id);
   const [playing, setPlaying] = useState(false);
   const [dur, setDur] = useState(300);
+  const isMedFav = medFavs.includes(herb.id);
+  const togMedFav = () => {
+    if (!setMedFavs) return;
+    const n = isMedFav ? medFavs.filter(x => x !== herb.id) : [...medFavs, herb.id];
+    setMedFavs(n); sv("medFavs", n);
+  };
   const [elapsed, setElapsed] = useState(0);
   const [breath, setBreath] = useState("idle");
   const [mode, setMode] = useState(() => (audioSrc ? ld("medMode", "voice") : "scape"));
   const timerRef = useRef(null); const breathRef = useRef(null);
   const audioRef = useRef(null);
+  const voiceEndedRef = useRef(false);
 
   const setModeSaved = (m) => { setMode(m); sv("medMode", m); };
 
@@ -41,15 +48,19 @@ export default function MedPlayer({ herb, med, term, stats, setStats }) {
   };
 
   const start = () => {
-    setPlaying(true); setElapsed(0);
+    setPlaying(true); setElapsed(0); voiceEndedRef.current = false;
     if (mode === "voice" && audioSrc) {
-      const a = new Audio(audioSrc);
+      // 依所選時長挑對應長度的音檔（有 5/10 分版就用，否則退回原檔）
+      const src = meditationAudioSrc(herb.id, Math.round(dur / 60)) || audioSrc;
+      const a = new Audio(src);
       audioRef.current = a;
-      // 語音結束後接續合成音景，直到計時結束
-      a.onended = () => { audioEngine.playSoundscape(herb.category, term.season); };
-      a.play().catch(() => { audioEngine.playSoundscape(herb.category, term.season); });
+      // 音景在語音底下輕輕墊著（同時即時合成，音量壓低）
+      audioEngine.playSoundscape(herb.category, term.season, 0.5);
+      // 語音結束後把音景平滑轉為完整音量；並標記引導語已結束（可讓計時收尾）
+      a.onended = () => { voiceEndedRef.current = true; audioEngine.setVolume(1); };
+      a.play().catch(() => { voiceEndedRef.current = true; audioEngine.playSoundscape(herb.category, term.season, 1); });
     } else {
-      audioEngine.playSoundscape(herb.category, term.season);
+      audioEngine.playSoundscape(herb.category, term.season, 1);
     }
     startBreath();
   };
@@ -78,16 +89,26 @@ export default function MedPlayer({ herb, med, term, stats, setStats }) {
     if (playing) { timerRef.current = setInterval(() => setElapsed(p => p + 1), 1000); }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [playing]);
-  useEffect(() => { if (elapsed >= dur && playing) stop(); }, [elapsed, dur, playing, stop]);
+  // 到時就結束；但語音模式若引導語還沒講完，等它講完再收尾（不切掉結尾）
+  useEffect(() => {
+    if (playing && elapsed >= dur && (mode !== "voice" || !audioSrc || voiceEndedRef.current)) stop();
+  }, [elapsed, dur, playing, stop, mode, audioSrc]);
   useEffect(() => () => { stopAudio(); if (breathRef.current) clearTimeout(breathRef.current); }, []);
 
-  const rem = dur - elapsed; const mn = Math.floor(rem / 60); const sc = rem % 60; const prog = elapsed / dur;
+  const rem = Math.max(0, dur - elapsed); const mn = Math.floor(rem / 60); const sc = rem % 60; const prog = Math.min(1, elapsed / dur);
   const bLabels = { idle:"", inhale:"吸氣", hold:"屏息", exhale:"呼氣" };
   const bScale = breath === "inhale" ? 1.3 : breath === "hold" ? 1.3 : 1;
 
   return (
     <div style={{ background:t.card, borderRadius:20, padding:24, marginTop:20, boxShadow:"0 2px 20px rgba(52,67,94,0.05)", border:"1px solid rgba(52,67,94,0.05)" }}>
-      <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:12 }}>正念冥想 · {herb.name} · {herb.category}</div>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
+        <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em" }}>正念冥想 · {herb.name} · {herb.category}</div>
+        {setMedFavs && (
+          <button onClick={togMedFav} title={isMedFav ? "已收藏音檔" : "收藏這段冥想"} style={{ display:"flex", alignItems:"center", gap:4, background:isMedFav ? t.accentLight : "transparent", border:`1px solid ${isMedFav ? "transparent" : t.sub + "40"}`, borderRadius:20, padding:"4px 10px", cursor:"pointer", color:isMedFav ? "#C4708D" : t.textSec, fontSize:11 }}>
+            <I.Heart f={isMedFav}/> {isMedFav ? "已收藏" : "收藏"}
+          </button>
+        )}
+      </div>
       <p style={{ fontSize:14, color:t.text, lineHeight:1.8, fontStyle:"italic", padding:"12px 16px", background:t.accentLight, borderRadius:12, borderLeft:`3px solid ${t.accent}`, marginBottom:16 }}>{med}</p>
 
       {/* 音源模式切換：語音引導 / 自然音景 */}

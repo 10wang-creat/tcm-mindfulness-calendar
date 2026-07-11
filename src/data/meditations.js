@@ -73,9 +73,18 @@ const AUDIO_FILES = {
   51: "meditation_34_cheqiancao.mp3", 52: "meditation_35_zexie.mp3", 53: "meditation_05_fuling.mp3",
   54: "meditation_38_yiyiren.mp3", 55: "meditation_36_huashi.mp3", 56: "meditation_37_tongcao.mp3",
 };
-export function meditationAudioSrc(herbId) {
+// 所有藥材都備有 5 分與 10 分兩種長度版本
+// 檔名規則：在原檔名 .mp3 前加 _05m / _10m，如 meditation_40_suanzaoren_10m.mp3
+const AVAILABLE_LENGTHS = [5, 10];
+export function meditationAudioSrc(herbId, minutes) {
   const f = AUDIO_FILES[herbId];
-  return f ? `./meditations/${f}` : null;
+  if (!f) return null;
+  if (minutes && AVAILABLE_LENGTHS.includes(minutes)) {
+    const mm = String(minutes).padStart(2, "0");
+    const base = f.replace(/\.mp3$/, "");
+    return `./meditations/${base}_${mm}m.mp3`;
+  }
+  return `./meditations/${f}`;
 }
 
 // ============================================================

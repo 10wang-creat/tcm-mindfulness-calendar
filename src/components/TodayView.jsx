@@ -11,16 +11,24 @@ import ImmersiveMeditation from "./ImmersiveMeditation.jsx";
 
 const WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
 
-export default function TodayView({ stats, setStats, collected, setCollected, canvasRef }) {
+export default function TodayView({ stats, setStats, collected, setCollected, medFavs, setMedFavs, canvasRef }) {
   const t = useTheme();
   const today = fmtDate(new Date());
-  const term = getCurrentSolarTerm(today);
-  const herb = getDayHerb(today);
-  const med = getDayMeditation(herb, today);
+  const [dateStr, setDateStr] = useState(today);
+  const isToday = dateStr === today;
+  const term = getCurrentSolarTerm(dateStr);
+  const herb = getDayHerb(dateStr);
+  const med = getDayMeditation(herb, dateStr);
   const [favs, setFavs] = useState(() => ld("favs", []));
   const isFav = favs.includes(herb.id);
   const togFav = () => { const n = isFav ? favs.filter(f => f !== herb.id) : [...favs, herb.id]; setFavs(n); sv("favs", n); };
-  const d = new Date();
+  const d = new Date(dateStr + "T00:00:00");
+  const shiftDay = (n) => {
+    const nd = new Date(dateStr + "T00:00:00");
+    nd.setDate(nd.getDate() + n);
+    const ns = fmtDate(nd);
+    if (ns <= today) setDateStr(ns);   // 只能回溯，不能看未來
+  };
   const isCollected = collected.includes(herb.id);
   const rc = getRarityCfg(herb.id);
   const [showMeditation, setShowMeditation] = useState(false);
@@ -43,7 +51,12 @@ export default function TodayView({ stats, setStats, collected, setCollected, ca
           <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:10 }}>
             <img src={solarTermImg(term.name)} alt={term.name} style={{ width:56, height:56, borderRadius:16, objectFit:"cover", border:"2px solid rgba(255,255,255,0.6)", boxShadow:"0 2px 12px rgba(52,67,94,0.12)" }} onError={e => { e.target.style.display = "none"; }} />
             <div>
-              <div style={{ fontSize:12, color:t.textSec, letterSpacing:"0.15em", marginBottom:2 }}>{d.getFullYear()} 年 {d.getMonth() + 1} 月 {d.getDate()} 日 星期{WEEKDAYS[d.getDay()]}</div>
+              <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:2 }}>
+                <button onClick={() => shiftDay(-1)} title="前一天" style={{ background:"rgba(255,255,255,0.5)", border:"none", borderRadius:8, width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:t.accent, padding:0 }}><I.CL/></button>
+                <div style={{ fontSize:12, color:t.textSec, letterSpacing:"0.1em" }}>{d.getFullYear()} 年 {d.getMonth() + 1} 月 {d.getDate()} 日 星期{WEEKDAYS[d.getDay()]}</div>
+                <button onClick={() => shiftDay(1)} disabled={isToday} title="後一天" style={{ background:"rgba(255,255,255,0.5)", border:"none", borderRadius:8, width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", cursor:isToday ? "default" : "pointer", color:t.accent, padding:0, opacity:isToday ? 0.3 : 1 }}><I.CR/></button>
+                {!isToday && <button onClick={() => setDateStr(today)} style={{ background:t.accent, border:"none", borderRadius:10, color:"#fff", fontSize:11, padding:"3px 10px", cursor:"pointer", fontFamily:"inherit" }}>回今日</button>}
+              </div>
               <div style={{ display:"flex", alignItems:"baseline", gap:8 }}>
                 <span className="font-serif-tc" style={{ fontSize:28, fontWeight:700, color:t.text }}>{term.name}</span>
                 <span style={{ fontSize:13, color:t.accent, fontWeight:500 }}>{term.theme}</span>
@@ -76,7 +89,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, ca
           <div style={{ flex:1 }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
               <div>
-                <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:4 }}>今日藥材 · {herb.category}</div>
+                <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:4 }}>{isToday ? "今日藥材" : "當日藥材"} · {herb.category}</div>
                 <div className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.text }}>{herb.name}</div>
                 <div style={{ fontSize:12, color:t.textSec, marginTop:2 }}>{herb.pinyin}</div>
               </div>
@@ -100,7 +113,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, ca
         </div>
       </div>
 
-      <MedPlayer herb={herb} med={med} term={term} stats={stats} setStats={setStats} />
+      <MedPlayer herb={herb} med={med} term={term} stats={stats} setStats={setStats} medFavs={medFavs} setMedFavs={setMedFavs} />
 
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:12, marginTop:20 }}>
         {[{ l:"冥想天數", v:stats.totalDays || 0 }, { l:"連續天數", v:stats.streak || 0 }, { l:"收藏卡牌", v:collected.length }].map((s, i) => (

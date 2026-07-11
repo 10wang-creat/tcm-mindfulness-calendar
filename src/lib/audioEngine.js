@@ -2,19 +2,28 @@
 // AUDIO ENGINE — 依藥材分類合成冥想音景（Web Audio）
 // ============================================================
 class MeditationAudioEngine {
-  constructor() { this.ctx = null; this.nodes = []; this.isPlaying = false; }
+  constructor() { this.ctx = null; this.nodes = []; this.master = null; this.isPlaying = false; }
   init() {
     if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (this.ctx.state === "suspended") this.ctx.resume();
   }
   stop() {
     this.nodes.forEach(n => { try { n.stop?.(); } catch { /* */ } try { n.disconnect?.(); } catch { /* */ } });
-    this.nodes = []; this.isPlaying = false;
+    try { this.master?.disconnect?.(); } catch { /* */ }
+    this.nodes = []; this.master = null; this.isPlaying = false;
+  }
+  // 平滑調整整體音量（給語音結束後把音景由弱轉強用）
+  setVolume(vol, ramp = 1.5) {
+    if (!this.master || !this.ctx) return;
+    const now = this.ctx.currentTime;
+    this.master.gain.cancelScheduledValues(now);
+    this.master.gain.setValueAtTime(this.master.gain.value, now);
+    this.master.gain.linearRampToValueAtTime(vol, now + ramp);
   }
   createOsc(freq, type, gain, detune = 0) {
     const osc = this.ctx.createOscillator(); const g = this.ctx.createGain();
     osc.type = type; osc.frequency.value = freq; osc.detune.value = detune; g.gain.value = gain;
-    osc.connect(g).connect(this.ctx.destination); osc.start(); this.nodes.push(osc, g); return { osc, gain: g };
+    osc.connect(g).connect(this.master); osc.start(); this.nodes.push(osc, g); return { osc, gain: g };
   }
   createNoise(gain) {
     const sz = this.ctx.sampleRate * 2; const buf = this.ctx.createBuffer(1, sz, this.ctx.sampleRate);
@@ -22,11 +31,13 @@ class MeditationAudioEngine {
     const src = this.ctx.createBufferSource(); src.buffer = buf; src.loop = true;
     const g = this.ctx.createGain(); g.gain.value = gain;
     const f = this.ctx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 400;
-    src.connect(f).connect(g).connect(this.ctx.destination); src.start(); this.nodes.push(src, f, g);
+    src.connect(f).connect(g).connect(this.master); src.start(); this.nodes.push(src, f, g);
     return { src, gain: g, filter: f };
   }
-  playSoundscape(category, season) {
+  // volume：整體音量（語音底下墊音景時傳 0.5 左右，單獨播音景傳 1）
+  playSoundscape(category, season, volume = 1) {
     this.init(); this.stop(); this.isPlaying = true;
+    this.master = this.ctx.createGain(); this.master.gain.value = volume; this.master.connect(this.ctx.destination);
     const profiles = {
       "補氣": { baseFreq: 80, type: "sine", harmonics: [1, 1.5, 2], vol: 0.07, nv: 0.01, ff: 220 },
       "補血": { baseFreq: 120, type: "sine", harmonics: [1, 1.33, 2], vol: 0.06, nv: 0.012, ff: 300 },

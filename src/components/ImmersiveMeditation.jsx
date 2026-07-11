@@ -1,13 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { audioEngine } from "../lib/audioEngine.js";
 import { herbImg, getRarityCfg } from "../data/herbs.js";
+import { meditationAudioSrc } from "../data/meditations.js";
+import { ld, sv } from "../lib/storage.js";
 import { getSeason } from "../theme.js";
+import { I } from "./Icons.jsx";
 
 // 全螢幕沉浸呼吸冥想 — 深藏藍夜空 × 薰衣草微光
 export default function ImmersiveMeditation({ herb, onClose }) {
   const [breathPhase, setBreathPhase] = useState("inhale");
   const breathRef = useRef(null);
+  const audioRef = useRef(null);
+  const audioSrc = meditationAudioSrc(herb.id, 5);
+  const [mode, setMode] = useState(() => (audioSrc ? ld("immMode", "voice") : "scape"));
+  const setModeSaved = (m) => { setMode(m); sv("immMode", m); };
 
+  // 呼吸節律
   useEffect(() => {
     const phases = ["inhale", "hold", "exhale", "rest"];
     const durations = [4000, 2000, 4000, 2000];
@@ -17,13 +25,39 @@ export default function ImmersiveMeditation({ herb, onClose }) {
       breathRef.current = setTimeout(() => { idx = (idx + 1) % phases.length; cycle(); }, durations[idx]);
     };
     cycle();
-    audioEngine.playSoundscape(herb.category, getSeason(new Date()));
-    return () => { clearTimeout(breathRef.current); audioEngine.stop(); };
-  }, [herb]);
+    return () => clearTimeout(breathRef.current);
+  }, []);
+
+  // 音源：語音引導（人聲＋底下音景）或純自然音景
+  useEffect(() => {
+    let a = null;
+    const season = getSeason(new Date());
+    if (mode === "voice" && audioSrc) {
+      a = new Audio(audioSrc);
+      audioRef.current = a;
+      audioEngine.playSoundscape(herb.category, season, 0.5);   // 音景墊在語音底下
+      a.onended = () => { audioEngine.setVolume(1); };           // 語音結束音景轉為完整音量
+      a.play().catch(() => { audioEngine.playSoundscape(herb.category, season, 1); });
+    } else {
+      audioEngine.playSoundscape(herb.category, season, 1);
+    }
+    return () => {
+      if (a) { a.pause(); a.onended = null; }
+      audioEngine.stop();
+    };
+  }, [herb, mode, audioSrc]);
 
   const label = { inhale: "吸氣", hold: "屏息", exhale: "呼氣", rest: "靜息" };
   const scale = { inhale: 1.3, hold: 1.3, exhale: 0.85, rest: 0.85 };
   const rc = getRarityCfg(herb.id);
+
+  const toggleBtn = (active) => ({
+    display:"flex", alignItems:"center", gap:6, padding:"8px 18px", borderRadius:22, cursor:"pointer",
+    fontSize:13, fontFamily:"inherit", backdropFilter:"blur(10px)",
+    border: active ? "1px solid rgba(187,173,216,0.6)" : "1px solid rgba(187,173,216,0.2)",
+    background: active ? "rgba(187,173,216,0.22)" : "rgba(255,255,255,0.05)",
+    color: active ? "#E7DEF5" : "#8E9AB4",
+  });
 
   return (
     <div style={{ position:"fixed", inset:0, zIndex:300, background:"radial-gradient(ellipse at center, #2B3247 0%, #1C2233 60%, #0E1220 100%)", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
@@ -48,6 +82,16 @@ export default function ImmersiveMeditation({ herb, onClose }) {
         <div style={{ fontSize:15, fontStyle:"italic", opacity:0.6, marginBottom:36 }}>{herb.pinyin}</div>
         <div style={{ fontSize:28, letterSpacing:12, fontWeight:300, color:"#BBADD8", textShadow:"0 0 20px rgba(187,173,216,0.45)" }}>{label[breathPhase]}</div>
         <div style={{ fontSize:13, opacity:0.4, marginTop:14 }}>{herb.effect}</div>
+      </div>
+
+      {/* 語音引導 / 自然音景 切換 */}
+      <div style={{ display:"flex", gap:10, marginTop:40 }}>
+        <button onClick={() => setModeSaved("voice")} disabled={!audioSrc} style={{ ...toggleBtn(mode === "voice" && audioSrc), opacity:audioSrc ? 1 : 0.35 }}>
+          <I.Mic/> 語音引導
+        </button>
+        <button onClick={() => setModeSaved("scape")} style={toggleBtn(mode === "scape" || !audioSrc)}>
+          <I.Vol/> 自然音景
+        </button>
       </div>
     </div>
   );
