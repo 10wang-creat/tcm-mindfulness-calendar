@@ -60,3 +60,24 @@ class MeditationAudioEngine {
 }
 
 export const audioEngine = new MeditationAudioEngine();
+
+// iOS/Safari：AudioContext 預設為 suspended，必須在使用者手勢中唤醒。
+// 首次觸碰畫面就解鎖，之後沉浸冥想在 useEffect 觸發的音訊也能發聲。
+if (typeof document !== "undefined") {
+  const unlockAudio = () => {
+    try {
+      audioEngine.init();
+      const ctx = audioEngine.ctx;
+      if (ctx) {
+        if (ctx.state === "suspended") ctx.resume();
+        const buf = ctx.createBuffer(1, 1, 22050);
+        const src = ctx.createBufferSource();
+        src.buffer = buf; src.connect(ctx.destination); src.start(0);
+      }
+    } catch { /* */ }
+    document.removeEventListener("touchend", unlockAudio);
+    document.removeEventListener("click", unlockAudio);
+  };
+  document.addEventListener("touchend", unlockAudio, { passive: true });
+  document.addEventListener("click", unlockAudio);
+}
