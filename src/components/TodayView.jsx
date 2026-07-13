@@ -91,21 +91,18 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
 
       {/* 今日藥材卡 */}
       <div style={{ background:t.card, borderRadius:20, padding:"24px", marginTop:20, boxShadow:"0 2px 20px rgba(52,67,94,0.05)", border:`1px solid ${isCollected ? rc.color + "30" : "rgba(52,67,94,0.05)"}` }}>
-        <div style={{ display:"flex", gap:16, marginBottom:16 }}>
-          <div style={{ position:"relative" }}>
-            <img src={herbImg(herb)} alt={herb.name} style={{ width:88, height:88, borderRadius:16, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
-            <div style={{ position:"absolute", top:-4, right:-4, fontSize:10, color:rc.color, background:t.card, borderRadius:8, padding:"1px 4px", border:`1px solid ${rc.color}40`, letterSpacing:1 }}>{"★".repeat(rc.stars)}</div>
+        {/* 藥材大圖 — 全寬正方，看清藥草本貌，強化記憶 */}
+        <div style={{ position:"relative", width:"100%", aspectRatio:"1 / 1", borderRadius:16, overflow:"hidden", background:t.accentLight, marginBottom:16 }}>
+          <img src={herbImg(herb)} alt={herb.name} style={{ width:"100%", height:"100%", objectFit:"contain", display:"block" }} onError={e => { e.target.style.display = "none"; }} />
+          <div style={{ position:"absolute", top:12, right:12, fontSize:12, color:rc.color, background:t.card, borderRadius:12, padding:"4px 10px", border:`1px solid ${rc.color}40`, letterSpacing:1, boxShadow:"0 1px 8px rgba(52,67,94,0.15)" }}>{"★".repeat(rc.stars)} {rc.label}</div>
+        </div>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16 }}>
+          <div>
+            <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:4 }}>{isToday ? "今日藥材" : "當日藥材"} · {herb.category}</div>
+            <div className="font-serif-tc" style={{ fontSize:26, fontWeight:700, color:t.text }}>{herb.name}</div>
+            <div style={{ fontSize:12, color:t.textSec, marginTop:2 }}>{herb.pinyin}</div>
           </div>
-          <div style={{ flex:1 }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-              <div>
-                <div style={{ fontSize:11, color:t.accent, fontWeight:600, letterSpacing:"0.1em", marginBottom:4 }}>{isToday ? "今日藥材" : "當日藥材"} · {herb.category}</div>
-                <div className="font-serif-tc" style={{ fontSize:24, fontWeight:700, color:t.text }}>{herb.name}</div>
-                <div style={{ fontSize:12, color:t.textSec, marginTop:2 }}>{herb.pinyin}</div>
-              </div>
-              <button onClick={toggleCollect} title={isCollected ? "已收藏（點擊取消）" : "收藏到本草圖鑑"} style={{ background:isCollected ? t.accentLight : "rgba(52,67,94,0.04)", border:"none", borderRadius:12, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:isCollected ? "#C4708D" : t.textSec }}><I.Heart f={isCollected}/></button>
-            </div>
-          </div>
+          <button onClick={toggleCollect} title={isCollected ? "已收藏（點擊取消）" : "收藏到本草圖鑑"} style={{ background:isCollected ? t.accentLight : "rgba(52,67,94,0.04)", border:"none", borderRadius:12, width:38, height:38, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:isCollected ? "#C4708D" : t.textSec, flexShrink:0 }}><I.Heart f={isCollected}/></button>
         </div>
         <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:12 }}>
           {[`性 ${herb.nature}`, `味 ${herb.taste}`, herb.meridian].map((tag, i) => <span key={i} style={{ fontSize:12, padding:"4px 10px", borderRadius:20, background:t.accentLight, color:t.accent, fontWeight:500 }}>{tag}</span>)}

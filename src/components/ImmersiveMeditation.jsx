@@ -25,7 +25,7 @@ export default function ImmersiveMeditation({ herb, onClose }) {
   // 呼吸節律
   useEffect(() => {
     const phases = ["inhale", "hold", "exhale", "rest"];
-    const durations = [4000, 2000, 4000, 2000];
+    const durations = [5000, 2000, 7000, 2000];
     let idx = 0;
     const cycle = () => {
       setBreathPhase(phases[idx]);
@@ -76,7 +76,7 @@ export default function ImmersiveMeditation({ herb, onClose }) {
           width:260, height:260, borderRadius:"50%", border:"2px solid rgba(187,173,216,0.35)",
           display:"flex", alignItems:"center", justifyContent:"center",
           transform:`scale(${scale[breathPhase]})`,
-          transition: (breathPhase === "inhale" || breathPhase === "exhale") ? "transform 4s ease-in-out" : "transform 0.3s ease",
+          transition: breathPhase === "inhale" ? "transform 5s ease-in-out" : breathPhase === "exhale" ? "transform 7s ease-in-out" : "transform 1.5s ease",
           boxShadow:`0 0 60px rgba(187,173,216,${breathPhase === "hold" ? 0.3 : 0.15}), inset 0 0 40px rgba(170,201,232,0.06)`,
         }}>
           <img src={herbImg(herb)} alt={herb.name} style={{ width:200, height:200, objectFit:"contain", opacity:(breathPhase === "hold" || breathPhase === "inhale") ? 0.85 : 0.5, transition:"opacity 3s ease", filter:"drop-shadow(0 0 20px rgba(187,173,216,0.35))" }}

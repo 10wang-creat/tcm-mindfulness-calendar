@@ -39,13 +39,13 @@ class MeditationAudioEngine {
     this.init(); this.stop(); this.isPlaying = true;
     this.master = this.ctx.createGain(); this.master.gain.value = volume; this.master.connect(this.ctx.destination);
     const profiles = {
-      "補氣": { baseFreq: 80, type: "sine", harmonics: [1, 1.5, 2], vol: 0.07, nv: 0.01, ff: 220 },
-      "補血": { baseFreq: 120, type: "sine", harmonics: [1, 1.33, 2], vol: 0.06, nv: 0.012, ff: 300 },
-      "養心安神": { baseFreq: 180, type: "sine", harmonics: [1, 1.25, 1.5, 2], vol: 0.04, nv: 0.015, ff: 500 },
-      "重鎮安神": { baseFreq: 55, type: "sine", harmonics: [1, 2, 3], vol: 0.06, nv: 0.008, ff: 180 },
-      "理氣": { baseFreq: 200, type: "triangle", harmonics: [1, 1.33, 1.67, 2], vol: 0.045, nv: 0.015, ff: 600 },
-      "活血化瘀": { baseFreq: 150, type: "triangle", harmonics: [1, 1.5, 2, 2.5], vol: 0.05, nv: 0.018, ff: 450 },
-      "利水滲濕": { baseFreq: 260, type: "sine", harmonics: [1, 1.2, 1.5], vol: 0.04, nv: 0.02, ff: 700 },
+      "補氣": { baseFreq: 80, type: "sine", harmonics: [1, 1.5, 2], vol: 0.12, nv: 0.022, ff: 220 },
+      "補血": { baseFreq: 120, type: "sine", harmonics: [1, 1.33, 2], vol: 0.11, nv: 0.026, ff: 300 },
+      "養心安神": { baseFreq: 180, type: "sine", harmonics: [1, 1.25, 1.5, 2], vol: 0.075, nv: 0.032, ff: 500 },
+      "重鎮安神": { baseFreq: 55, type: "sine", harmonics: [1, 2, 3], vol: 0.11, nv: 0.018, ff: 180 },
+      "理氣": { baseFreq: 200, type: "triangle", harmonics: [1, 1.33, 1.67, 2], vol: 0.08, nv: 0.032, ff: 600 },
+      "活血化瘀": { baseFreq: 150, type: "triangle", harmonics: [1, 1.5, 2, 2.5], vol: 0.09, nv: 0.04, ff: 450 },
+      "利水滲濕": { baseFreq: 260, type: "sine", harmonics: [1, 1.2, 1.5], vol: 0.075, nv: 0.045, ff: 700 },
     };
     const sMod = { spring: 1.05, summer: 1.1, autumn: 0.95, winter: 0.9 };
     const mod = sMod[season] || 1; const p = profiles[category] || profiles["理氣"];

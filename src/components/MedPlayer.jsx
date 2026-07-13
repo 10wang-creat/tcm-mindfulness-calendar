@@ -43,9 +43,9 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
         setBreath("hold");
         breathRef.current = setTimeout(() => {
           setBreath("exhale");
-          breathRef.current = setTimeout(cycle, 4000);
+          breathRef.current = setTimeout(cycle, 7000);
         }, 2000);
-      }, 4000);
+      }, 5000);
     };
     cycle();
   };
@@ -164,7 +164,7 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
             <circle cx="80" cy="80" r="72" fill="none" stroke={t.accent} strokeWidth="4" strokeDasharray={`${prog * 452} 452`} strokeLinecap="round" style={{ transition:"stroke-dasharray 1s linear" }}/>
           </svg>
           <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
-            <div style={{ width:90, height:90, borderRadius:"50%", background:`radial-gradient(circle,${t.accentLight} 0%,${t.accent}33 100%)`, transform:`scale(${bScale})`, transition:(!paused && (breath === "inhale" || breath === "exhale")) ? "transform 4s ease-in-out" : "transform 0.3s", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column" }}>
+            <div style={{ width:90, height:90, borderRadius:"50%", background:`radial-gradient(circle,${t.accentLight} 0%,${t.accent}33 100%)`, transform:`scale(${bScale})`, transition: paused ? "transform 0.3s" : breath === "inhale" ? "transform 5s ease-in-out" : breath === "exhale" ? "transform 7s ease-in-out" : "transform 0.3s", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column" }}>
               {paused
                 ? <div style={{ fontSize:14, fontWeight:600, color:t.accent }}>已暫停</div>
                 : playing
