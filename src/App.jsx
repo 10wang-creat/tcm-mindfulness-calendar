@@ -38,6 +38,9 @@ export default function App() {
           {view === "calendar" && <CalendarView stats={stats} canvasRef={canvasRef} goToDate={goToDate}/>}
           {view === "herbs" && <HerbsView collected={collected} setCollected={setCollected} canvasRef={canvasRef}/>}
           {view === "journey" && <JourneyView stats={stats} setStats={setStats} collected={collected} medFavs={medFavs} setMedFavs={setMedFavs} dark={dark} toggleDark={toggleDark}/>}
+          <footer style={{ textAlign:"center", fontSize:11, lineHeight:1.75, color:t.textSec, opacity:0.72, padding:"24px 14px 104px" }}>
+            本內容為傳統中醫藥知識與文化分享，非醫療建議。<br/>身體不適或用藥前，請諮詢合格中醫師或醫療專業人員。
+          </footer>
         </div>
         <Nav view={view} setView={setView}/>
       </div>
