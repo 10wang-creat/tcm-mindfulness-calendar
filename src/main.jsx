@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+import { Analytics } from '@vercel/analytics/react'
 import { registerSW } from 'virtual:pwa-register'
 
 // PWA Service Worker 更新通知
@@ -19,5 +20,6 @@ const updateSW = registerSW({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
+    <Analytics />
   </React.StrictMode>,
 )
