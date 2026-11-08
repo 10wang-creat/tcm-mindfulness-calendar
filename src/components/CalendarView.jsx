@@ -63,7 +63,7 @@ export default function CalendarView({ stats, canvasRef, goToDate }) {
       {/* 當日藥材 */}
       {dayHerb && (
         <div style={{ background:t.card, borderRadius:20, padding:"16px 20px", marginTop:20, boxShadow:"0 2px 16px rgba(52,67,94,0.05)", border:"1px solid rgba(52,67,94,0.05)", display:"flex", alignItems:"center", gap:14 }}>
-          <img src={herbImg(dayHerb)} alt={dayHerb.name} style={{ width:52, height:52, borderRadius:12, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
+          <img src={herbImg(dayHerb, "thumb")} alt={dayHerb.name} loading="lazy" decoding="async" style={{ width:52, height:52, borderRadius:12, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
           <div style={{ flex:1 }}>
             <div style={{ fontSize:12, color:t.accent, fontWeight:600, letterSpacing:"0.08em", marginBottom:2 }}>{activeDate === today ? "今日藥材" : `${activeDate.slice(5)} 藥材`} · {dayHerb.category}</div>
             <div className="font-serif-tc" style={{ fontSize:20, fontWeight:700, color:t.text }}>{dayHerb.name}</div>
@@ -79,7 +79,7 @@ export default function CalendarView({ stats, canvasRef, goToDate }) {
       {customs && activeTerm && (
         <div style={{ background:t.card, borderRadius:20, padding:"20px 24px", marginTop:20, boxShadow:"0 2px 16px rgba(52,67,94,0.05)", border:"1px solid rgba(52,67,94,0.05)" }}>
           <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-            <img src={solarTermImg(activeTerm.name)} alt="" style={{ width:40, height:40, borderRadius:10, objectFit:"cover" }} onError={e => { e.target.style.display = "none"; }} />
+            <img src={solarTermImg(activeTerm.name, "thumb")} alt="" loading="lazy" decoding="async" style={{ width:40, height:40, borderRadius:10, objectFit:"cover" }} onError={e => { e.target.style.display = "none"; }} />
             <div>
               <div className="font-serif-tc" style={{ fontSize:18, fontWeight:700, color:t.text }}>{activeTerm.icon} {activeTerm.name}習俗</div>
               <div style={{ fontSize:11, color:t.textSec }}>{activeTerm.theme} · {activeTerm.date}</div>

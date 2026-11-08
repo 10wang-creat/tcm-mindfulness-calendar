@@ -72,7 +72,7 @@ export default function JourneyView({ stats, setStats, collected, medFavs = [], 
         <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:24 }}>
           {favHerbs.map(h => (
             <div key={h.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 14px", background:t.card, borderRadius:14, border:"1px solid rgba(52,67,94,0.05)" }}>
-              <img src={herbImg(h)} alt={h.name} style={{ width:40, height:40, borderRadius:10, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
+              <img src={herbImg(h, "thumb")} alt={h.name} loading="lazy" decoding="async" style={{ width:40, height:40, borderRadius:10, objectFit:"cover", background:t.accentLight }} onError={e => { e.target.style.display = "none"; }} />
               <div style={{ flex:1 }}>
                 <div className="font-serif-tc" style={{ fontSize:15, fontWeight:600, color:t.text }}>{h.name}</div>
                 <div style={{ fontSize:11, color:t.textSec, marginTop:2 }}>{h.category} · {h.effect}</div>

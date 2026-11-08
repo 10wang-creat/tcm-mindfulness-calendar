@@ -79,7 +79,7 @@ export default function ImmersiveMeditation({ herb, onClose }) {
           transition: breathPhase === "inhale" ? "transform 5s ease-in-out" : breathPhase === "exhale" ? "transform 7s ease-in-out" : "transform 1.5s ease",
           boxShadow:`0 0 60px rgba(187,173,216,${breathPhase === "hold" ? 0.3 : 0.15}), inset 0 0 40px rgba(170,201,232,0.06)`,
         }}>
-          <img src={herbImg(herb)} alt={herb.name} style={{ width:200, height:200, objectFit:"contain", opacity:(breathPhase === "hold" || breathPhase === "inhale") ? 0.85 : 0.5, transition:"opacity 3s ease", filter:"drop-shadow(0 0 20px rgba(187,173,216,0.35))" }}
+          <img src={herbImg(herb)} alt={herb.name} decoding="async" style={{ width:200, height:200, objectFit:"contain", opacity:(breathPhase === "hold" || breathPhase === "inhale") ? 0.85 : 0.5, transition:"opacity 3s ease", filter:"drop-shadow(0 0 20px rgba(187,173,216,0.35))" }}
             onError={e => { e.target.style.display = "none"; }} />
         </div>
       </div>

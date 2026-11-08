@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/*.png', 'images/**/*'],
+      includeAssets: ['favicon.svg', 'icons/*.png', 'og-image.png'],
       manifest: {
         name: '中藥正念日曆',
         short_name: '中藥日曆',
@@ -34,14 +34,14 @@ export default defineConfig({
       },
       workbox: {
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB 上限
-        globPatterns: ['**/*.{js,css,html,ico,svg,woff2}'], // 排除 png（圖片太大，改用 runtimeCaching）
+        globPatterns: ['**/*.{js,css,html,ico,svg,woff2}', 'badges/*.svg'], // 圖片／音檔改用 runtimeCaching
         runtimeCaching: [
           {
-            urlPattern: /\/herbs\/.*/i,
+            urlPattern: /\/(herbs|solar-terms)\/.*\.webp$/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'herb-images',
-              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }
+              cacheName: 'artwork-v2',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 }
             }
           },
           {
@@ -54,10 +54,18 @@ export default defineConfig({
           },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts-css',
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts',
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+              cacheName: 'google-fonts-files',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 365 }
             }
           }
         ]

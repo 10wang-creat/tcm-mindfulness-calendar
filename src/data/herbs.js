@@ -138,4 +138,5 @@ const HERB_RARITY = {
 export function getRarity(id) { return HERB_RARITY[id] || "common"; }
 export function getRarityCfg(id) { return RARITY[getRarity(id)]; }
 
-export function herbImg(herb) { return `./herbs/${herb.img}`; }
+// size: "full"（1024px，詳情／分享卡）或 "thumb"（320px，列表縮圖）
+export function herbImg(herb, size = "full") { return `/herbs/${size}/${herb.img.replace(/\.png$/i, "")}.webp`; }

@@ -78,7 +78,7 @@ export default function HerbsView({ collected, setCollected, canvasRef }) {
             <button key={h.id} onClick={() => { setSel(h); setFlipped(false); setShowWpMenu(false); }} style={{ background:t.card, borderRadius:16, padding:14, border:`1px solid ${isCol ? rc.color + "30" : "rgba(52,67,94,0.05)"}`, boxShadow:"0 1px 8px rgba(52,67,94,0.04)", cursor:"pointer", textAlign:"left", position:"relative", transition:"all 0.2s" }}>
               <div style={{ position:"absolute", top:8, right:8, fontSize:9, color:rc.color, letterSpacing:1 }}>{"★".repeat(rc.stars)}</div>
               {isCol && <div style={{ position:"absolute", top:8, left:8, width:18, height:18, borderRadius:"50%", background:t.accent, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#fff" }}>✓</div>}
-              <img src={herbImg(h)} alt={h.name} style={{ width:"100%", height:100, borderRadius:12, objectFit:"cover", background:t.accentLight, marginBottom:10, filter:isCol ? "none" : "grayscale(0.4) opacity(0.6)", transition:"filter 0.3s" }} onError={e => { e.target.style.display = "none"; }}/>
+              <img src={herbImg(h, "thumb")} alt={h.name} loading="lazy" decoding="async" style={{ width:"100%", height:100, borderRadius:12, objectFit:"cover", background:t.accentLight, marginBottom:10, filter:isCol ? "none" : "grayscale(0.4) opacity(0.6)", transition:"filter 0.3s" }} onError={e => { e.target.style.display = "none"; }}/>
               <div className="font-serif-tc" style={{ fontSize:16, fontWeight:700, color:t.text }}>{h.name}</div>
               <div style={{ fontSize:11, color:t.textSec, marginTop:2 }}>{h.pinyin}</div>
               <div style={{ fontSize:10, marginTop:6, padding:"3px 8px", borderRadius:8, background:t.subLight, color:t.sub, display:"inline-block" }}>{h.category}</div>
@@ -105,7 +105,7 @@ export default function HerbsView({ collected, setCollected, canvasRef }) {
                     <h2 className="font-serif-tc" style={{ fontSize:32, fontWeight:700, letterSpacing:6, margin:"0 0 4px", color:t.text }}>{sel.name}</h2>
                     <p style={{ fontSize:13, color:t.textSec, fontStyle:"italic", margin:"0 0 16px" }}>{sel.pinyin}</p>
                     <div style={{ width:200, height:200, margin:"0 auto 16px", display:"flex", alignItems:"center", justifyContent:"center", background:"rgba(52,67,94,0.03)", borderRadius:20 }}>
-                      <img src={herbImg(sel)} alt={sel.name} style={{ width:"88%", height:"88%", objectFit:"contain" }} onError={e => { e.target.style.display = "none"; }} />
+                      <img src={herbImg(sel)} alt={sel.name} decoding="async" style={{ width:"88%", height:"88%", objectFit:"contain" }} onError={e => { e.target.style.display = "none"; }} />
                     </div>
                     <p style={{ fontSize:14, color:t.text, lineHeight:1.7, marginBottom:8 }}>{sel.effect}</p>
                     <div style={{ fontSize:12, color:t.textSec }}>點擊「翻轉」查看詳細資訊</div>

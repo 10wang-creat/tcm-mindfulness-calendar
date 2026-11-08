@@ -93,7 +93,8 @@ const SOLAR_TERM_IMAGES = {
   "立冬": "19_lidong.png", "小雪": "20_xiaoxue.png", "大雪": "21_daxue.png",
   "冬至": "22_dongzhi.png", "小寒": "23_xiaohan.png", "大寒": "24_dahan.png",
 };
-export function solarTermImg(name) { return `./solar-terms/${SOLAR_TERM_IMAGES[name] || "01_lichun.png"}`; }
+// size: "full"（1024px）或 "thumb"（320px）
+export function solarTermImg(name, size = "full") { return `/solar-terms/${size}/${(SOLAR_TERM_IMAGES[name] || "01_lichun.png").replace(/\.png$/i, "")}.webp`; }
 
 // 每個節氣的推薦藥材（herb id）
 export const TERM_HERBS = {

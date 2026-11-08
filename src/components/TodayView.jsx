@@ -44,12 +44,12 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
       {/* 節氣頁首 */}
       <div style={{ background:t.headerBg, margin:"-8px -16px 0", borderRadius:"0 0 28px 28px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", inset:0, opacity:t.dark ? 0.12 : 0.18 }}>
-          <img src={solarTermImg(term.name)} alt={term.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e => { e.target.style.display = "none"; }} />
+          <img src={solarTermImg(term.name)} alt="" aria-hidden="true" decoding="async" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e => { e.target.style.display = "none"; }} />
         </div>
         {t.dark && <div style={{ position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(16,19,26,0.45) 0%, rgba(16,19,26,0.7) 100%)" }} />}
         <div style={{ position:"relative", padding:"32px 24px 24px" }}>
           <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:10 }}>
-            <img src={solarTermImg(term.name)} alt={term.name} style={{ width:56, height:56, borderRadius:16, objectFit:"cover", border:"2px solid rgba(255,255,255,0.6)", boxShadow:"0 2px 12px rgba(52,67,94,0.12)" }} onError={e => { e.target.style.display = "none"; }} />
+            <img src={solarTermImg(term.name, "thumb")} alt={term.name} decoding="async" style={{ width:56, height:56, borderRadius:16, objectFit:"cover", border:"2px solid rgba(255,255,255,0.6)", boxShadow:"0 2px 12px rgba(52,67,94,0.12)" }} onError={e => { e.target.style.display = "none"; }} />
             <div>
               <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:2 }}>
                 <button onClick={() => shiftDay(-1)} title="前一天" style={{ background:"rgba(255,255,255,0.5)", border:"none", borderRadius:8, width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", color:t.accent, padding:0 }}><I.CL/></button>
@@ -93,7 +93,7 @@ export default function TodayView({ stats, setStats, collected, setCollected, me
       <div style={{ background:t.card, borderRadius:20, padding:"24px", marginTop:20, boxShadow:"0 2px 20px rgba(52,67,94,0.05)", border:`1px solid ${isCollected ? rc.color + "30" : "rgba(52,67,94,0.05)"}` }}>
         {/* 藥材大圖 — 全寬正方，看清藥草本貌，強化記憶 */}
         <div style={{ position:"relative", width:"100%", aspectRatio:"1 / 1", borderRadius:16, overflow:"hidden", background:t.accentLight, marginBottom:16 }}>
-          <img src={herbImg(herb)} alt={herb.name} style={{ width:"100%", height:"100%", objectFit:"contain", display:"block" }} onError={e => { e.target.style.display = "none"; }} />
+          <img src={herbImg(herb)} alt={herb.name} fetchpriority="high" decoding="async" style={{ width:"100%", height:"100%", objectFit:"contain", display:"block" }} onError={e => { e.target.style.display = "none"; }} />
           <div style={{ position:"absolute", top:12, right:12, fontSize:12, color:rc.color, background:t.card, borderRadius:12, padding:"4px 10px", border:`1px solid ${rc.color}40`, letterSpacing:1, boxShadow:"0 1px 8px rgba(52,67,94,0.15)" }}>{"★".repeat(rc.stars)} {rc.label}</div>
         </div>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16 }}>
