@@ -54,6 +54,83 @@ PITCH = "+0Hz"                    # 音調
 
 ADD_BGM     = True                # 是否混入背景音樂
 BGM_FILE    = ""                  # 指定背景音樂檔；留空 = 自動抓「背景音樂」資料夾裡第一個 mp3
+
+# 依藥材分類配床：分類 → 「背景音樂」資料夾裡的檔名（可以是底線開頭的檔）。
+# 有對到就用這個，沒對到就退回 BGM_FILE / 資料夾第一個 mp3。設成 {} = 關閉。
+BGM_BY_CATEGORY = {
+    "補氣":     "meditation_bed_sound4stock.mp3",   # 明亮通透
+    "理氣":     "meditation_bed_sound4stock.mp3",
+    "利水滲濕": "meditation_bed_sound4stock.mp3",
+    "活血化瘀": "meditation_bed_sound4stock.mp3",
+    "補血":     "_bed_dream_of_sand.mp3",           # 低沉厚實
+    "養心安神": "_bed_dream_of_sand.mp3",
+    "重鎮安神": "_bed_dream_of_sand.mp3",
+}
+
+# 腳本檔名（不含 .txt）→ 藥材分類。對應 src/data/herbs.js 的 category。
+SCRIPT_CATEGORY = {
+    # 補氣
+    "meditation_02_huangqi": "補氣",   # 黃耆
+    "meditation_01_renshen": "補氣",   # 人參
+    "meditation_07_gancao": "補氣",   # 甘草
+    "meditation_03_dangshen": "補氣",   # 黨參
+    "meditation_04_baizhu": "補氣",   # 白朮
+    "meditation_06_shanyao": "補氣",   # 山藥
+    "meditation_08_dazao": "補氣",   # 大棗
+    "meditation_10_fengmi": "補氣",   # 蜂蜜
+    # 補血
+    "meditation_28_gouqi": "補血",   # 枸杞
+    "meditation_15_danggui": "補血",   # 當歸
+    "meditation_09_hongzao": "補血",   # 紅棗
+    "meditation_43_dihuang": "補血",   # 熟地黃
+    "meditation_16_baishao": "補血",   # 白芍
+    "meditation_44_ejiao": "補血",   # 阿膠
+    "meditation_39_longyanrou": "補血",   # 桂圓
+    "meditation_45_heshouwu": "補血",   # 何首烏
+    "meditation_46_sangshen": "補血",   # 桑椹
+    # 養心安神
+    "meditation_30_juhua": "養心安神",   # 菊花
+    "meditation_40_suanzaoren": "養心安神",   # 酸棗仁
+    "meditation_42_baiziren": "養心安神",   # 柏子仁
+    "meditation_41_yuanzhi": "養心安神",   # 遠志
+    "meditation_47_hehuanpi": "養心安神",   # 合歡皮
+    "meditation_48_yejiaoteng": "養心安神",   # 夜交藤
+    # 重鎮安神
+    "meditation_11_longgu": "重鎮安神",   # 龍骨
+    "meditation_12_muli": "重鎮安神",   # 牡蠣
+    "meditation_49_zhenzumu": "重鎮安神",   # 珍珠母
+    "meditation_13_cishi": "重鎮安神",   # 磁石
+    "meditation_14_hupo": "重鎮安神",   # 琥珀
+    # 理氣
+    "meditation_29_bohe": "理氣",   # 薄荷
+    "meditation_50_chenpi": "理氣",   # 陳皮
+    "meditation_51_qingpi": "理氣",   # 青皮
+    "meditation_52_zhishi": "理氣",   # 枳實
+    "meditation_53_muxiang": "理氣",   # 木香
+    "meditation_27_xiangfu": "理氣",   # 香附
+    "meditation_54_wuyao": "理氣",   # 烏藥
+    # 活血化瘀
+    "meditation_31_aicao": "活血化瘀",   # 艾葉
+    "meditation_17_chuanxiong": "活血化瘀",   # 川芎
+    "meditation_18_danshen": "活血化瘀",   # 丹參
+    "meditation_19_honghua": "活血化瘀",   # 紅花
+    "meditation_20_taoren": "活血化瘀",   # 桃仁
+    "meditation_23_sanqi": "活血化瘀",   # 三七
+    "meditation_21_yimucao": "活血化瘀",   # 益母草
+    "meditation_22_jixueteng": "活血化瘀",   # 雞血藤
+    "meditation_24_yanhusuo": "活血化瘀",   # 延胡索
+    "meditation_25_yujin": "活血化瘀",   # 鬱金
+    "meditation_26_jianghuang": "活血化瘀",   # 薑黃
+    # 利水滲濕
+    "meditation_32_yinchen": "利水滲濕",   # 茵陳
+    "meditation_33_jinqiancao": "利水滲濕",   # 金錢草
+    "meditation_34_cheqiancao": "利水滲濕",   # 車前子
+    "meditation_35_zexie": "利水滲濕",   # 澤瀉
+    "meditation_05_fuling": "利水滲濕",   # 茯苓
+    "meditation_38_yiyiren": "利水滲濕",   # 薏仁
+    "meditation_36_huashi": "利水滲濕",   # 滑石
+    "meditation_37_tongcao": "利水滲濕",   # 通草
+}
 BGM_VOLUME  = 0.18                # 背景音樂相對音量（0~1，越小越輕）
 LEAD_IN     = 3.0                 # 開頭純背景音樂秒數
 TAIL        = 6.0                 # 結尾純背景音樂秒數
@@ -106,6 +183,20 @@ def find_bgm():
         return None
     cands = sorted(f for f in BGM_DIR.glob("*.mp3") if not f.name.startswith("_"))
     return cands[0] if cands else None
+
+
+def bgm_for_script(stem, default_bgm):
+    """依腳本檔名查藥材分類，再查分類配的背景音樂；查不到就用預設。"""
+    if not ADD_BGM:
+        return None
+    cat = SCRIPT_CATEGORY.get(stem)
+    fname = BGM_BY_CATEGORY.get(cat) if cat else None
+    if fname:
+        p = BGM_DIR / fname
+        if p.exists():
+            return p
+        print(f"      [注意] 分類「{cat}」配的背景音樂 {fname} 不存在，改用預設")
+    return default_bgm
 
 
 def parse_script(text):
@@ -418,7 +509,10 @@ async def main():
     print("=" * 66)
     print(f"  聲音    ：{VOICE}   語速 {RATE}   音調 {PITCH}")
     print(f"  長度    ：{('、'.join(f'{m}分' for m in minutes_list)) if minutes_list else '原始長度'}")
-    print(f"  背景音樂：{bgm.name if bgm else '（無，只輸出純人聲）'}")
+    print(f"  背景音樂：{bgm.name if bgm else '（無，只輸出純人聲）'}（預設）")
+    if ADD_BGM and BGM_BY_CATEGORY:
+        used = sorted(set(BGM_BY_CATEGORY.values()))
+        print(f"  分類配床：{'、'.join(used)}")
     print(f"  輸入    ：{INPUT_DIR}")
     print(f"  輸出    ：{OUTPUT_DIR}")
     print("-" * 66)
@@ -452,7 +546,10 @@ async def main():
     for i, t in enumerate(todo, 1):
         print(f"  [{i}/{len(todo)}] {t.stem} ...", flush=True)
         try:
-            outs = await build_one(t, bgm, minutes_list)
+            this_bgm = bgm_for_script(t.stem, bgm)
+            if this_bgm is not bgm:
+                print(f"        背景音樂：{this_bgm.name}（{SCRIPT_CATEGORY.get(t.stem)}）")
+            outs = await build_one(t, this_bgm, minutes_list)
             for out in outs:
                 secs = duration(out)
                 kb = out.stat().st_size / 1024
