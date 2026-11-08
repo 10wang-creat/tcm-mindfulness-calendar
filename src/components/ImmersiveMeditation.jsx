@@ -4,6 +4,7 @@ import { herbImg, getRarityCfg } from "../data/herbs.js";
 import { meditationAudioSrc } from "../data/meditations.js";
 import { ld, sv } from "../lib/storage.js";
 import { getSeason } from "../theme.js";
+import { keepAwake, releaseAwake } from "../lib/wakeLock.js";
 import { I } from "./Icons.jsx";
 
 // 全螢幕沉浸呼吸冥想 — 深藏藍夜空 × 薰衣草微光
@@ -11,7 +12,9 @@ export default function ImmersiveMeditation({ herb, onClose }) {
   const [breathPhase, setBreathPhase] = useState("inhale");
   const breathRef = useRef(null);
   const audioRef = useRef(null);
-  const audioSrc = meditationAudioSrc(herb.id, 5);
+  const [minutes, setMinutes] = useState(() => ld("immMinutes", 5));   // 語音引導長度：5 或 10 分
+  const setMinutesSaved = (m) => { setMinutes(m); sv("immMinutes", m); };
+  const audioSrc = meditationAudioSrc(herb.id, minutes);
   const [mode, setMode] = useState(() => (audioSrc ? ld("immMode", "voice") : "scape"));
   const [bgMuted, setBgMuted] = useState(() => ld("immBgMuted", false));
   const setModeSaved = (m) => { setMode(m); sv("immMode", m); };
@@ -39,6 +42,7 @@ export default function ImmersiveMeditation({ herb, onClose }) {
   useEffect(() => {
     let a = null;
     const season = getSeason(new Date());
+    keepAwake();
     if (mode === "voice" && audioSrc) {
       a = new Audio(audioSrc);
       audioRef.current = a;
@@ -51,6 +55,7 @@ export default function ImmersiveMeditation({ herb, onClose }) {
     return () => {
       if (a) { a.pause(); a.onended = null; }
       audioEngine.stop();
+      releaseAwake();
     };
   }, [herb, mode, audioSrc]);
 
@@ -102,6 +107,16 @@ export default function ImmersiveMeditation({ herb, onClose }) {
           <I.Vol/> 自然音景
         </button>
       </div>
+      {/* 語音長度 5 / 10 分（只在語音引導模式顯示） */}
+      {isVoice && (
+        <div style={{ display:"flex", gap:8, marginTop:12 }}>
+          {[5, 10].map(m => (
+            <button key={m} onClick={() => setMinutesSaved(m)} style={{ ...toggleBtn(minutes === m), padding:"6px 14px", fontSize:12 }}>
+              {m} 分鐘
+            </button>
+          ))}
+        </div>
+      )}
       <button onClick={toggleBgMute} style={{ marginTop:14, display:"flex", alignItems:"center", gap:6, padding:"6px 16px", borderRadius:20, cursor:"pointer", fontSize:12, fontFamily:"inherit", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(187,173,216,0.2)", color: bgMuted ? "#7C86A0" : "#C9D4E8", opacity: bgMuted ? 0.7 : 1 }}>
         <I.Vol/> {bgMuted ? "背景音：關" : "背景音：開"}
       </button>

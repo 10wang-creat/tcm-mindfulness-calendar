@@ -3,6 +3,7 @@ import { useTheme } from "../theme.js";
 import { audioEngine } from "../lib/audioEngine.js";
 import { meditationAudioSrc } from "../data/meditations.js";
 import { ld, sv, fmtDate } from "../lib/storage.js";
+import { keepAwake, releaseAwake } from "../lib/wakeLock.js";
 import { I } from "./Icons.jsx";
 
 const DURS = [{ l:"5分鐘", v:300 }, { l:"10分鐘", v:600 }];
@@ -19,6 +20,7 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
   const [mode, setMode] = useState(() => (audioSrc ? ld("medMode", "voice") : "scape"));
   const [bgMuted, setBgMuted] = useState(() => ld("medBgMuted", false));
   const [audioFailed, setAudioFailed] = useState(false);
+  const [voiceDur, setVoiceDur] = useState(0);   // 語音檔實際長度（秒），讓圓環與倒數跟著人聲走
   const [doneMsg, setDoneMsg] = useState(null);
   const timerRef = useRef(null); const breathRef = useRef(null);
   const audioRef = useRef(null);
@@ -60,7 +62,9 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
     if (mode === "voice" && audioSrc) {
       const src = meditationAudioSrc(herb.id, Math.round(dur / 60)) || audioSrc;
       const a = new Audio(src);
+      a.preload = "auto";
       audioRef.current = a;
+      a.onloadedmetadata = () => { if (isFinite(a.duration) && a.duration > 0) setVoiceDur(Math.ceil(a.duration)); };
       audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 0.5);   // 音景墊在語音底下
       a.onended = () => { voiceEndedRef.current = true; if (!bgMuted) audioEngine.setVolume(1); };
       a.play().catch(() => { voiceEndedRef.current = true; setAudioFailed(true); audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 1); });
@@ -71,7 +75,8 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
 
   const start = () => {
     setPlaying(true); setPaused(false); setElapsed(0); setDoneMsg(null);
-    setAudioFailed(false); voiceEndedRef.current = false;
+    setAudioFailed(false); voiceEndedRef.current = false; setVoiceDur(0);
+    keepAwake();
     startSound();
     startBreath();
   };
@@ -97,7 +102,7 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
 
   const stop = useCallback(() => {
     const secs = elapsed;
-    setPlaying(false); setPaused(false); stopAudio();
+    setPlaying(false); setPaused(false); stopAudio(); releaseAwake();
     if (timerRef.current) clearInterval(timerRef.current);
     if (breathRef.current) clearTimeout(breathRef.current);
     setBreath("idle");
@@ -126,9 +131,11 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
   useEffect(() => {
     if (playing && !paused && elapsed >= dur && (mode !== "voice" || !audioSrc || voiceEndedRef.current)) stop();
   }, [elapsed, dur, playing, paused, stop, mode, audioSrc]);
-  useEffect(() => () => { stopAudio(); if (breathRef.current) clearTimeout(breathRef.current); }, []);
+  useEffect(() => () => { stopAudio(); releaseAwake(); if (breathRef.current) clearTimeout(breathRef.current); }, []);
 
-  const rem = Math.max(0, dur - elapsed); const mn = Math.floor(rem / 60); const sc = rem % 60; const prog = Math.min(1, elapsed / dur);
+  // 語音模式以音檔實際長度為準（5 分版約 5:10～5:30），避免倒數歸零後人聲還在講
+  const total = (mode === "voice" && audioSrc && voiceDur) ? voiceDur : dur;
+  const rem = Math.max(0, total - elapsed); const mn = Math.floor(rem / 60); const sc = rem % 60; const prog = Math.min(1, elapsed / total);
   const bLabels = { idle:"", inhale:"吸氣", hold:"屏息", exhale:"呼氣" };
   const bScale = paused ? 1 : (breath === "inhale" || breath === "hold" ? 1.3 : 1);
   const isVoiceMode = mode === "voice" && audioSrc;   // 語音模式不顯示呼吸字，避免和旁白打架

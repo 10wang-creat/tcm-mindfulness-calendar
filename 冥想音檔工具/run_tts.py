@@ -61,6 +61,17 @@ FADE_IN     = 2.0                 # 整體淡入秒數
 FADE_OUT    = 6.0                 # 整體淡出秒數
 LOUDNORM_I  = -16                 # 響度標準化目標（dBFS/LUFS）
 
+# 長留白輕提示：做長版本時 [靜] 會被撐長（10 分版約 80 秒），中間完全無聲會讓人以為當機。
+# 單段留白超過 REST_HINT_MAX 秒，就每隔約這麼久插一句很短的輕提示，句子依序輪替。
+# 設成 0 = 關閉此功能。
+REST_HINT_MAX = 40
+REST_HINTS = [
+    "繼續跟著呼吸。",
+    "不急，慢慢來。",
+    "讓肩膀再鬆一點。",
+    "就這樣，安靜地待著。",
+]
+
 # ffmpeg / ffprobe 執行檔。若不在系統 PATH，改成完整路徑，例如：
 #   FFMPEG  = r"C:\ffmpeg\bin\ffmpeg.exe"
 #   FFPROBE = r"C:\ffmpeg\bin\ffprobe.exe"
@@ -246,6 +257,13 @@ async def build_one(txt_path, bgm_path, minutes_list):
             await tts(spoken, f)
             speech_files[i] = f
             speech_total += duration(f)
+    # 長留白輕提示（多長度共用）
+    hint_files = []   # [(Path, 秒數), ...]
+    if REST_HINT_MAX and REST_HINTS:
+        for hi, h in enumerate(REST_HINTS):
+            hf = work / f"hint_{hi:02d}.mp3"
+            await tts(h, hf)
+            hint_files.append((hf, duration(hf)))
     print("      語音完成，開始混音與輸出 …", flush=True)
 
     fixed_total = sum(p for _s, p, k in segments if k == "fixed")
@@ -263,11 +281,29 @@ async def build_one(txt_path, bgm_path, minutes_list):
                 if k == "rest":
                     rests[i] = p + per
         pieces = []
+        hint_idx = 0   # 讓同一檔內的提示句輪替，不重複
         for i, (spoken, pause, kind) in enumerate(segments):
             if spoken and i in speech_files:
                 pieces.append(speech_files[i])
             sec = rests.get(i, pause) if kind == "rest" else pause
-            if sec > 0:
+            if sec <= 0:
+                continue
+            # 長留白：切成 n+1 段靜音，中間夾 n 句輕提示；總長不變
+            n_hints = 0
+            if kind == "rest" and hint_files and REST_HINT_MAX and sec > REST_HINT_MAX:
+                n_hints = int(sec // REST_HINT_MAX)
+            if n_hints:
+                chosen = [hint_files[(hint_idx + k) % len(hint_files)] for k in range(n_hints)]
+                hint_idx += n_hints
+                sil_total = max(0.0, sec - sum(d for _f, d in chosen))
+                sil_each = round(sil_total / (n_hints + 1), 2)
+                for k in range(n_hints + 1):
+                    sil = work / f"sil_{suffix}_{i:03d}_{k}.mp3"
+                    make_silence(sil_each, sil)
+                    pieces.append(sil)
+                    if k < n_hints:
+                        pieces.append(chosen[k][0])
+            else:
                 sil = work / f"sil_{suffix}_{i:03d}.mp3"
                 make_silence(round(sec, 2), sil)
                 pieces.append(sil)
