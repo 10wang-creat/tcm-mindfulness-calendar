@@ -18,7 +18,6 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
   const [elapsed, setElapsed] = useState(0);
   const [breath, setBreath] = useState("idle");
   const [mode, setMode] = useState(() => (audioSrc ? ld("medMode", "voice") : "scape"));
-  const [bgMuted, setBgMuted] = useState(() => ld("medBgMuted", false));
   const [audioFailed, setAudioFailed] = useState(false);
   const [voiceDur, setVoiceDur] = useState(0);   // 語音檔實際長度（秒），讓圓環與倒數跟著人聲走
   const [doneMsg, setDoneMsg] = useState(null);
@@ -33,10 +32,6 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
     setMedFavs(n); sv("medFavs", n);
   };
   const setModeSaved = (m) => { setMode(m); sv("medMode", m); };
-
-  // 語音模式且引導語未結束時，音景墊在底下(0.5)；否則完整(1)；靜音則 0
-  const scapeBase = () => (mode === "voice" && audioSrc && !voiceEndedRef.current ? 0.5 : 1);
-  const applyBgVolume = (muted) => { audioEngine.setVolume(muted ? 0 : scapeBase()); };
 
   const startBreath = () => {
     const cycle = () => {
@@ -65,11 +60,11 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
       a.preload = "auto";
       audioRef.current = a;
       a.onloadedmetadata = () => { if (isFinite(a.duration) && a.duration > 0) setVoiceDur(Math.ceil(a.duration)); };
-      audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 0.5);   // 音景墊在語音底下
-      a.onended = () => { voiceEndedRef.current = true; if (!bgMuted) audioEngine.setVolume(1); };
-      a.play().catch(() => { voiceEndedRef.current = true; setAudioFailed(true); audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 1); });
+      // 語音 mp3 已內含背景床，不另疊音景；語音講完後接上自然音景直到計時結束
+      a.onended = () => { voiceEndedRef.current = true; audioEngine.playSoundscape(herb.category, season, 1); };
+      a.play().catch(() => { voiceEndedRef.current = true; setAudioFailed(true); audioEngine.playSoundscape(herb.category, season, 1); });
     } else {
-      audioEngine.playSoundscape(herb.category, season, bgMuted ? 0 : 1);
+      audioEngine.playSoundscape(herb.category, season, 1);
     }
   };
 
@@ -84,20 +79,15 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
   const pause = () => {
     setPaused(true);
     if (audioRef.current) audioRef.current.pause();
-    audioEngine.stop();
+    audioEngine.pause();
     if (breathRef.current) clearTimeout(breathRef.current);
   };
 
   const resume = () => {
     setPaused(false);
-    audioEngine.playSoundscape(herb.category, term.season, bgMuted ? 0 : scapeBase());
+    audioEngine.resume();
     if (audioRef.current) audioRef.current.play().catch(() => {});
     startBreath();
-  };
-
-  const toggleBgMute = () => {
-    const n = !bgMuted; setBgMuted(n); sv("medBgMuted", n);
-    if (playing && !paused) applyBgVolume(n);
   };
 
   const stop = useCallback(() => {
@@ -211,16 +201,13 @@ export default function MedPlayer({ herb, med, term, stats, setStats, medFavs = 
         )}
       </div>
 
-      {/* 播放中狀態列：音源 + 背景音靜音 */}
+      {/* 播放中狀態列：音源 */}
       {playing && (
         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginTop:14, flexWrap:"wrap" }}>
           <span style={{ display:"flex", alignItems:"center", gap:6, fontSize:12, color:t.textSec }}>
             {isVoiceMode ? <I.Mic/> : <I.Vol/>}
             {isVoiceMode ? `語音引導 · ${herb.name}` : `${herb.category}音景 · ${herb.name}`}
           </span>
-          <button onClick={toggleBgMute} title={bgMuted ? "開啟背景音" : "關閉背景音"} style={{ display:"flex", alignItems:"center", gap:4, background:"transparent", border:`1px solid ${t.sub}40`, borderRadius:16, padding:"4px 10px", cursor:"pointer", color:bgMuted ? t.textSec : t.accent, fontSize:11, opacity:bgMuted ? 0.6 : 1 }}>
-            <I.Vol/> {bgMuted ? "背景音：關" : "背景音：開"}
-          </button>
         </div>
       )}
 
