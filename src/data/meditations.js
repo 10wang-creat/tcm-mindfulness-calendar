@@ -1,5 +1,6 @@
 import { HERBS } from "./herbs.js";
 import { TERM_HERBS, getCurrentSolarTerm } from "./solarTerms.js";
+import { audioUrl } from "../config/audio.js";
 
 // ============================================================
 // 冥想引導文案（依藥材分類）
@@ -50,7 +51,7 @@ export const MEDITATIONS = {
 };
 
 // ============================================================
-// 語音引導音檔 — herb id → public/meditations/*.mp3
+// 語音引導音檔 — herb id → mp3 檔名（實際網址見 src/config/audio.js）
 // （54 味有音檔；沉香 37、檀香 38 無，自動退回合成音景）
 // ============================================================
 const AUDIO_FILES = {
@@ -82,9 +83,9 @@ export function meditationAudioSrc(herbId, minutes) {
   if (minutes && AVAILABLE_LENGTHS.includes(minutes)) {
     const mm = String(minutes).padStart(2, "0");
     const base = f.replace(/\.mp3$/, "");
-    return `./meditations/${base}_${mm}m.mp3`;
+    return audioUrl(`${base}_${mm}m.mp3`);
   }
-  return `./meditations/${f}`;
+  return audioUrl(f);
 }
 
 // ============================================================

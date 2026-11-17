@@ -3,7 +3,8 @@
 // ============================================================
 // 真實背景音樂床（與 TTS 混音用的是同兩首）：依藥材分類選一首，HTMLAudio 循環播放。
 // 用 <audio> 而非 Web Audio，iOS 靜音鍵開著也聽得到。
-const BED_FILES = { bright: "/meditations/bed_bright.mp3", deep: "/meditations/bed_deep.mp3" };
+import { audioUrl } from "../config/audio.js";
+const BED_FILES = { bright: audioUrl("bed_bright.mp3"), deep: audioUrl("bed_deep.mp3") };
 const BED_BY_CATEGORY = {
   "補氣": "bright", "理氣": "bright", "利水滲濕": "bright", "活血化瘀": "bright",
   "補血": "deep", "養心安神": "deep", "重鎮安神": "deep",

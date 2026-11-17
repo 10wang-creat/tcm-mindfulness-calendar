@@ -44,14 +44,8 @@ export default defineConfig({
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 90 }
             }
           },
-          {
-            urlPattern: /\/meditations\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'meditation-audio',
-              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 }
-            }
-          },
+          // 冥想音檔改由 GitHub Releases 提供（跨網域、無 CORS 標頭），
+          // Service Worker 不快取：避免把 Range 請求的部分內容當成完整檔案存起來。
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'StaleWhileRevalidate',

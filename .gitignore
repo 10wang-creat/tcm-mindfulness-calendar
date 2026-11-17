@@ -5,3 +5,8 @@ node_modules
 dist
 temp_meditation
 背景音樂
+# 大型素材與工作檔：不進 git（音檔由 GitHub Releases 提供，原檔請備份到雲端硬碟）
+public/meditations/
+冥想音檔工具/
+assets-src/
+__pycache__/
